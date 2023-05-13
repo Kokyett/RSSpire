@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">RSSpire</string>
+
+    <!-- Main activity -->
+    <string name="main_menu_about">À propos</string>
+
+    <!-- About activity -->/
+    <string name="about_title">À propos</string>
+    <string name="about_tab">À propos</string>
+    <string name="source_code"><![CDATA[Code source sur <a href="https://github.com/Kokyett/RSSpire">GitHub</a>]]></string>
+    <string name="about_material">À l\'exception de l\'icône d\'application et de l\'icône de l\'onglet Licence, toutes les images font partie de Material Design Icons sous le terme de Apache License Version 2.0.</string>
+    <string name="about_license">Copyright \u00A9 2023 Kokyett\n\nCe programme est un logiciel libre. Il est livré sans aucune garantie, dans la mesure permise par les loi. Vous pouvez le redistribuer et/ou le modifier selon les termes du Do What The Fuck You Want To Publc License, version 2, telle que publiée par Sam Hocevar.</string>
+    <string name="license_tab">Licence</string>
+
+</resources>
