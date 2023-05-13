@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">RSSpire</string>
+
+    <!-- Main menu -->
+    <string name="main_menu_about">About</string>
+
+    <!-- About activity -->
+    <string name="about_activity_title">About</string>
+    <string name="about_tab">About</string>
+    <string name="source_code"><![CDATA[Source code on <a href="https://github.com/Kokyett/RSSpire">GitHub</a>]]></string>
+    <string name="about_material">Except application icon and License tab icon, all image assets are part of Material Design Icons under the term of Apache License Version 2.0.</string>
+    <string name="about_material_link" translatable="false"><![CDATA[<a href="https://github.com/google/material-design-icons">https://github.com/google/material-design-icons</a>]]></string>
+    <string name="about_license">Copyright \u00A9 2023 Kokyett\n\nThis program is free software. It comes without any warranty, to the extent permitted by applicable law. You can redistribute it and/or modify it under the terms of the Do What The Fuck You Want To, Version 2, as published by Sam Hocevar.</string>
+    <string name="about_license_link" translatable="false"><![CDATA[<a href="http://www.wtfpl.net/">http://www.wtfpl.net/</a>]]></string>
+    <string name="license_tab">Licence</string>
+    <string name="wtfpl_license_1" translatable="false">DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE\nVersion 2, December 2004</string>*
+    <string name="wtfpl_license_2" translatable="false">Copyright (C) 2004 Sam Hocevar &lt;sam@hocevar.net&gt;\n\nEveryone is permitted to copy and distribute verbatim or modified copies of this license document, and changing it is allowed as long as the name is changed.</string>*
+    <string name="wtfpl_license_3" translatable="false">DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE\nTERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION</string>*
+    <string name="wtfpl_license_4" translatable="false">0. You just DO WHAT THE FUCK YOU WANT TO.</string>
+    <string name="changelog_tab">Changelog</string>
+</resources>
