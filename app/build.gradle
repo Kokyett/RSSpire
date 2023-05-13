@@ -1,0 +1,41 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    namespace 'fr.kokyett.rsspire'
+    compileSdk 33
+
+    String versionNameEnv = System.getenv("VERSION_NAME") ?: "develop"
+    Integer versionCodeEnv = Integer.parseInt(System.getenv("VERSION_CODE") ?: new Date().format('yyMMdd'))
+
+    defaultConfig {
+        applicationId "fr.kokyett.rsspire"
+        minSdk 26
+        targetSdk 33
+        versionCode versionCodeEnv
+        versionName versionNameEnv
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+
+    implementation 'androidx.core:core-ktx:1.10.1'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.9.0'
+}
