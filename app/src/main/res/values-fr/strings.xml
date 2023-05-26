@@ -3,6 +3,7 @@
 
     <!-- Main activity -->
     <string name="main_menu_about">À propos</string>
+    <string name="main_menu_add_feed">Ajouter un flux</string>
 
     <!-- About activity -->/
     <string name="about_title">À propos</string>
@@ -12,4 +13,8 @@
     <string name="about_license">Copyright \u00A9 2023 Kokyett\n\nCe programme est un logiciel libre. Il est livré sans aucune garantie, dans la mesure permise par les loi. Vous pouvez le redistribuer et/ou le modifier selon les termes du Do What The Fuck You Want To Publc License, version 2, telle que publiée par Sam Hocevar.</string>
     <string name="license_tab">Licence</string>
 
+    <!-- Search feed activity -->
+    <string name="search_feed_title">Rechercher un flux</string>
+    <string name="search_feed_description">Rechercher</string>
+    <string name="search_feed_text_hint">Saisir des mots clé ou une URL</string>
 </resources>

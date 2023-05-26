@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">RSSpire</string>
 
-    <!-- Main activity -->
+    <!-- Main menu -->
     <string name="main_menu_about">About</string>
+    <string name="main_menu_add_feed">Add feed</string>
 
     <!-- About activity -->
     <string name="about_title">About</string>
@@ -18,4 +19,8 @@
     <string name="wtfpl_license_3" translatable="false">DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE\nTERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION</string>*
     <string name="wtfpl_license_4" translatable="false">0. You just DO WHAT THE FUCK YOU WANT TO.</string>
 
+    <!-- Search feed activity -->
+    <string name="search_feed_title">Search feed</string>
+    <string name="search_feed_description">Search</string>
+    <string name="search_feed_text_hint">Enter keywords or URL</string>
 </resources>

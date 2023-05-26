@@ -26,11 +26,13 @@ class AboutFragment : Fragment() {
         sourceCode.movementMethod = LinkMovementMethod.getInstance()
 
         val aboutMaterial = view.findViewById<TextView>(R.id.about_material)
-        aboutMaterial.text = Html.fromHtml(getString(R.string.about_material_link), Html.FROM_HTML_MODE_LEGACY)
+        aboutMaterial.text =
+            Html.fromHtml(getString(R.string.about_material_link), Html.FROM_HTML_MODE_LEGACY)
         aboutMaterial.movementMethod = LinkMovementMethod.getInstance()
 
         val aboutLicense = view.findViewById<TextView>(R.id.about_license)
-        aboutLicense.text = Html.fromHtml(getString(R.string.about_license_link), Html.FROM_HTML_MODE_LEGACY)
+        aboutLicense.text =
+            Html.fromHtml(getString(R.string.about_license_link), Html.FROM_HTML_MODE_LEGACY)
         aboutLicense.movementMethod = LinkMovementMethod.getInstance()
 
         return view
