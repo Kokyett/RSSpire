@@ -2,19 +2,36 @@
     <string name="app_name">RSSpire</string>
 
     <!-- Main activity -->
-    <string name="main_menu_about">À propos</string>
     <string name="main_menu_add_feed">Ajouter un flux</string>
+    <string name="main_menu_feed_list">Liste des flux</string>
+    <string name="main_menu_about">À propos</string>
 
     <!-- About activity -->/
-    <string name="about_title">À propos</string>
+    <string name="about_activity_title">À propos</string>
     <string name="about_tab">À propos</string>
     <string name="source_code"><![CDATA[Code source sur <a href="https://github.com/Kokyett/RSSpire">GitHub</a>]]></string>
     <string name="about_material">À l\'exception de l\'icône d\'application et de l\'icône de l\'onglet Licence, toutes les images font partie de Material Design Icons sous le terme de Apache License Version 2.0.</string>
     <string name="about_license">Copyright \u00A9 2023 Kokyett\n\nCe programme est un logiciel libre. Il est livré sans aucune garantie, dans la mesure permise par les loi. Vous pouvez le redistribuer et/ou le modifier selon les termes du Do What The Fuck You Want To Publc License, version 2, telle que publiée par Sam Hocevar.</string>
     <string name="license_tab">Licence</string>
 
+    <!-- Feeds activity -->
+    <string name="feeds_activity_title">Liste des flux</string>
+
     <!-- Search feed activity -->
-    <string name="search_feed_title">Rechercher un flux</string>
+    <string name="search_feed_activity_title">Rechercher un flux</string>
     <string name="search_feed_description">Rechercher</string>
     <string name="search_feed_text_hint">Saisir des mots clé ou une URL</string>
+
+    <!-- Edit feed activity -->
+    <string name="edit_feed_activity_title">Modification d\'un flux</string>
+    <string name="edit_feed_url">URL</string>
+    <string name="edit_feed_title">Titre</string>
+    <string name="edit_feed_category">Catégorie</string>
+    <string name="edit_feed_invalid_url">URL invalide</string>
+    <string name="edit_feed_url_already_exists">L\'URL existe déjà</string>
+
+    <!-- Edit feed menu -->
+    <string name="edit_feed_menu_save">Enregistrer</string>
+    <string name="edit_feed_menu_search_icon">Rechercher l\'icône</string>
+    <string name="edit_feed_menu_delete">Spprimer</string>
 </resources>

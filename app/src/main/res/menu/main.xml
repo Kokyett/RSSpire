@@ -7,6 +7,11 @@
             android:icon="@drawable/ic_action_add"
             android:title="@string/main_menu_add_feed"
             app:showAsAction="never|withText" />
+        <item
+            android:id="@+id/action_menu_feed_list"
+            android:icon="@drawable/ic_action_feed_list"
+            android:title="@string/main_menu_feed_list"
+            app:showAsAction="never|withText" />
     </group>
     <group
         android:id="@+id/group_about">

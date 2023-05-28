@@ -2,11 +2,12 @@
     <string name="app_name">RSSpire</string>
 
     <!-- Main menu -->
-    <string name="main_menu_about">About</string>
     <string name="main_menu_add_feed">Add feed</string>
+    <string name="main_menu_feed_list">Feed list</string>
+    <string name="main_menu_about">About</string>
 
     <!-- About activity -->
-    <string name="about_title">About</string>
+    <string name="about_activity_title">About</string>
     <string name="about_tab">About</string>
     <string name="source_code"><![CDATA[Source code on <a href="https://github.com/Kokyett/RSSpire">GitHub</a>]]></string>
     <string name="about_material">Except application icon and License tab icon, all image assets are part of Material Design Icons under the term of Apache License Version 2.0.</string>
@@ -19,8 +20,24 @@
     <string name="wtfpl_license_3" translatable="false">DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE\nTERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION</string>*
     <string name="wtfpl_license_4" translatable="false">0. You just DO WHAT THE FUCK YOU WANT TO.</string>
 
+    <!-- Feeds activity -->
+    <string name="feeds_activity_title">Feed list</string>
+
     <!-- Search feed activity -->
-    <string name="search_feed_title">Search feed</string>
+    <string name="search_feed_activity_title">Search feed</string>
     <string name="search_feed_description">Search</string>
     <string name="search_feed_text_hint">Enter keywords or URL</string>
+
+    <!-- Edit feed activity -->
+    <string name="edit_feed_activity_title">Edit feed</string>
+    <string name="edit_feed_url">URL</string>
+    <string name="edit_feed_title">Title</string>
+    <string name="edit_feed_category">Category</string>
+    <string name="edit_feed_invalid_url">Invalid URL</string>
+    <string name="edit_feed_url_already_exists">URL already exists</string>
+
+    <!-- Edit feed menu -->
+    <string name="edit_feed_menu_save">Save</string>
+    <string name="edit_feed_menu_search_icon">Search icon</string>
+    <string name="edit_feed_menu_delete">Delete</string>
 </resources>

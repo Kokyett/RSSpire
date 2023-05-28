@@ -1,13 +1,18 @@
 package fr.kokyett.rsspire.activities
 
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.Menu
+import android.view.MenuItem
 import android.webkit.URLUtil
 import android.widget.EditText
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.menu.MenuBuilder
+import androidx.core.view.MenuCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,14 +20,17 @@ import androidx.recyclerview.widget.RecyclerView
 import fr.kokyett.rsspire.R
 import fr.kokyett.rsspire.adapters.SearchFeedAdapter
 import fr.kokyett.rsspire.models.SearchFeedResult
-import fr.kokyett.rsspire.utils.Downloader
+import fr.kokyett.rsspire.utils.DateTimeUtils
+import fr.kokyett.rsspire.utils.DownloaderUtils
+import fr.kokyett.rsspire.utils.ExtrasUtils
+import fr.kokyett.rsspire.utils.HtmlUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
-import java.net.URL
+import java.util.Timer
+import java.util.TimerTask
 import java.util.regex.Matcher
-import java.util.regex.Pattern
 
 
 class SearchFeedActivity : AppCompatActivity() {
@@ -35,10 +43,23 @@ class SearchFeedActivity : AppCompatActivity() {
         initEditText()
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                finish()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     private fun initRecyclerView() {
-        adapter = SearchFeedAdapter(lifecycleScope)
+        adapter = SearchFeedAdapter()
         adapter.onItemClick = {
-            Toast.makeText(this, it.url, Toast.LENGTH_LONG).show()
+            val intent = Intent(this, EditFeedActivity::class.java)
+            intent.putExtra(ExtrasUtils.URL, it.url)
+            intent.putExtra(ExtrasUtils.TITLE, it.title)
+            startActivity(intent)
         }
 
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerview)
@@ -54,16 +75,27 @@ class SearchFeedActivity : AppCompatActivity() {
     private fun initEditText() {
         val editText = findViewById<EditText>(R.id.edittext)
         editText.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable) {}
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+            private var timer = Timer()
+
+            override fun afterTextChanged(s: Editable) {
+                timer.cancel()
+                timer = Timer()
+                timer.schedule(
+                    object : TimerTask() {
+                        override fun run() {
+                            lifecycleScope.launch {
+                                val list = search(s.toString())
+                                updateListAdapter(list)
+                            }
+                        }
+                    },
+                    DateTimeUtils.SECOND.toLong()
+                )
             }
 
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                lifecycleScope.launch {
-                    val list = search(editText.text.toString())
-                    updateListAdapter(list)
-                }
-            }
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
         })
     }
 
@@ -88,29 +120,22 @@ class SearchFeedActivity : AppCompatActivity() {
     private fun searchFromURL(url: String): ArrayList<SearchFeedResult> {
         val list = ArrayList<SearchFeedResult>()
         try {
-            val content = Downloader.getString(URL(url))
+            var content = DownloaderUtils.getString(url) ?: ""
+            content = HtmlUtils.restoreLinks(url, content)
 
-            val patternHref =
-                Pattern.compile("href=[\"']([^\"']*)[\"']", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
-            val patternLinkRss = Pattern.compile(
-                "<link[^>]*type=[\"']application/rss\\+xml[\"'][^>]*>",
-                Pattern.CASE_INSENSITIVE or Pattern.DOTALL
-            )
-            val matcher = patternLinkRss.matcher(content)
+            val matcher = HtmlUtils.patternLinkRss.matcher(content)
             while (matcher.find()) {
-                val hrefMatcher: Matcher = patternHref.matcher(matcher.group(0) ?: "")
+                val hrefMatcher: Matcher = HtmlUtils.patternHref.matcher(matcher.group(0) ?: "")
                 if (hrefMatcher.find()) {
-                    val searchFeedResult = SearchFeedResult(
-                        hrefMatcher.group(1) ?: "", null, null
-                    )
+                    val searchFeedResult = SearchFeedResult(hrefMatcher.group(1) ?: "")
                     list.add(searchFeedResult)
                 }
             }
-            if (list.size == 0)
-                list.add(SearchFeedResult(url, null, null))
         } catch (e: Exception) {
-           //TODO: log exception ?
+            //TODO: log exception ?
         }
+        if (list.size == 0)
+            list.add(SearchFeedResult(url, null))
         list.addAll(searchFromFeedly(url))
         return list
     }
@@ -122,17 +147,16 @@ class SearchFeedActivity : AppCompatActivity() {
                 .appendQueryParameter("locale", resources.configuration.locales.get(0).language)
                 .appendQueryParameter("query", term).build().toString()
 
-        val jsonString = Downloader.getString(URL(uri))
+        val list = ArrayList<SearchFeedResult>()
+        val jsonString = DownloaderUtils.getString(uri) ?: return list
         val json = JSONObject(jsonString)
 
-        val list = ArrayList<SearchFeedResult>()
         val entries = json.getJSONArray("results")
         for (i in 0 until entries.length()) {
             val entry = entries.get(i) as JSONObject
             val searchFeedResult = SearchFeedResult(
                 entry.get("feedId").toString().replaceFirst("feed/", ""),
                 entry.get("title").toString(),
-                if (entry.has("iconUrl")) entry.get("iconUrl").toString() else null
             )
             list.add(searchFeedResult)
         }

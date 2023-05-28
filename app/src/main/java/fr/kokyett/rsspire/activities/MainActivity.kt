@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_menu_add_feed -> startActivity(Intent(this, SearchFeedActivity::class.java))
+            R.id.action_menu_feed_list -> startActivity(Intent(this, FeedsActivity::class.java))
             R.id.action_menu_about -> startActivity(Intent(this, AboutActivity::class.java))
         }
         return super.onOptionsItemSelected(item)

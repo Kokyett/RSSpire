@@ -2,6 +2,7 @@ package fr.kokyett.rsspire.utils
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.webkit.URLUtil
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.net.HttpURLConnection
@@ -9,26 +10,45 @@ import java.net.URL
 import java.nio.charset.Charset
 import java.util.zip.GZIPInputStream
 
-class Downloader {
+class DownloaderUtils {
     companion object {
-        private const val TIMEOUT = 30 * DateTime.SECOND
+        private const val TIMEOUT = 30 * DateTimeUtils.SECOND
         private const val MAXIMUM_REDIRECTS = 7
 
-        fun getBitmap(url: URL) : Bitmap {
-            val bytes = getBytes(url)
-            return BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+        fun getBitmap(url: String): Bitmap? {
+            return if (URLUtil.isValidUrl(url)) {
+                getBitmap(URL(url))
+            } else {
+                //TODO: Log
+                null
+            }
         }
 
-        fun getString(url: URL): String {
-            val connection = getHttpURLConnection(url, 0)
-            val bytes = getBytes(connection)
-            val charset = getCharset(connection)
-            connection.disconnect()
+        fun getBitmap(url: URL): Bitmap? {
+            return try {
+                val bytes = getBytes(url)
+                BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+            } catch (e: Exception) {
+                //TODO: Log Exception
+                null
+            }
+        }
 
-            return if (charset == null)
-                String(bytes)
-            else
-                String(bytes, Charset.forName(charset))
+        fun getString(url: String): String? {
+            return if (URLUtil.isValidUrl(url)) {
+                val connection = getHttpURLConnection(URL(url), 0)
+                val bytes = getBytes(connection)
+                val charset = getCharset(connection)
+                connection.disconnect()
+
+                if (charset == null)
+                    String(bytes)
+                else
+                    String(bytes, Charset.forName(charset))
+            } else {
+                //TODO: Log
+                null
+            }
         }
 
         private fun getCharset(connection: HttpURLConnection): String? {
@@ -48,7 +68,7 @@ class Downloader {
             return null
         }
 
-        fun getBytes(url: URL): ByteArray {
+        private fun getBytes(url: URL): ByteArray {
             val connection = getHttpURLConnection(url, 0)
             val bytes = getBytes(connection)
             connection.disconnect()

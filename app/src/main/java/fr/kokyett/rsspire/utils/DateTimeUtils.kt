@@ -1,6 +1,6 @@
 package fr.kokyett.rsspire.utils
 
-class DateTime {
+class DateTimeUtils {
     companion object {
         const val SECOND = 1000
         const val MINUTE = 60 * SECOND
