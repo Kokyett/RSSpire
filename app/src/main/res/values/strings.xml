@@ -4,6 +4,8 @@
     <!-- Main menu -->
     <string name="main_menu_add_feed">Add feed</string>
     <string name="main_menu_feed_list">Feed list</string>
+    <string name="main_menu_import_opml">Import OPML file</string>
+    <string name="main_menu_export_opml">Export OPML file</string>
     <string name="main_menu_about">About</string>
 
     <!-- About activity -->

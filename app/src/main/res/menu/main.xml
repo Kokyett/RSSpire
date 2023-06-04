@@ -12,6 +12,16 @@
             android:icon="@drawable/ic_action_feed_list"
             android:title="@string/main_menu_feed_list"
             app:showAsAction="never|withText" />
+        <item
+            android:id="@+id/action_menu_import_opml"
+            android:icon="@drawable/ic_action_import"
+            android:title="@string/main_menu_import_opml"
+            app:showAsAction="never|withText" />
+        <item
+            android:id="@+id/action_menu_export_opml"
+            android:icon="@drawable/ic_action_export"
+            android:title="@string/main_menu_export_opml"
+            app:showAsAction="never|withText" />
     </group>
     <group
         android:id="@+id/group_about">

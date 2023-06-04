@@ -7,5 +7,15 @@
             android:icon="@drawable/ic_action_add"
             android:title="@string/main_menu_add_feed"
             app:showAsAction="never|withText" />
+        <item
+            android:id="@+id/action_menu_import_opml"
+            android:icon="@drawable/ic_action_import"
+            android:title="@string/main_menu_import_opml"
+            app:showAsAction="never|withText" />
+        <item
+            android:id="@+id/action_menu_export_opml"
+            android:icon="@drawable/ic_action_export"
+            android:title="@string/main_menu_export_opml"
+            app:showAsAction="never|withText" />
     </group>
 </menu>

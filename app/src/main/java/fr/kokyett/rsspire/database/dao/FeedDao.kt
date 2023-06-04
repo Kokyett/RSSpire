@@ -19,6 +19,9 @@ interface FeedDao {
     @Query("select * from Feed where url = :url;")
     fun get(url: String): Feed?
 
+    @Query("select * from Feed where idCategory = :id or (idCategory is null and :id is null);")
+    fun getByCategory(id: Long?): Flow<List<Feed>>
+
     @Insert
     suspend fun insert(feed: Feed): Long
 

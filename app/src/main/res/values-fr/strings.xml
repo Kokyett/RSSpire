@@ -4,6 +4,8 @@
     <!-- Main activity -->
     <string name="main_menu_add_feed">Ajouter un flux</string>
     <string name="main_menu_feed_list">Liste des flux</string>
+    <string name="main_menu_import_opml">Importer un fichier OPML</string>
+    <string name="main_menu_export_opml">Exporter un fichier OPML</string>
     <string name="main_menu_about">À propos</string>
 
     <!-- About activity -->/
