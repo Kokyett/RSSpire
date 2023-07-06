@@ -10,13 +10,16 @@ import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.core.view.MenuCompat
 import androidx.lifecycle.lifecycleScope
 import fr.kokyett.rsspire.R
 import fr.kokyett.rsspire.RSSpireApplication
+import fr.kokyett.rsspire.adapters.IconListAdapter
 import fr.kokyett.rsspire.database.entities.Feed
+import fr.kokyett.rsspire.models.FeedIcon
 import fr.kokyett.rsspire.utils.ExtrasUtils
 import fr.kokyett.rsspire.utils.HtmlUtils
 import fr.kokyett.rsspire.views.InstantAutoComplete
@@ -57,7 +60,6 @@ class EditFeedActivity : AppCompatActivity() {
             editUrl.setText(intent.extras?.getString(ExtrasUtils.URL))
             editTitle.setText(intent.extras?.getString(ExtrasUtils.TITLE))
             feed = Feed(0, null, editUrl.text.toString(), nullIfEmpty(editTitle.text.toString()))
-            getIcon()
         } else {
             feed = Feed()
         }
@@ -69,36 +71,48 @@ class EditFeedActivity : AppCompatActivity() {
                 val application = (applicationContext as RSSpireApplication)
                 feed = application.feedRepository.get(intent.extras?.getLong(ExtrasUtils.FEED) ?: 0) ?: Feed()
                 val idCategory = feed.idCategory
-                val category = if (idCategory != null)
-                    application.categoryRepository.get(idCategory)?.name
-                else
-                    null
+                val category = if (idCategory != null) application.categoryRepository.get(idCategory)?.name
+                else null
 
                 withContext(Dispatchers.Main) {
                     editUrl.setText(feed.url)
                     editTitle.setText(feed.title)
                     editCategory.setText(category)
                     val icon = feed.icon
-                    if (icon != null)
-                        imageView.setImageBitmap(BitmapFactory.decodeByteArray(icon, 0, icon.size))
-                    else
-                        getIcon()
+                    if (icon != null) imageView.setImageBitmap(BitmapFactory.decodeByteArray(icon, 0, icon.size))
                 }
             }
         }
     }
 
-    private fun getIcon() {
+    private fun showDialogIcons(icons: ArrayList<FeedIcon>) {
+        val builderSingle = AlertDialog.Builder(this@EditFeedActivity)
+        builderSingle.setIcon(R.drawable.ic_action_get_icon)
+        builderSingle.setTitle(R.string.edit_feed_select_icon)
+
+        val arrayAdapter = IconListAdapter(this@EditFeedActivity, icons)
+        builderSingle.setNegativeButton(R.string.edit_feed_select_icon_cancel) { dialog, _ -> dialog.dismiss() }
+        builderSingle.setAdapter(arrayAdapter) { _, which ->
+            val feedIcon = arrayAdapter.getItem(which)
+            if (feedIcon?.byteArray != null) {
+                feed.icon = feedIcon.byteArray
+                val bitmap = BitmapFactory.decodeByteArray(feedIcon.byteArray, 0, feedIcon.byteArray!!.size)
+                imageView.setImageBitmap(bitmap)
+            }
+        }
+        builderSingle.show()
+    }
+
+    private fun getIcons() {
         lifecycleScope.launch {
             withContext(Dispatchers.IO) {
                 if (URLUtil.isValidUrl(editUrl.text.toString())) {
                     val url = URL(editUrl.text.toString())
-                    val byteArray = HtmlUtils.getIcon(url.protocol + "://" + url.host)
-                    if (byteArray != null) {
-                        val bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
-                        feed.icon = byteArray
-                        withContext(Dispatchers.Main) {
-                            imageView.setImageBitmap(bitmap)
+                    val icons = HtmlUtils.getIcons(url.protocol + "://" + url.host)
+                    withContext(Dispatchers.Main) {
+                        when (icons.size) {
+                            0 -> Toast.makeText(this@EditFeedActivity, applicationContext.getText(R.string.edit_feed_not_found_icons), Toast.LENGTH_LONG).show()
+                            else -> showDialogIcons(icons)
                         }
                     }
                 }
@@ -110,9 +124,7 @@ class EditFeedActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.edit_feed, menu)
         if (menu != null) MenuCompat.setGroupDividerEnabled(menu, true)
-
         if (menu is MenuBuilder) menu.setOptionalIconsVisible(true)
-
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -128,15 +140,16 @@ class EditFeedActivity : AppCompatActivity() {
                 finish()
                 return true
             }
+
             R.id.action_menu_save -> saveFeed()
-            R.id.action_menu_search_icon -> getIcon()
+            R.id.action_menu_search_icon -> getIcons()
             R.id.action_menu_delete -> deleteFeed()
         }
         return super.onOptionsItemSelected(item)
     }
 
     private fun deleteFeed() {
-        //TODO delete cnofirmation popup
+        //TODO delete confirmation popup
         lifecycleScope.launch {
             withContext(Dispatchers.IO) {
                 val context = applicationContext as RSSpireApplication

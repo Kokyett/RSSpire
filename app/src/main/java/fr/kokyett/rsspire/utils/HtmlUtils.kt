@@ -1,9 +1,7 @@
 package fr.kokyett.rsspire.utils
 
-import android.graphics.Bitmap
-import android.text.Html
 import android.webkit.URLUtil
-import java.io.ByteArrayOutputStream
+import fr.kokyett.rsspire.models.FeedIcon
 import java.net.URL
 import java.util.Locale
 import java.util.regex.Matcher
@@ -11,32 +9,30 @@ import java.util.regex.Pattern
 
 class HtmlUtils {
     companion object {
-        val patternOpenGraphIcon = Pattern.compile("<meta[^>]*property=[\"']og:image[\"'][^>]*>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
-        val patternMetaContent = Pattern.compile("content=[\"']([^\"']*)[\"']", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
-        val patternIcon = Pattern.compile("<link[^>]*rel=[\"'][^\"']*icon[\"'][^>]*>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
-        val patternHref = Pattern.compile("href=[\"']([^\"']*)[\"']", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
-        val patternLinks: Pattern = Pattern.compile("(href|src)=[\"']([^\"']*)[\"']", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
-        val patternLinkRss = Pattern.compile("<link[^>]*type=[\"']application/rss\\+xml[\"'][^>]*>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
+        private val patternOpenGraphIcon: Pattern = Pattern.compile("<meta[^>]*property=[\"']og:image[\"'][^>]*>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
+        private val patternMetaContent: Pattern = Pattern.compile("content=[\"']([^\"']*)[\"']", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
+        private val patternIcon: Pattern = Pattern.compile("<link[^>]*rel=[\"'][^\"']*icon[\"'][^>]*>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
+        val patternHref: Pattern = Pattern.compile("href=[\"']([^\"']*)[\"']", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
+        private val patternLinks: Pattern = Pattern.compile("(href|src)=[\"']([^\"']*)[\"']", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
+        val patternLinkRss: Pattern = Pattern.compile("<link[^>]*type=[\"']application/rss\\+xml[\"'][^>]*>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
+        private val patternLogoImage: Pattern = Pattern.compile("<img[^>]*src=[\"']([^\"']*logo[^\"']*)[\"'][^>]*>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
 
-        fun getIcon(url: String): ByteArray? {
-            if (!URLUtil.isValidUrl(url))
-                return null
+        fun getIcons(url: String): ArrayList<FeedIcon> {
+            val list = ArrayList<FeedIcon>()
 
-            var savedBitmap: Bitmap? = null
+            if (!URLUtil.isValidUrl(url)) return list
             try {
                 var content = DownloaderUtils.getString(url) ?: ""
                 content = restoreLinks(url, content)
 
                 var matcher = patternOpenGraphIcon.matcher(content)
-                if (matcher.find()) {
+                while (matcher.find()) {
                     val matcherContent = matcher.group(0) ?: ""
                     matcher = patternMetaContent.matcher(matcherContent)
                     if (matcher.find()) {
                         val bitmapUrl = matcher.group(1) ?: ""
-                        if (URLUtil.isValidUrl(bitmapUrl)) {
-                            val bitmap = DownloaderUtils.getBitmap(bitmapUrl)
-                            if (bitmap != null)
-                                savedBitmap = bitmap
+                        if (URLUtil.isValidUrl(bitmapUrl) && list.none { it.url == bitmapUrl.toString() }) {
+                            list.add(FeedIcon(bitmapUrl))
                         }
                     }
                 }
@@ -47,41 +43,34 @@ class HtmlUtils {
                     val hrefMatcher: Matcher = patternHref.matcher(matcherContent)
                     if (hrefMatcher.find()) {
                         val bitmapUrl = hrefMatcher.group(1) ?: continue
-                        if (URLUtil.isValidUrl(bitmapUrl)) {
-                            val bitmap = DownloaderUtils.getBitmap(bitmapUrl)
-                            if (bitmap != null && (savedBitmap == null || savedBitmap.width < bitmap.width))
-                                savedBitmap = bitmap
+                        if (URLUtil.isValidUrl(bitmapUrl) && list.none { it.url == bitmapUrl.toString() }) {
+                            list.add(FeedIcon(bitmapUrl))
                         }
                     }
                 }
 
-                if (savedBitmap == null) {
-                    try {
-                        var iconUrl = URL(url)
-                        iconUrl = URL(iconUrl.protocol + "://" + iconUrl.host + "/favicon.png")
-
-                        var bitmap = DownloaderUtils.getBitmap(iconUrl)
-                        if (bitmap == null) {
-                            iconUrl = URL(iconUrl.protocol + "://" + iconUrl.host + "/favicon.ico")
-                            bitmap = DownloaderUtils.getBitmap(iconUrl)
-                        }
-                        savedBitmap = bitmap
-                    } catch (e: Exception) {
-                        //TODO: Log exception
+                matcher = patternLogoImage.matcher(content)
+                while (matcher.find()) {
+                    val bitmapUrl = matcher.group(1) ?: continue
+                    if (URLUtil.isValidUrl(bitmapUrl) && list.none { it.url == bitmapUrl.toString() }) {
+                        list.add(FeedIcon(bitmapUrl))
                     }
                 }
             } catch (e: Exception) {
                 //TODO: Log exception
             }
 
-            if (savedBitmap != null) {
-                val stream = ByteArrayOutputStream()
-                savedBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
-                val byteArray = stream.toByteArray()
-                stream.close()
-                return byteArray
+            try {
+                var iconUrl = URL(url)
+                iconUrl = URL(iconUrl.protocol + "://" + iconUrl.host + "/favicon.png")
+                if (list.none { it.url == iconUrl.toString() }) list.add(FeedIcon(iconUrl.toString()))
+
+                iconUrl = URL(iconUrl.protocol + "://" + iconUrl.host + "/favicon.ico")
+                if (list.none { it.url == iconUrl.toString() }) list.add(FeedIcon(iconUrl.toString()))
+            } catch (e: Exception) {
+                //TODO: Log exception
             }
-            return null
+            return list
         }
 
         fun restoreLinks(urlString: String, content: String): String {
@@ -97,10 +86,8 @@ class HtmlUtils {
                     if (list.contains(matchContent)) continue
 
                     list.add(matchContent)
-                    if (link.trim() == "" || link == "/" || link.lowercase(Locale.getDefault())
-                            .startsWith("http://") || link.lowercase(Locale.getDefault())
-                            .startsWith("https://") || link.lowercase(Locale.getDefault())
-                            .startsWith("data:")
+                    if (link.trim() == "" || link == "/" || link.lowercase(Locale.getDefault()).startsWith("http://") || link.lowercase(Locale.getDefault())
+                            .startsWith("https://") || link.lowercase(Locale.getDefault()).startsWith("data:")
                     ) continue
 
                     var newLink: String
@@ -117,8 +104,7 @@ class HtmlUtils {
                             url.path.substring(0, pos) + link
                         }
                     }
-                    newContent =
-                        newContent.replace(matchContent, matchContent.replace(link, newLink))
+                    newContent = newContent.replace(matchContent, matchContent.replace(link, newLink))
                 }
                 return newContent
             } catch (e: java.lang.Exception) {

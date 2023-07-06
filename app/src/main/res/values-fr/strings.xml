@@ -31,6 +31,9 @@
     <string name="edit_feed_category">Catégorie</string>
     <string name="edit_feed_invalid_url">URL invalide</string>
     <string name="edit_feed_url_already_exists">L\'URL existe déjà</string>
+    <string name="edit_feed_not_found_icons">Aucune icône n\'a été trouvée</string>
+    <string name="edit_feed_select_icon">Selectioner une icône</string>
+    <string name="edit_feed_select_icon_cancel">Annuler</string>
 
     <!-- Edit feed menu -->
     <string name="edit_feed_menu_save">Enregistrer</string>

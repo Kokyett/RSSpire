@@ -37,6 +37,9 @@
     <string name="edit_feed_category">Category</string>
     <string name="edit_feed_invalid_url">Invalid URL</string>
     <string name="edit_feed_url_already_exists">URL already exists</string>
+    <string name="edit_feed_not_found_icons">No icon have been found</string>
+    <string name="edit_feed_select_icon">Select icon</string>
+    <string name="edit_feed_select_icon_cancel">Cancel</string>
 
     <!-- Edit feed menu -->
     <string name="edit_feed_menu_save">Save</string>

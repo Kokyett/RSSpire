@@ -81,9 +81,10 @@ class DownloaderUtils {
             connection.doInput = true
             connection.doOutput = false
             connection.setRequestProperty("Accept", "*/*")
+            connection.setRequestProperty("Accept-Encoding", "gzip");
             connection.setRequestProperty(
                 "User-Agent",
-                "Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/113.0"
+                "Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/115.0"
             )
             connection.connectTimeout = TIMEOUT
             connection.readTimeout = TIMEOUT
@@ -103,7 +104,7 @@ class DownloaderUtils {
 
         private fun getBytes(connection: HttpURLConnection): ByteArray {
             var inputStream = connection.inputStream
-            if (connection.contentEncoding === "gzip" && inputStream !is GZIPInputStream) {
+            if (connection.contentEncoding == "gzip" && inputStream !is GZIPInputStream) {
                 inputStream = GZIPInputStream(inputStream)
             }
             var n: Int
