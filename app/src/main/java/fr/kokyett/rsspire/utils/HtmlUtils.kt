@@ -1,6 +1,7 @@
 package fr.kokyett.rsspire.utils
 
 import android.webkit.URLUtil
+import fr.kokyett.rsspire.RSSpireApplication
 import fr.kokyett.rsspire.models.FeedIcon
 import java.net.URL
 import java.util.Locale
@@ -57,7 +58,7 @@ class HtmlUtils {
                     }
                 }
             } catch (e: Exception) {
-                //TODO: Log exception
+                RSSpireApplication.logException(e)
             }
 
             try {
@@ -68,7 +69,7 @@ class HtmlUtils {
                 iconUrl = URL(iconUrl.protocol + "://" + iconUrl.host + "/favicon.ico")
                 if (list.none { it.url == iconUrl.toString() }) list.add(FeedIcon(iconUrl.toString()))
             } catch (e: Exception) {
-                //TODO: Log exception
+                RSSpireApplication.logException(e)
             }
             return list
         }
@@ -108,7 +109,7 @@ class HtmlUtils {
                 }
                 return newContent
             } catch (e: java.lang.Exception) {
-                //TODO Log exception
+                RSSpireApplication.logException(e)
                 return content
             }
         }

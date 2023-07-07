@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import fr.kokyett.rsspire.R
+import fr.kokyett.rsspire.RSSpireApplication
 import fr.kokyett.rsspire.adapters.SearchFeedAdapter
 import fr.kokyett.rsspire.models.SearchFeedResult
 import fr.kokyett.rsspire.utils.DateTimeUtils
@@ -132,7 +133,7 @@ class SearchFeedActivity : AppCompatActivity() {
                 }
             }
         } catch (e: Exception) {
-            //TODO: log exception ?
+            RSSpireApplication.logException(e)
         }
         if (list.size == 0)
             list.add(SearchFeedResult(url, null))

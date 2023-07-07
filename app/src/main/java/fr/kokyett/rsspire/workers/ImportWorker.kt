@@ -3,6 +3,7 @@ package fr.kokyett.rsspire.workers
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import android.webkit.URLUtil
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import fr.kokyett.rsspire.RSSpireApplication
@@ -28,8 +29,7 @@ class ImportWorker(context: Context, private var params: WorkerParameters) : Cor
             }
             Result.success()
         } catch (e: Exception) {
-            // TODO: Log error
-            Log.e("ImportOPML", "Crash " + e.message, e)
+            RSSpireApplication.logException(e)
             Result.failure()
         }
     }
@@ -37,7 +37,7 @@ class ImportWorker(context: Context, private var params: WorkerParameters) : Cor
     private suspend fun readXml(document: Document) {
         val root = document.documentElement
         if (root.nodeName.lowercase() != "opml") {
-            // TODO: Log error
+            RSSpireApplication.logInformation("ImportWorker.readXml: not an OPML file")
             return
         }
 
@@ -47,7 +47,7 @@ class ImportWorker(context: Context, private var params: WorkerParameters) : Cor
             if (node.nodeName.lowercase() == "body") {
                 readOutlines(node.childNodes)
             } else {
-                // TODO: Log unknown Tag
+                RSSpireApplication.logInformation("ImportWorker.readXml: unknown node ${node.nodeName}")
             }
         }
     }
@@ -56,7 +56,7 @@ class ImportWorker(context: Context, private var params: WorkerParameters) : Cor
         for (i in 0 until nodes.length) {
             val node = nodes.item(i)
             if (node.nodeName.lowercase() != "outline") {
-                // TODO: Log unknown Tag
+                RSSpireApplication.logInformation("ImportWorker.readXml: unknown node ${node.nodeName}")
                 continue
             }
 
@@ -70,27 +70,15 @@ class ImportWorker(context: Context, private var params: WorkerParameters) : Cor
                 continue
             }
 
-            if (isUrl(url)) {
+            if (URLUtil.isValidUrl(url)) {
                 var feed = feedRepository.get(url)
                 if (feed == null) {
                     feed = Feed(0, category?.id, url, title)
                     feedRepository.save(feed)
                 }
             } else {
-                // TODO: Log error
+                RSSpireApplication.logInformation("ImportWorker.readOutlines: Invalid url for $url")
             }
-        }
-    }
-
-    private fun isUrl(url: String) : Boolean {
-        if (url.trim() == "") {
-            return false
-        }
-        return try {
-            URL(url)
-            true
-        } catch (e: Exception) {
-            false
         }
     }
 }

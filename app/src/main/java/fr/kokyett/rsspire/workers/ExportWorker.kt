@@ -49,14 +49,13 @@ class ExportWorker(private var context: Context, private var params: WorkerParam
                         .newInstance()
                         .newTransformer()
                         .transform(DOMSource(document), StreamResult(outputStream))
-                } catch (ex: Exception) {
-                    // TODO: Log exception
+                } catch (e: Exception) {
+                    RSSpireApplication.logException(e)
                 }
             }
             Result.success()
         } catch (e: Exception) {
-            // TODO: Log error
-            Log.e("ExportOPML", "Crash " + e.message, e)
+            RSSpireApplication.logException(e)
             Result.failure()
         }
     }

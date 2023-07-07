@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import fr.kokyett.rsspire.R
+import fr.kokyett.rsspire.RSSpireApplication
 import fr.kokyett.rsspire.database.entities.Feed
 
 class FeedListAdapter : ListAdapter<Feed, FeedListAdapter.ItemViewHolder>(ItemsComparator()) {
@@ -42,6 +43,7 @@ class FeedListAdapter : ListAdapter<Feed, FeedListAdapter.ItemViewHolder>(ItemsC
                 textView1.text = feed.title
                 textView2.text = feed.url
             }
+            imageView.setImageResource(R.drawable.ic_default_feed)
 
             val icon = feed.icon
             if (icon != null) {
@@ -49,7 +51,7 @@ class FeedListAdapter : ListAdapter<Feed, FeedListAdapter.ItemViewHolder>(ItemsC
                     val bitmap = BitmapFactory.decodeByteArray(icon, 0, icon.size)
                     imageView.setImageBitmap(bitmap)
                 } catch (e: Exception) {
-                    //TODO: Log exception
+                    RSSpireApplication.logException(e)
                 }
             }
         }

@@ -3,6 +3,7 @@ package fr.kokyett.rsspire.utils
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.webkit.URLUtil
+import fr.kokyett.rsspire.RSSpireApplication
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.net.HttpURLConnection
@@ -19,17 +20,17 @@ class DownloaderUtils {
             return if (URLUtil.isValidUrl(url)) {
                 getBitmap(URL(url))
             } else {
-                //TODO: Log
+                RSSpireApplication.logInformation("DownloaderUtils.getBitmap: Invalid url for $url")
                 null
             }
         }
 
-        fun getBitmap(url: URL): Bitmap? {
+        private fun getBitmap(url: URL): Bitmap? {
             return try {
                 val bytes = getBytes(url)
                 BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
             } catch (e: Exception) {
-                //TODO: Log Exception
+                RSSpireApplication.logException(e)
                 null
             }
         }
@@ -46,7 +47,7 @@ class DownloaderUtils {
                 else
                     String(bytes, Charset.forName(charset))
             } else {
-                //TODO: Log
+                RSSpireApplication.logInformation("DownloaderUtils.getString: Invalid url for $url")
                 null
             }
         }
