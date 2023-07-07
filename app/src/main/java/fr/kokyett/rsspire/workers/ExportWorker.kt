@@ -75,8 +75,10 @@ class ExportWorker(private var context: Context, private var params: WorkerParam
         for (feed in feedRepository.getByCategory(id).first()) {
             val outline = document.createElement("outline")
             outline.setAttribute("xmlUrl", feed.url)
-            outline.setAttribute("title", feed.title)
-            outline.setAttribute("text", feed.title)
+            if (feed.title != null) {
+                outline.setAttribute("title", feed.title)
+                outline.setAttribute("text", feed.title)
+            }
             node.appendChild(outline)
         }
     }
