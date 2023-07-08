@@ -31,7 +31,6 @@ class ExportWorker(private var context: Context, private var params: WorkerParam
             val head = document.createElement("head")
             val body = document.createElement("body")
 
-
             document.appendChild(root)
             root.appendChild(head)
             root.appendChild(body)
@@ -72,7 +71,7 @@ class ExportWorker(private var context: Context, private var params: WorkerParam
     }
 
     private suspend fun exportCategoryFeeds(document: Document, node: Element, id: Long?) {
-        for (feed in feedRepository.getByCategory(id).first()) {
+        for (feed in feedRepository.getByCategory(id).asFlow().first()) {
             val outline = document.createElement("outline")
             outline.setAttribute("xmlUrl", feed.url)
             if (feed.title != null) {

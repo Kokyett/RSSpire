@@ -18,6 +18,7 @@
 
     <!-- Feeds activity -->
     <string name="feeds_activity_title">Liste des flux</string>
+    <string name="feeds_no_category">Sans catégorie</string>
 
     <!-- Search feed activity -->
     <string name="search_feed_activity_title">Rechercher un flux</string>

@@ -24,6 +24,7 @@
 
     <!-- Feeds activity -->
     <string name="feeds_activity_title">Feed list</string>
+    <string name="feeds_no_category">No category</string>
 
     <!-- Search feed activity -->
     <string name="search_feed_activity_title">Search feed</string>

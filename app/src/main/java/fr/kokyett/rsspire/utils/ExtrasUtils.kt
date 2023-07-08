@@ -5,5 +5,6 @@ class ExtrasUtils {
         const val URL = "url"
         const val TITLE = "title"
         const val FEED = "feed"
+        const val ID_CATEGORY = "idCategory"
     }
 }

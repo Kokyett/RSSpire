@@ -123,8 +123,10 @@ class EditFeedActivity : AppCompatActivity() {
     @SuppressLint("RestrictedApi")
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.edit_feed, menu)
-        if (menu != null) MenuCompat.setGroupDividerEnabled(menu, true)
-        if (menu is MenuBuilder) menu.setOptionalIconsVisible(true)
+        if (menu != null)
+            MenuCompat.setGroupDividerEnabled(menu, true)
+        if (menu is MenuBuilder)
+            menu.setOptionalIconsVisible(true)
         return super.onCreateOptionsMenu(menu)
     }
 

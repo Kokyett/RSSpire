@@ -17,22 +17,16 @@ class AboutActivity : AppCompatActivity() {
         setContentView(R.layout.activity_tabs)
 
         val tabs: ArrayList<TabInfo> = ArrayList()
-        tabs.add(TabInfo(AboutFragment::class.java, R.drawable.ic_action_about, R.string.about_tab))
-        tabs.add(
-            TabInfo(
-                LicenseFragment::class.java,
-                R.drawable.ic_action_licence,
-                R.string.license_tab
-            )
-        )
+        tabs.add(TabInfo(AboutFragment::class.java, resources.getString(R.string.about_tab), R.drawable.ic_action_about))
+        tabs.add(TabInfo(LicenseFragment::class.java, resources.getString(R.string.license_tab), R.drawable.ic_action_licence))
 
         val viewPager = findViewById<ViewPager2>(R.id.viewpager)
         viewPager.adapter = ViewPagerAdapter(supportFragmentManager, lifecycle, tabs)
 
         val tabLayout = findViewById<TabLayout>(R.id.tablayout)
         TabLayoutMediator(tabLayout, viewPager) { tab: TabLayout.Tab, position: Int ->
-            tab.setIcon(tabs[position].iconId)
-            tab.setText(tabs[position].textId)
+            tabs[position].iconId?.let { tab.setIcon(it) }
+            tab.text = tabs[position].text
         }.attach()
     }
 }

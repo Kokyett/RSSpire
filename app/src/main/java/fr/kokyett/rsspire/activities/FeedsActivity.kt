@@ -11,23 +11,43 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.core.view.MenuCompat
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import fr.kokyett.rsspire.R
 import fr.kokyett.rsspire.RSSpireApplication
-import fr.kokyett.rsspire.adapters.FeedListAdapter
+import fr.kokyett.rsspire.adapters.CategoryViewPagerAdapter
+import fr.kokyett.rsspire.fragments.FeedsFragment
+import fr.kokyett.rsspire.models.CategoryTabInfo
 import fr.kokyett.rsspire.utils.DateTimeUtils
-import fr.kokyett.rsspire.utils.ExtrasUtils
 import fr.kokyett.rsspire.workers.Workers
 
 class FeedsActivity : AppCompatActivity() {
-    private lateinit var adapter: FeedListAdapter
+    private val tabs: ArrayList<CategoryTabInfo> = ArrayList()
+    private lateinit var tabLayoutMediator: TabLayoutMediator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_feeds)
-        initRecyclerView()
+        setContentView(R.layout.activity_tabs)
+
+        val viewPager = findViewById<ViewPager2>(R.id.viewpager)
+        viewPager.adapter = CategoryViewPagerAdapter(supportFragmentManager, lifecycle, tabs)
+
+        val tabLayout = findViewById<TabLayout>(R.id.tablayout)
+        tabLayoutMediator = TabLayoutMediator(tabLayout, viewPager) { tab: TabLayout.Tab, position: Int ->
+            tab.text = tabs[position].text
+        }
+        tabLayoutMediator.attach()
+
+        (application as RSSpireApplication).feedRepository.allCategoriesWithFeeds.observe(this) { categories ->
+            tabs.clear()
+            for (category in categories) {
+                tabs.add(CategoryTabInfo(FeedsFragment::class.java, category.id, category.name ?: resources.getString(R.string.feeds_no_category)))
+            }
+            viewPager.adapter = CategoryViewPagerAdapter(supportFragmentManager, lifecycle, tabs)
+            tabLayoutMediator.detach()
+            tabLayoutMediator.attach()
+        }
     }
 
     @SuppressLint("RestrictedApi")
@@ -56,28 +76,6 @@ class FeedsActivity : AppCompatActivity() {
                 })
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun initRecyclerView() {
-        adapter = FeedListAdapter()
-        adapter.onItemClick = {
-            val intent = Intent(this, EditFeedActivity::class.java)
-            intent.putExtra(ExtrasUtils.FEED, it.id)
-            startActivity(intent)
-        }
-
-        val recyclerView = findViewById<RecyclerView>(R.id.recyclerview)
-        recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.addItemDecoration(
-            DividerItemDecoration(
-                recyclerView.context, DividerItemDecoration.VERTICAL
-            )
-        )
-
-        (application as RSSpireApplication).feedRepository.allFeeds.observe(this) { feeds ->
-            feeds?.let { adapter.submitList(it) }
-        }
     }
 
     private var importStartForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->

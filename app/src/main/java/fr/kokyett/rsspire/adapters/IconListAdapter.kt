@@ -22,6 +22,7 @@ class IconListAdapter(private val activity: AppCompatActivity, icons: ArrayList<
         val view = convertView ?: View.inflate(context, R.layout.view_icon_item, null)
         val item = getItem(position)
         val imageView = view.findViewById(R.id.imageview) as ImageView
+        imageView.visibility = View.GONE
 
         if (item != null) {
             if (item.byteArray == null) {
@@ -37,7 +38,7 @@ class IconListAdapter(private val activity: AppCompatActivity, icons: ArrayList<
                             stream.close()
                         } else {
                             withContext(Dispatchers.Main) {
-                                this@IconListAdapter.remove(item);
+                                this@IconListAdapter.remove(item)
                             }
                         }
                         withContext(Dispatchers.Main) {
@@ -48,7 +49,7 @@ class IconListAdapter(private val activity: AppCompatActivity, icons: ArrayList<
             } else if (item.byteArray!!.isNotEmpty()) {
                 val bitmap = BitmapFactory.decodeByteArray(item.byteArray, 0, item.byteArray!!.size)
                 if (bitmap != null) {
-                    view.visibility = View.VISIBLE
+                    imageView.visibility = View.VISIBLE
                     imageView.setImageBitmap(bitmap)
                 }
             }
