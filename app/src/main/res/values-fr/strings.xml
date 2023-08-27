@@ -2,6 +2,10 @@
     <!-- Manifest -->
     <string name="app_name">RSSpire</string>
 
+    <!-- Database initializations -->
+    <string name="database_initial_category">RSSpire</string>
+    <string name="database_initial_feed_logs">Journaux</string>
+
     <!-- Main activity -->
     <string name="main_menu_about">À propos</string>
 

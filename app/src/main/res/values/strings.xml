@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">RSSpire</string>
 
+    <!-- Database initializations -->
+    <string name="database_initial_category">RSSpire</string>
+    <string name="database_initial_feed_logs">Logs</string>
+
     <!-- Main menu -->
     <string name="main_menu_about">About</string>
 
