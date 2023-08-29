@@ -10,15 +10,15 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface EntryDao {
-    @Query("select * From Entry order by publishDate desc")
+    @Query("select * from Entry order by publishDate desc")
     fun getAll(): Flow<List<Entry>>
 
     @Insert
-    fun insert(feed: Entry): Long
+    fun insert(entry: Entry): Long
 
     @Update
-    fun update(feed: Entry)
+    fun update(entry: Entry)
 
     @Delete
-    fun delete(feed: Entry)
+    fun delete(entry: Entry)
 }

@@ -8,7 +8,6 @@ import fr.kokyett.rsspire.database.entities.Category
 
 
 class CategoryRepository(private val categoryDao: CategoryDao) {
-    @WorkerThread
     fun getAll(): LiveData<List<Category>> {
         return categoryDao.getAll().asLiveData()
     }

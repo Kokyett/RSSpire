@@ -7,7 +7,6 @@ import fr.kokyett.rsspire.database.dao.EntryDao
 import fr.kokyett.rsspire.database.entities.Entry
 
 class EntryRepository(private val entryDao: EntryDao) {
-    @WorkerThread
     fun getAll(): LiveData<List<Entry>> {
         return entryDao.getAll().asLiveData()
     }

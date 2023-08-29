@@ -7,9 +7,12 @@ import fr.kokyett.rsspire.database.dao.FeedDao
 import fr.kokyett.rsspire.database.entities.Feed
 
 class FeedRepository(private val feedDao: FeedDao) {
-    @WorkerThread
     fun getAll(): LiveData<List<Feed>> {
         return feedDao.getAll().asLiveData()
+    }
+
+    fun getLogsFeed(): Feed {
+        return feedDao.getLogsFeed()
     }
 
     @WorkerThread

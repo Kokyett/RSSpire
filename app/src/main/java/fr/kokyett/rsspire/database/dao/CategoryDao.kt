@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CategoryDao {
-    @Query("select * From Category order by name")
+    @Query("select * from Category order by name")
     fun getAll(): Flow<List<Category>>
 
     @Insert

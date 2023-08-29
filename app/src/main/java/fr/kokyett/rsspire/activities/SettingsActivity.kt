@@ -7,20 +7,16 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import fr.kokyett.rsspire.R
 import fr.kokyett.rsspire.adapters.ViewPagerAdapter
-import fr.kokyett.rsspire.fragments.AboutFragment
-import fr.kokyett.rsspire.fragments.ChangelogFragment
-import fr.kokyett.rsspire.fragments.LicenseFragment
+import fr.kokyett.rsspire.fragments.LogsPreferencesFragment
 import fr.kokyett.rsspire.models.TabInfo
 
-class AboutActivity : AppCompatActivity() {
+class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tabs)
 
         val tabs: ArrayList<TabInfo> = ArrayList()
-        tabs.add(TabInfo(AboutFragment::class.java, resources.getString(R.string.about_tab), R.drawable.ic_tab_about))
-        tabs.add(TabInfo(LicenseFragment::class.java, resources.getString(R.string.license_tab), R.drawable.ic_tab_licence))
-        tabs.add(TabInfo(ChangelogFragment::class.java, resources.getString(R.string.changelog_tab), R.drawable.ic_tab_changelog))
+        tabs.add(TabInfo(LogsPreferencesFragment::class.java, resources.getString(R.string.logs_tab), R.drawable.ic_tab_logs))
 
         val viewPager = findViewById<ViewPager2>(R.id.viewpager)
         viewPager.adapter = ViewPagerAdapter(supportFragmentManager, lifecycle, tabs)
