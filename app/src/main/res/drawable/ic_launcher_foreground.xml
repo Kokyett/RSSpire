@@ -10,10 +10,10 @@
     <path
         android:pathData="M100,0A100,100 0,0 0,0 100,100 100,0 0,0 0.62,110.5 80,80 0,0 1,80 40,80 80,0 0,1 160,120 80,80 0,0 1,89.5 199.38,100 100,0 0,0 100,200 100,100 0,0 0,200 100,100 100,0 0,0 100,0Z"
         android:strokeWidth="0.264583"
-        android:fillColor="#f77900"/>
+        android:fillColor="#3e601d"/>
     <path
         android:pathData="M65,135m-65,0a65,65 0,1 1,130 0a65,65 0,1 1,-130 0"
         android:strokeWidth="0.264583"
-        android:fillColor="#f4c430"/>
+        android:fillColor="#87ab63"/>
   </group>
 </vector>
