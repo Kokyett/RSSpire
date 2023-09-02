@@ -12,16 +12,20 @@ class CategoryRepository(private val categoryDao: CategoryDao) {
         return categoryDao.getAll().asLiveData()
     }
 
+    fun get(name: String): Category {
+        var category = categoryDao.get(name)
+        if (category == null) {
+            category = Category(0, name)
+            category.id = categoryDao.insert(category)
+        }
+        return category
+    }
+
     @WorkerThread
     fun save(category: Category) {
         if (category.id == 0L)
             category.id = categoryDao.insert(category)
         else
             categoryDao.update(category)
-    }
-
-    @WorkerThread
-    fun delete(category: Category) {
-        categoryDao.delete(category)
     }
 }

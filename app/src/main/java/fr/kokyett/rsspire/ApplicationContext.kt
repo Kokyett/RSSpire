@@ -28,7 +28,7 @@ class ApplicationContext : Application() {
 
         Thread.setDefaultUncaughtExceptionHandler { thread, e ->
             Log(LogType.CRASH). use {
-                it.write(LogLineType.CRASH, e)
+                it.writeCrash(e)
             }
             defaultUncaughtHandler?.uncaughtException(thread, e)
         }

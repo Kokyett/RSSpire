@@ -5,8 +5,17 @@
 
     <CheckBoxPreference
         android:defaultValue="true"
-        android:key="pref_uncaught_exceptions"
-        android:title="@string/pref_uncaught_exceptions"
-        android:summary="@string/pref_uncaught_exceptions_description"
+        android:key="pref_log_uncaught_exceptions"
+        android:title="@string/pref_log_uncaught_exceptions"
+        app:iconSpaceReserved="false"/>
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="pref_log_import_opml"
+        android:title="@string/pref_log_import_opml"
+        app:iconSpaceReserved="false"/>
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="pref_log_export_opml"
+        android:title="@string/pref_log_export_opml"
         app:iconSpaceReserved="false"/>
 </PreferenceScreen>

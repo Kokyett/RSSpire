@@ -2,7 +2,6 @@ package fr.kokyett.rsspire.utils
 
 import fr.kokyett.rsspire.ApplicationContext
 import fr.kokyett.rsspire.BuildConfig
-import fr.kokyett.rsspire.R
 import fr.kokyett.rsspire.database.entities.Entry
 import fr.kokyett.rsspire.enums.LogLineType
 import fr.kokyett.rsspire.enums.LogType
@@ -14,7 +13,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class Log(val type: LogType): Closeable {
+class Log(private val type: LogType): Closeable {
     private var logs: StringBuilder = StringBuilder()
     private val dateFormat = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
 
@@ -25,11 +24,31 @@ class Log(val type: LogType): Closeable {
         logs.append("****************************************\r\n")
     }
 
-    fun write(type: LogLineType, line: String?) {
+    fun writeInformation(line: String?) {
+        write(LogLineType.INFORMATION, line)
+    }
+
+    fun writeInformation(throwable: Throwable) {
+        write(LogLineType.INFORMATION, throwable)
+    }
+
+    fun writeException(line: String?) {
+        write(LogLineType.EXCEPTION, line)
+    }
+
+    fun writeException(throwable: Throwable) {
+        write(LogLineType.EXCEPTION, throwable)
+    }
+
+    fun writeCrash(throwable: Throwable) {
+        write(LogLineType.EXCEPTION, throwable)
+    }
+
+    private fun write(type: LogLineType, line: String?) {
         logs.append("${dateFormat.format(Date())} [${type}] ${line}\r\n")
     }
 
-    fun write(type: LogLineType, throwable: Throwable) {
+    private fun write(type: LogLineType, throwable: Throwable) {
         write(type, throwable.javaClass.name)
         write(type, throwable.message)
         for (stack in throwable.stackTrace) {
@@ -39,8 +58,9 @@ class Log(val type: LogType): Closeable {
 
     private fun canSaveLgg(): Boolean {
         return when (type) {
-            LogType.CRASH -> ApplicationContext.getBooleanPreference("pref_uncaught_exceptions", true)
-            else -> true;
+            LogType.CRASH -> ApplicationContext.getBooleanPreference("pref_log_uncaught_exceptions", true)
+            LogType.IMPORTOPML -> ApplicationContext.getBooleanPreference("pref_log_import_opml", false)
+            LogType.EXPORTOPML -> ApplicationContext.getBooleanPreference("pref_log_export_opml", false)
         }
     }
 

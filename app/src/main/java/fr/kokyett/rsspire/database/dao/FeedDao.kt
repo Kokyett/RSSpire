@@ -17,6 +17,12 @@ interface FeedDao {
     @Query("select * from Feed where type = 'LOG'")
     fun getLogsFeed(): Feed
 
+    @Query("select * from Feed where type <> 'LOG' and (idCategory = :id or (idCategory is null and :id is null)) order by title, url;")
+    fun getExportByCategory(id: Long?): Flow<List<Feed>>
+
+    @Query("select * from Feed where url = :url;")
+    fun getForUrl(url: String): Feed?
+
     @Insert
     fun insert(feed: Feed): Long
 

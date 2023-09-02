@@ -13,6 +13,9 @@ interface CategoryDao {
     @Query("select * from Category order by name")
     fun getAll(): Flow<List<Category>>
 
+    @Query("select * from Category where name = :name;")
+    fun get(name: String): Category?
+
     @Insert
     fun insert(category: Category): Long
 
