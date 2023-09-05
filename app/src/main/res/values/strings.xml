@@ -6,10 +6,21 @@
     <string name="database_initial_feed_logs">Logs</string>
 
     <!-- Main menu -->
+    <string name="main_menu_feed_list">Feed list</string>
     <string name="main_menu_import_opml">Import OPML file</string>
     <string name="main_menu_export_opml">Export OPML file</string>
     <string name="main_menu_settings">Settings</string>
     <string name="main_menu_about">About</string>
+
+    <!-- Feeds activity -->
+    <string name="feeds_activity_title">Feed list</string>
+    <string name="feeds_no_category">No category</string>
+
+    <!-- Entries activity -->
+    <string name="entries_activity_title">Entry list</string>
+
+    <!-- Entry activity -->
+    <string name="entry_activity_title">Entry</string>
 
     <!-- Settings activity -->
     <string name="settings_activity_title">Settings</string>
@@ -32,4 +43,7 @@
     <string name="wtfpl_license_3" translatable="false">DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE\nTERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION</string>*
     <string name="wtfpl_license_4" translatable="false">0. You just DO WHAT THE FUCK YOU WANT TO.</string>
     <string name="changelog_tab">Changelog</string>
+
+    <!-- Error messages -->
+    <string name="error_swipe_not_implemented">Feature not implemented</string>
 </resources>

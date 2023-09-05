@@ -5,10 +5,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import fr.kokyett.rsspire.database.dao.EntryDao
 import fr.kokyett.rsspire.database.entities.Entry
+import fr.kokyett.rsspire.database.entities.Feed
 
 class EntryRepository(private val entryDao: EntryDao) {
-    fun getAll(): LiveData<List<Entry>> {
-        return entryDao.getAll().asLiveData()
+    fun get(id: Long): LiveData<Entry> {
+        return entryDao.get(id).asLiveData()
+    }
+
+    fun getByCategory(id: Long?): LiveData<List<Entry>> {
+        return entryDao.getByCategory(id).asLiveData()
     }
 
     @WorkerThread

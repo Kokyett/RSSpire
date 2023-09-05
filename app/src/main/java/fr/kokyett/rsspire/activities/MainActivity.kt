@@ -11,14 +11,43 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.core.view.MenuCompat
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
+import fr.kokyett.rsspire.ApplicationContext
 import fr.kokyett.rsspire.R
+import fr.kokyett.rsspire.adapters.CategoryViewPagerAdapter
+import fr.kokyett.rsspire.fragments.EntriesFragment
+import fr.kokyett.rsspire.models.CategoryTabInfo
 import fr.kokyett.rsspire.utils.DateTime
 import fr.kokyett.rsspire.workers.Workers
 
 class MainActivity : AppCompatActivity() {
+    private val tabs: ArrayList<CategoryTabInfo> = ArrayList()
+    private lateinit var tabLayoutMediator: TabLayoutMediator
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_tabs)
+
+        val viewPager = findViewById<ViewPager2>(R.id.viewpager)
+        viewPager.adapter = CategoryViewPagerAdapter(supportFragmentManager, lifecycle, tabs)
+
+        val tabLayout = findViewById<TabLayout>(R.id.tablayout)
+        tabLayoutMediator = TabLayoutMediator(tabLayout, viewPager) { tab: TabLayout.Tab, position: Int ->
+            tab.text = tabs[position].text
+        }
+        tabLayoutMediator.attach()
+
+        ApplicationContext.getCategoryRepository().getWithEntries().observe(this) { categories ->
+            tabs.clear()
+            for (category in categories) {
+                tabs.add(CategoryTabInfo(EntriesFragment::class.java, category.id, category.name ?: resources.getString(R.string.feeds_no_category)))
+            }
+            viewPager.adapter = CategoryViewPagerAdapter(supportFragmentManager, lifecycle, tabs)
+            tabLayoutMediator.detach()
+            tabLayoutMediator.attach()
+        }
     }
 
     @SuppressLint("RestrictedApi")
@@ -35,6 +64,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.action_menu_feed_list -> startActivity(Intent(this, FeedsActivity::class.java))
             R.id.action_menu_import_opml -> importStartForResult.launch(Intent(Intent.ACTION_OPEN_DOCUMENT)
                 .apply {
                     addCategory(Intent.CATEGORY_OPENABLE)

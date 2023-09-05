@@ -62,15 +62,13 @@ class ImportWorker(context: Context, private var params: WorkerParameters) : Cor
                 continue
             }
 
-            log.writeInformation("Get title")
             var title = node.attributes.getNamedItem("title")?.nodeValue ?: node.attributes.getNamedItem("text")?.nodeValue
             if (title != null && title.trim() == "")
                 title = null
 
-            log.writeInformation("Get url")
             val url = node.attributes.getNamedItem("xmlUrl")?.nodeValue ?: ""
             if (title != null && url.trim() == "") {
-                log.writeInformation("No url: ge category $title")
+                log.writeInformation("No url: create category $title")
                 readOutlines(node.childNodes, categoryRepository.get(title))
                 continue
             }

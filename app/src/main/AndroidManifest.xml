@@ -20,6 +20,24 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".activities.FeedsActivity"
+            android:label="@string/feeds_activity_title"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activities.EntryActivity"
+            android:label="@string/entry_activity_title"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity" />
+        </activity>
+        <activity
             android:name=".activities.SettingsActivity"
             android:label="@string/settings_activity_title"
             android:screenOrientation="portrait"

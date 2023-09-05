@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
     <group
+        android:id="@+id/group_miscelaneous">
+        <item
+            android:id="@+id/action_menu_feed_list"
+            android:icon="@drawable/ic_action_feed_list"
+            android:title="@string/main_menu_feed_list"
+            app:showAsAction="never|withText" />
+    </group>
+    <group
         android:id="@+id/group_opml">
         <item
             android:id="@+id/action_menu_import_opml"

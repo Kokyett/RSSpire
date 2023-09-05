@@ -5,11 +5,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import fr.kokyett.rsspire.database.dao.CategoryDao
 import fr.kokyett.rsspire.database.entities.Category
-
+import fr.kokyett.rsspire.database.entities.NullableCategory
 
 class CategoryRepository(private val categoryDao: CategoryDao) {
     fun getAll(): LiveData<List<Category>> {
         return categoryDao.getAll().asLiveData()
+    }
+
+    fun getWithFeeds(): LiveData<List<NullableCategory>> {
+        return categoryDao.getWithFeeds().asLiveData()
+    }
+
+    fun getWithEntries(): LiveData<List<NullableCategory>> {
+        return categoryDao.getWithEntries().asLiveData()
     }
 
     fun get(name: String): Category {

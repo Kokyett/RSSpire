@@ -21,6 +21,10 @@ class FeedRepository(private val feedDao: FeedDao) {
         return feedDao.getForUrl(url)
     }
 
+    fun getByCategory(id: Long?): LiveData<List<Feed>> {
+        return feedDao.getByCategory(id).asLiveData()
+    }
+
     fun getExportByCategory(id: Long?): Flow<List<Feed>> {
         return feedDao.getExportByCategory(id)
     }

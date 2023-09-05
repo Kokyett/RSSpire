@@ -74,6 +74,8 @@ class Log(private val type: LogType): Closeable {
                         idFeed = feed.id,
                         title = when (type) {
                             LogType.CRASH -> "Application crash"
+                            LogType.IMPORTOPML -> "OPML import"
+                            LogType.EXPORTOPML -> "OPML export"
                             else -> "Unknown functionality log"
                         },
                         content = "",
