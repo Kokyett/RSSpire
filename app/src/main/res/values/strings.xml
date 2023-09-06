@@ -12,6 +12,16 @@
     <string name="main_menu_settings">Settings</string>
     <string name="main_menu_about">About</string>
 
+    <!-- Feeds menu -->
+    <string name="feeds_menu_add_feed">Add feed</string>
+    <string name="feeds_menu_import_opml">Import OPML file</string>
+    <string name="feeds_menu_export_opml">Export OPML file</string>
+
+    <!-- Search feed activity -->
+    <string name="search_feed_activity_title">Search feed</string>
+    <string name="search_feed_text_hint">Enter keywords or URL</string>
+    <string name="search_feed_button">Search</string>
+
     <!-- Feeds activity -->
     <string name="feeds_activity_title">Feed list</string>
     <string name="feeds_no_category">No category</string>

@@ -6,16 +6,26 @@
     <string name="database_initial_category">RSSpire</string>
     <string name="database_initial_feed_logs">Journaux</string>
 
-    <!-- Main activity -->
+    <!-- Main Menu -->
     <string name="main_menu_feed_list">Liste de flux</string>
     <string name="main_menu_import_opml">Importer un fichier OPML</string>
     <string name="main_menu_export_opml">Exporter un fichier OPML</string>
     <string name="main_menu_settings">Settings</string>
     <string name="main_menu_about">À propos</string>
 
+    <!-- Feeds menu -->
+    <string name="feeds_menu_add_feed">Ajouter un flux</string>
+    <string name="feeds_menu_import_opml">Importer un fichier OPML</string>
+    <string name="feeds_menu_export_opml">Exporter un fichier OPML</string>
+
+    <!-- Search feed activity -->
+    <string name="search_feed_activity_title">Rechercher un flux</string>
+    <string name="search_feed_text_hint">Saisir des mots clé ou une URL</string>
+
     <!-- Feeds activity -->
     <string name="feeds_activity_title">Liste de flux</string>
     <string name="feeds_no_category">Sans catégorie</string>
+    <string name="search_feed_button">Rechercher</string>
 
     <!-- Entries activity -->
     <string name="entries_activity_title">Liste des articles</string>
