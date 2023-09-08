@@ -1,5 +1,7 @@
 package fr.kokyett.rsspire.utils
 
+import android.webkit.URLUtil
+import fr.kokyett.rsspire.models.FeedIcon
 import java.net.URL
 import java.util.Locale
 import java.util.regex.Matcher
@@ -10,6 +12,10 @@ class Html {
         val patternHref: Pattern = Pattern.compile("href=[\"']([^\"']*)[\"']", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
         private val patternLinks: Pattern = Pattern.compile("(href|src)=[\"']([^\"']*)[\"']", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
         val patternLinkRss: Pattern = Pattern.compile("<link[^>]*type=[\"']application/rss\\+xml[\"'][^>]*>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
+        private val patternOpenGraphIcon: Pattern = Pattern.compile("<meta[^>]*property=[\"']og:image[\"'][^>]*>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
+        private val patternMetaContent: Pattern = Pattern.compile("content=[\"']([^\"']*)[\"']", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
+        private val patternIcon: Pattern = Pattern.compile("<link[^>]*rel=[\"'][^\"']*icon[\"'][^>]*>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
+        private val patternLogoImage: Pattern = Pattern.compile("<img[^>]*src=[\"']([^\"']*logo[^\"']*)[\"'][^>]*>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
 
         fun restoreLink(url: URL, link: String): String {
             val newLink: String
@@ -53,6 +59,62 @@ class Html {
             } catch (e: java.lang.Exception) {
                 return content
             }
+        }
+
+        fun getIcons(url: String): ArrayList<FeedIcon> {
+            val list = ArrayList<FeedIcon>()
+
+            if (!URLUtil.isValidUrl(url)) return list
+            try {
+                var content = Downloader.getString(url) ?: ""
+                content = restoreLinks(url, content)
+
+                var matcher = patternOpenGraphIcon.matcher(content)
+                while (matcher.find()) {
+                    val matcherContent = matcher.group(0) ?: ""
+                    matcher = patternMetaContent.matcher(matcherContent)
+                    if (matcher.find()) {
+                        val bitmapUrl = matcher.group(1) ?: ""
+                        if (URLUtil.isValidUrl(bitmapUrl) && list.none { it.url == bitmapUrl }) {
+                            list.add(FeedIcon(bitmapUrl))
+                        }
+                    }
+                }
+
+                matcher = patternIcon.matcher(content)
+                while (matcher.find()) {
+                    val matcherContent = matcher.group(0) ?: continue
+                    val hrefMatcher: Matcher = patternHref.matcher(matcherContent)
+                    if (hrefMatcher.find()) {
+                        val bitmapUrl = hrefMatcher.group(1) ?: continue
+                        if (URLUtil.isValidUrl(bitmapUrl) && list.none { it.url == bitmapUrl }) {
+                            list.add(FeedIcon(bitmapUrl))
+                        }
+                    }
+                }
+
+                matcher = patternLogoImage.matcher(content)
+                while (matcher.find()) {
+                    val bitmapUrl = matcher.group(1) ?: continue
+                    if (URLUtil.isValidUrl(bitmapUrl) && list.none { it.url == bitmapUrl }) {
+                        list.add(FeedIcon(bitmapUrl))
+                    }
+                }
+            } catch (e: Exception) {
+                // TODO LOGS
+            }
+
+            try {
+                var iconUrl = URL(url)
+                iconUrl = URL(iconUrl.protocol + "://" + iconUrl.host + "/favicon.png")
+                if (list.none { it.url == iconUrl.toString() }) list.add(FeedIcon(iconUrl.toString()))
+
+                iconUrl = URL(iconUrl.protocol + "://" + iconUrl.host + "/favicon.ico")
+                if (list.none { it.url == iconUrl.toString() }) list.add(FeedIcon(iconUrl.toString()))
+            } catch (e: Exception) {
+                // TODO LOGS
+            }
+            return list
         }
     }
 }

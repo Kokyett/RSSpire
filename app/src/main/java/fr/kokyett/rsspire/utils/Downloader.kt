@@ -15,19 +15,6 @@ class Downloader {
         private const val TIMEOUT = 30 * DateTime.SECOND
         private const val MAXIMUM_REDIRECTS = 7
 
-        fun getBitmap(url: String): Bitmap? {
-            return if (URLUtil.isValidUrl(url)) {
-                getBitmap(URL(url))
-            } else {
-                null
-            }
-        }
-
-        private fun getBitmap(url: URL): Bitmap? {
-            val bytes = getBytes(url)
-            return BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-        }
-
         fun getString(url: String): String? {
             return if (URLUtil.isValidUrl(url)) {
                 val connection = getHttpURLConnection(URL(url), 0)
@@ -61,7 +48,7 @@ class Downloader {
             return null
         }
 
-        private fun getBytes(url: URL): ByteArray {
+        fun getBytes(url: URL): ByteArray {
             val connection = getHttpURLConnection(url, 0)
             val bytes = getBytes(connection)
             connection.disconnect()

@@ -11,6 +11,12 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CategoryDao {
+    @Query("select * from Category where id = :id;")
+    fun get(id: Long): Category?
+
+    @Query("select * from Category where name = :name;")
+    fun get(name: String): Category?
+
     @Query("select * from Category order by name")
     fun getAll(): Flow<List<Category>>
 
@@ -19,9 +25,6 @@ interface CategoryDao {
 
     @Query("select distinct c.id, c.name from Entry e inner join Feed f on f.id  = e.idFeed left join Category c on c.id = f.idCategory order by name")
     fun getWithEntries(): Flow<List<NullableCategory>>
-
-    @Query("select * from Category where name = :name;")
-    fun get(name: String): Category?
 
     @Insert
     fun insert(category: Category): Long

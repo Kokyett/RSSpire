@@ -18,9 +18,25 @@
     <string name="feeds_menu_import_opml">Importer un fichier OPML</string>
     <string name="feeds_menu_export_opml">Exporter un fichier OPML</string>
 
+    <!-- Edit feed menu -->
+    <string name="edit_feed_menu_save">Enregistrer</string>
+    <string name="edit_feed_menu_search_icon">Rechercher l\'icône</string>
+    <string name="edit_feed_menu_delete">Supprimer</string>
+
     <!-- Search feed activity -->
     <string name="search_feed_activity_title">Rechercher un flux</string>
     <string name="search_feed_text_hint">Saisir des mots clé ou une URL</string>
+
+    <!-- Edit feed activity -->
+    <string name="edit_feed_activity_title">Modification d\'un flux</string>
+    <string name="edit_feed_url">URL</string>
+    <string name="edit_feed_title">Titre</string>
+    <string name="edit_feed_category">Catégorie</string>
+    <string name="edit_feed_invalid_url">URL invalide</string>
+    <string name="edit_feed_url_already_exists">L\'URL existe déjà</string>
+    <string name="edit_feed_not_found_icons">Aucune icône n\'a été trouvée</string>
+    <string name="edit_feed_select_icon">Selectioner une icône</string>
+    <string name="edit_feed_select_icon_cancel">Annuler</string>
 
     <!-- Feeds activity -->
     <string name="feeds_activity_title">Liste de flux</string>

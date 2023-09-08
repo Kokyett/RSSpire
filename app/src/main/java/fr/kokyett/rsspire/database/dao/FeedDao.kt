@@ -6,11 +6,13 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import fr.kokyett.rsspire.database.entities.Feed
-import fr.kokyett.rsspire.enums.FeedType
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface FeedDao {
+    @Query("select * from Feed where id = :id;")
+    fun get(id: Long): Feed?
+
     @Query("select * from Feed order by title, url")
     fun getAll(): Flow<List<Feed>>
 
@@ -24,7 +26,7 @@ interface FeedDao {
     fun getByCategory(id: Long?): Flow<List<Feed>>
 
     @Query("select * from Feed where url = :url;")
-    fun getForUrl(url: String): Feed?
+    fun getByUrl(url: String): Feed?
 
     @Insert
     fun insert(feed: Feed): Long

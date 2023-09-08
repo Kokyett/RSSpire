@@ -3,8 +3,6 @@ package fr.kokyett.rsspire.activities
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.webkit.URLUtil
 import android.widget.Button
 import android.widget.EditText
@@ -22,8 +20,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
-import java.util.Timer
-import java.util.TimerTask
 import java.util.regex.Matcher
 
 
@@ -52,6 +48,10 @@ class SearchFeedActivity : AppCompatActivity() {
     private fun initRecyclerView() {
         adapter = SearchFeedAdapter(this)
         adapter.onItemClick = {
+            val intent = Intent(this, EditFeedActivity::class.java)
+            intent.putExtra("URL", it.url)
+            intent.putExtra("TITLE", it.title)
+            startActivity(intent)
         }
 
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerview)

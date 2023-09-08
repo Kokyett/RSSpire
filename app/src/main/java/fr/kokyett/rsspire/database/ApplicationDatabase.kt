@@ -77,12 +77,6 @@ abstract class ApplicationDatabase : RoomDatabase() {
                 iconUrl = "https://raw.githubusercontent.com/Kokyett/RSSpire/main/logo.png"
             )
             feed.id = database.feedDao.insert(feed)
-
-            feed = Feed(
-                url = "https://apod.nasa.gov/apod.rss",
-                title = "Astronomy picture of the day"
-            )
-            feed.id = database.feedDao.insert(feed)
         }
     }
 }

@@ -17,10 +17,26 @@
     <string name="feeds_menu_import_opml">Import OPML file</string>
     <string name="feeds_menu_export_opml">Export OPML file</string>
 
+    <!-- Edit feed menu -->
+    <string name="edit_feed_menu_save">Save</string>
+    <string name="edit_feed_menu_search_icon">Search icon</string>
+    <string name="edit_feed_menu_delete">Delete</string>
+
     <!-- Search feed activity -->
     <string name="search_feed_activity_title">Search feed</string>
     <string name="search_feed_text_hint">Enter keywords or URL</string>
     <string name="search_feed_button">Search</string>
+
+    <!-- Edit feed activity -->
+    <string name="edit_feed_activity_title">Edit feed</string>
+    <string name="edit_feed_url">URL</string>
+    <string name="edit_feed_title">Title</string>
+    <string name="edit_feed_category">Category</string>
+    <string name="edit_feed_invalid_url">Invalid URL</string>
+    <string name="edit_feed_url_already_exists">URL already exists</string>
+    <string name="edit_feed_not_found_icons">No icon have been found</string>
+    <string name="edit_feed_select_icon">Select icon</string>
+    <string name="edit_feed_select_icon_cancel">Cancel</string>
 
     <!-- Feeds activity -->
     <string name="feeds_activity_title">Feed list</string>
