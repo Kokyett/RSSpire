@@ -33,5 +33,10 @@
             android:icon="@drawable/ic_action_about"
             android:title="@string/main_menu_about"
             app:showAsAction="never|withText" />
+        <item
+            android:id="@+id/action_menu_test"
+            android:icon="@drawable/ic_action_test"
+            android:title="@string/main_menu_test"
+            app:showAsAction="never|withText" />
     </group>
 </menu>

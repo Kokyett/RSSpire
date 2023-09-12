@@ -6,7 +6,9 @@ import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import fr.kokyett.rsspire.enums.FeedType
+import fr.kokyett.rsspire.utils.DateTime
 import java.io.Serializable
+import java.util.Date
 
 @Entity(
     indices = [Index(value = ["url"], unique = true), Index(value = ["idCategory"])],
@@ -18,6 +20,12 @@ data class Feed(
     var type: FeedType = FeedType.RSS,
     @ColumnInfo(collate = ColumnInfo.NOCASE) var url: String = "",
     @ColumnInfo(collate = ColumnInfo.NOCASE) var title: String? = null,
+    @ColumnInfo(collate = ColumnInfo.NOCASE) var description: String? = null,
+    var lastEntryDate: Date? = null,
+    var nextRefreshDate: Date? = null,
+    var refreshInterval: Long = DateTime.DAY,
+    var deleteReadEntriesInterval: Long = DateTime.DAY,
+    var downloadFullContent: Boolean = false,
     var icon: ByteArray? = null,
     var iconUrl: String? = null,
 ) : Serializable {

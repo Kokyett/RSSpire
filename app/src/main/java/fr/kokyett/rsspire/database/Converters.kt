@@ -10,12 +10,12 @@ class Converters {
     private val dateFormat: DateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
 
     @TypeConverter
-    fun toNullableTimestamp(value: Date?): String? {
-        return value?.let { dateFormat.format(it) }
+    fun toDate(timestamp: Long?): Date? {
+        return if (timestamp == null) null else Date(timestamp)
     }
 
     @TypeConverter
-    fun fromNullableTimestamp(value: String?): Date? {
-        return value?.let { dateFormat.parse(it) }
+    fun toTimestamp(date: Date?): Long? {
+        return date?.time
     }
 }

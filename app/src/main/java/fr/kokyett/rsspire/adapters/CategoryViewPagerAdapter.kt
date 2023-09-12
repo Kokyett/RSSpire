@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
+import androidx.recyclerview.widget.DiffUtil
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import fr.kokyett.rsspire.models.CategoryTabInfo
 
@@ -23,24 +24,49 @@ class CategoryViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Life
         return tabs.size
     }
 
+    override fun getItemId(position: Int): Long {
+        return tabs[position].id ?: 0
+    }
+
+    override fun containsItem(itemId: Long): Boolean {
+        return tabs.any { (it.id ?: 0) == itemId }
+    }
+
     fun getText(position: Int): String? {
         return tabs[position].text
     }
 
     fun update(newTabs: ArrayList<CategoryTabInfo>) {
-        for (i in 0..<newTabs.size) {
-            var tab = tabs.find { it.id == newTabs[i].id }
-            if (tab == null) {
-                tab = tabs.find { (it.text?.lowercase() ?: "") > (newTabs[i].text?.lowercase() ?: "") }
-                val pos = if (tab == null) tabs.size else tabs.indexOf(tab)
-                tabs.add(pos, newTabs[i])
-                notifyItemInserted(pos)
-            } else {
-                if (tab.text?.lowercase() != newTabs[i].text?.lowercase()) {
-                    tab.text = newTabs[i].text
-                    notifyItemChanged(tabs.indexOf(tab))
-                }
-            }
+        val callback = CategoryDiffUtil(tabs, newTabs)
+        val diff = DiffUtil.calculateDiff(callback)
+        tabs.clear()
+        tabs.addAll(newTabs)
+        diff.dispatchUpdatesTo(this)
+    }
+
+    private class CategoryDiffUtil(private val oldList: ArrayList<CategoryTabInfo>, private val newList: ArrayList<CategoryTabInfo>) : DiffUtil.Callback() {
+        enum class PayloadKey {
+            VALUE
+        }
+
+        override fun getOldListSize(): Int {
+            return oldList.size
+        }
+
+        override fun getNewListSize(): Int {
+            return newList.size
+        }
+
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldList[oldItemPosition].id == newList[newItemPosition].id
+        }
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldList[oldItemPosition].text?.lowercase() == newList[newItemPosition].text?.lowercase()
+        }
+
+        override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
+            return listOf(PayloadKey.VALUE)
         }
     }
 }

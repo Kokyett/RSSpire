@@ -19,5 +19,10 @@ class Workers {
             val request = OneTimeWorkRequestBuilder<ExportWorker>().setInputData(data).build()
             WorkManager.getInstance(context).enqueue(request)
         }
+
+        fun refreshFeeds(context: Context) {
+            val request = OneTimeWorkRequestBuilder<RefreshFeedsWorker>().build()
+            WorkManager.getInstance(context).enqueue(request)
+        }
     }
 }

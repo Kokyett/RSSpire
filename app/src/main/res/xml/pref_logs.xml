@@ -18,4 +18,14 @@
         android:key="pref_log_export_opml"
         android:title="@string/pref_log_export_opml"
         app:iconSpaceReserved="false"/>
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="pref_log_update_feeds"
+        android:title="@string/pref_log_update_feeds"
+        app:iconSpaceReserved="false"/>
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="pref_log_parse_date"
+        android:title="@string/pref_log_parse_date"
+        app:iconSpaceReserved="false"/>
 </PreferenceScreen>

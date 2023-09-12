@@ -11,12 +11,14 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.core.view.MenuCompat
+import androidx.lifecycle.distinctUntilChanged
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import fr.kokyett.rsspire.ApplicationContext
 import fr.kokyett.rsspire.R
 import fr.kokyett.rsspire.adapters.CategoryViewPagerAdapter
+import fr.kokyett.rsspire.fragments.EntriesFragment
 import fr.kokyett.rsspire.fragments.FeedsFragment
 import fr.kokyett.rsspire.models.CategoryTabInfo
 import fr.kokyett.rsspire.utils.DateTime
@@ -33,6 +35,7 @@ class FeedsActivity : AppCompatActivity() {
         val viewPager = findViewById<ViewPager2>(R.id.viewpager)
         adapter = CategoryViewPagerAdapter(supportFragmentManager, lifecycle)
         viewPager.adapter = adapter
+        viewPager.isUserInputEnabled = false
 
         val tabLayout = findViewById<TabLayout>(R.id.tablayout)
         tabLayoutMediator = TabLayoutMediator(tabLayout, viewPager) { tab: TabLayout.Tab, position: Int ->

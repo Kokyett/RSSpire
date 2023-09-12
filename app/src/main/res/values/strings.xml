@@ -11,6 +11,7 @@
     <string name="main_menu_export_opml">Export OPML file</string>
     <string name="main_menu_settings">Settings</string>
     <string name="main_menu_about">About</string>
+    <string name="main_menu_test">Test</string>
 
     <!-- Feeds menu -->
     <string name="feeds_menu_add_feed">Add feed</string>
@@ -22,6 +23,9 @@
     <string name="edit_feed_menu_search_icon">Search icon</string>
     <string name="edit_feed_menu_delete">Delete</string>
 
+    <!-- Entry menu -->
+    <string name="entry_menu_open_nagigator">Open in navigator</string>
+
     <!-- Search feed activity -->
     <string name="search_feed_activity_title">Search feed</string>
     <string name="search_feed_text_hint">Enter keywords or URL</string>
@@ -31,6 +35,7 @@
     <string name="edit_feed_activity_title">Edit feed</string>
     <string name="edit_feed_url">URL</string>
     <string name="edit_feed_title">Title</string>
+    <string name="edit_feed_description">Description</string>
     <string name="edit_feed_category">Category</string>
     <string name="edit_feed_invalid_url">Invalid URL</string>
     <string name="edit_feed_url_already_exists">URL already exists</string>
@@ -51,9 +56,11 @@
     <!-- Settings activity -->
     <string name="settings_activity_title">Settings</string>
     <string name="logs_tab">Logs</string>
-    <string name="pref_log_uncaught_exceptions">Log on application crash</string>
-    <string name="pref_log_import_opml">Log on import OPML file</string>
-    <string name="pref_log_export_opml">Log on export OPML file</string>
+    <string name="pref_log_uncaught_exceptions">Log application crash</string>
+    <string name="pref_log_import_opml">Log import OPML file</string>
+    <string name="pref_log_export_opml">Log export OPML file</string>
+    <string name="pref_log_update_feeds">Log update feeds</string>
+    <string name="pref_log_parse_date">Log failed parse date</string>
 
     <!-- About activity -->
     <string name="about_activity_title">About</string>

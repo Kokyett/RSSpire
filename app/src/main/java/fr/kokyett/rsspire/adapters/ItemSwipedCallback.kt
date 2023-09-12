@@ -142,13 +142,13 @@ class ItemSwipedCallback(var context: Context) : ItemTouchHelper.SimpleCallback(
 
     fun setSwipe(direction: Int, @ColorRes color:Int? = null, @DrawableRes icon: Int? = null, @ColorRes iconColor: Int? = null) {
         when (direction) {
-            ItemTouchHelper.LEFT -> {
+            ItemTouchHelper.RIGHT -> {
                 leftColor = color?.let { context.resources.getColor(it, context.theme) } ?: leftColor
                 leftIcon = icon ?: leftIcon
                 leftIconColor = iconColor?.let { context.resources.getColor(iconColor, context.theme) } ?: leftIconColor
             }
 
-            ItemTouchHelper.RIGHT -> {
+            ItemTouchHelper.LEFT -> {
                 rightColor = color?.let { context.resources.getColor(color, context.theme) } ?: rightColor
                 rightIcon = icon ?: rightIcon
                 rightIconColor = iconColor?.let { context.resources.getColor(iconColor, context.theme) } ?: rightIconColor

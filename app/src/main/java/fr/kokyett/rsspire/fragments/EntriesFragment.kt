@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import fr.kokyett.rsspire.ApplicationContext
@@ -39,7 +38,6 @@ class EntriesFragment : Fragment() {
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerview)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.addItemDecoration(DividerItemDecoration(recyclerView.context, DividerItemDecoration.VERTICAL))
 
         ApplicationContext.getEntryRepository().getByCategory(idCategory).observe(viewLifecycleOwner) { entries ->
             entries?.let { adapter.submitList(it) }

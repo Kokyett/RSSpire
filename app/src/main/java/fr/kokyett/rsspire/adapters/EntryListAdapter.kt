@@ -4,53 +4,131 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import fr.kokyett.rsspire.database.entities.Entry
+import com.bumptech.glide.Glide
+import com.google.android.material.card.MaterialCardView
+import fr.kokyett.rsspire.ApplicationContext
+import fr.kokyett.rsspire.R
+import fr.kokyett.rsspire.database.entities.EntryView
 import fr.kokyett.rsspire.utils.DateTime.Companion.toLocalizedString
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.util.Date
 
-class EntryListAdapter(context: Context) : SwipeListAdapter<Entry, EntryListAdapter.ItemViewHolder>(context, ItemsComparator()) {
-    var onItemClick: ((Entry) -> Unit)? = null
+class EntryListAdapter(context: Context) : SwipeListAdapter<EntryView, EntryListAdapter.ItemViewHolder>(context, ItemsComparator()) {
+    var onItemClick: ((EntryView) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemViewHolder {
-        val view: View = LayoutInflater.from(parent.context).inflate(android.R.layout.two_line_list_item, parent, false)
+        val view: View = LayoutInflater.from(parent.context).inflate(R.layout.view_enrty_item, parent, false)
         return ItemViewHolder(view)
-    }
-
-    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
-        super.onAttachedToRecyclerView(recyclerView)
     }
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
+    override fun onItemSwiped(direction: Int, position: Int) {
+        val entry = getItem(position)
+        when (direction) {
+            ItemTouchHelper.RIGHT -> {
+                ApplicationContext.getApplicationScope().launch {
+                    withContext(Dispatchers.IO) {
+                        if (entry.readDate == null) {
+                            entry.readDate = Date()
+                            ApplicationContext.getEntryRepository().markAsRead(entry.id)
+                        } else {
+                            entry.readDate = null
+                            ApplicationContext.getEntryRepository().markAsUnread(entry.id)
+                        }
+                        withContext(Dispatchers.Main) {
+                            notifyItemChanged(position)
+                        }
+                    }
+                }
+            }
+            ItemTouchHelper.LEFT -> super.onItemSwiped(direction, position)
+        }
+    }
+
+    override fun onDrawItemSwiped(direction: Int, position: Int) {
+        val entry = getItem(position)
+        if (entry.readDate == null)
+            itemSwipedCallBack.setSwipe(ItemTouchHelper.RIGHT, R.color.cardViewReadEntry, R.drawable.ic_action_read, R.color.colorOnPrimary)
+        else
+            itemSwipedCallBack.setSwipe(ItemTouchHelper.RIGHT, R.color.cardViewUnreadEntry, R.drawable.ic_action_unread, R.color.colorOnPrimary)
+        super.onDrawItemSwiped(direction, position)
+    }
+
+
     inner class ItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val textView1 = itemView.findViewById<TextView>(android.R.id.text1)
-        private val textView2 = itemView.findViewById<TextView>(android.R.id.text2)
-        fun bind(entry: Entry) {
+        private val cardView = itemView.findViewById<MaterialCardView>(R.id.cardview)
+        private val imageView = itemView.findViewById<ImageView>(R.id.imageview)
+        private val textView1 = itemView.findViewById<TextView>(R.id.text1)
+        private val textView2 = itemView.findViewById<TextView>(R.id.text2)
+        private val textView3 = itemView.findViewById<TextView>(R.id.text3)
+        fun bind(entryView: EntryView) {
             itemView.setOnClickListener {
-                onItemClick?.invoke(entry)
+                onItemClick?.invoke(entryView)
             }
 
-            textView1.text = entry.title
-            entry.publishDate?.let {
-                textView2.text = it.toLocalizedString()
+            textView1.text = entryView.title
+
+            if ((entryView.feedTitle?.trim() ?: "") == "") {
+                textView2.text = entryView.feedUrl
+            } else {
+                textView2.text = entryView.feedTitle
+            }
+
+            entryView.publishDate?.let {
+                textView3.text = it.toLocalizedString()
+            }
+
+            if (entryView.readDate == null)
+                cardView.strokeColor = context.getColor(R.color.cardViewUnreadEntry)
+            else
+                cardView.strokeColor = context.getColor(R.color.cardViewReadEntry)
+
+            imageView.setImageResource(R.drawable.ic_default_feed)
+
+            ApplicationContext.getApplicationScope().launch {
+                withContext(Dispatchers.IO) {
+                    val icons = ApplicationContext.getEntryRepository().getIcons(entryView.id)
+                    if (icons != null) {
+                        if (icons.entryIcon != null) {
+                            withContext(Dispatchers.Main) {
+                                Glide.with(context).load(icons.entryIcon).into(imageView)
+                            }
+                        } else {
+                            withContext(Dispatchers.Main) {
+                                Glide.with(context).load(icons.feedIcon).into(imageView)
+                            }
+                        }
+                    }
+                }
             }
         }
     }
 
-    class ItemsComparator : DiffUtil.ItemCallback<Entry>() {
-        override fun areItemsTheSame(oldItem: Entry, newItem: Entry): Boolean {
+    class ItemsComparator : DiffUtil.ItemCallback<EntryView>() {
+        override fun areItemsTheSame(oldItem: EntryView, newItem: EntryView): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: Entry, newItem: Entry): Boolean {
+        override fun areContentsTheSame(oldItem: EntryView, newItem: EntryView): Boolean {
             return oldItem.id == newItem.id &&
-                    oldItem.title == newItem.title &&
-                    oldItem.content == newItem.content &&
-                    oldItem.icon.contentEquals(newItem.icon)
+                oldItem.guid == newItem.guid &&
+                oldItem.link == newItem.link &&
+                oldItem.title == newItem.title &&
+                oldItem.feedUrl == newItem.feedUrl &&
+                oldItem.feedTitle == newItem.feedTitle &&
+                oldItem.isFavorite == newItem.isFavorite &&
+                oldItem.publishDate == newItem.publishDate &&
+                oldItem.readDate == newItem.readDate
         }
     }
 }

@@ -20,48 +20,48 @@ import javax.xml.transform.dom.DOMSource
 import javax.xml.transform.stream.StreamResult
 
 class ExportWorker(private var context: Context, private var params: WorkerParameters) : CoroutineWorker(context, params) {
-    lateinit var log: Log
+    private lateinit var log: Log
 
     override suspend fun doWork(): Result {
-        Log(LogType.EXPORTOPML).use {
-            log = it
-            return try {
-                val factory = DocumentBuilderFactory.newInstance()
-                val builder = factory.newDocumentBuilder()
-                val document = builder.newDocument()
+        log = Log(LogType.EXPORTOPML)
+        return try {
+            val factory = DocumentBuilderFactory.newInstance()
+            val builder = factory.newDocumentBuilder()
+            val document = builder.newDocument()
 
-                val root = document.createElement("opml")
-                root.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:rsspire", "http://github.com/kokyett/schemas")
-                val head = document.createElement("head")
-                val body = document.createElement("body")
+            val root = document.createElement("opml")
+            root.setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:rsspire", "http://github.com/kokyett/schemas")
+            val head = document.createElement("head")
+            val body = document.createElement("body")
 
-                document.appendChild(root)
-                root.appendChild(head)
-                root.appendChild(body)
+            document.appendChild(root)
+            root.appendChild(head)
+            root.appendChild(body)
 
-                val title = document.createElement("title")
-                title.textContent = context.getString(R.string.app_name)
-                head.appendChild(title)
+            val title = document.createElement("title")
+            title.textContent = context.getString(R.string.app_name)
+            head.appendChild(title)
 
-                exportCategories(document, body)
+            exportCategories(document, body)
 
-                log.writeInformation("Saving OPML file")
-                applicationContext.contentResolver.openOutputStream(Uri.parse(params.inputData.getString("URI"))).use { outputStream ->
-                    try {
-                        val transformerFactory = TransformerFactory.newInstance().newTransformer()
-                        transformerFactory.setOutputProperty(OutputKeys.INDENT, "yes")
-                        transformerFactory.transform(DOMSource(document), StreamResult(outputStream))
-                    } catch (e: Exception) {
-                        log.writeException("Error on saving OPML file")
-                        it.writeException(e)
-                    }
+            log.writeInformation("Saving OPML file")
+            applicationContext.contentResolver.openOutputStream(Uri.parse(params.inputData.getString("URI"))).use { outputStream ->
+                try {
+                    val transformerFactory = TransformerFactory.newInstance().newTransformer()
+                    transformerFactory.setOutputProperty(OutputKeys.INDENT, "yes")
+                    transformerFactory.transform(DOMSource(document), StreamResult(outputStream))
+                } catch (e: Exception) {
+                    log.writeException("Error on saving OPML file")
+                    log.writeException(e)
                 }
-                Result.success()
-            } catch (e: Exception) {
-                log.writeException("Error on exporting OPML file")
-                it.writeException(e)
-                Result.failure()
             }
+            log.save()
+            Result.success()
+        } catch (e: Exception) {
+            log.writeException("Error on exporting OPML file")
+            log.writeException(e)
+            log.save()
+            Result.failure()
         }
     }
 

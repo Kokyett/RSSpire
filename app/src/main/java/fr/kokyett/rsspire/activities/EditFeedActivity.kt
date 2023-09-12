@@ -34,6 +34,7 @@ class EditFeedActivity : AppCompatActivity() {
     private lateinit var imageView: ImageView
     private lateinit var editUrl: EditText
     private lateinit var editTitle: EditText
+    private lateinit var editDescription: EditText
     private lateinit var editCategory: InstantAutoComplete
     private lateinit var feed: Feed
 
@@ -45,6 +46,7 @@ class EditFeedActivity : AppCompatActivity() {
         imageView = findViewById(R.id.imageview)
         editUrl = findViewById(R.id.url)
         editTitle = findViewById(R.id.title)
+        editDescription = findViewById(R.id.description)
         editCategory = findViewById(R.id.category)
         editCategory.threshold = 0
 
@@ -60,7 +62,13 @@ class EditFeedActivity : AppCompatActivity() {
         } else if (intent.hasExtra("URL")) {
             editUrl.setText(intent.extras?.getString("URL"))
             editTitle.setText(intent.extras?.getString("TITLE"))
-            feed = Feed(0, null, FeedType.RSS, editUrl.text.toString(), nullIfEmpty(editTitle.text.toString()))
+            feed = Feed(
+                id = 0,
+                idCategory = null,
+                type = FeedType.RSS,
+                url = editUrl.text.toString(),
+                title = nullIfEmpty(editTitle.text.toString())
+            )
         } else {
             feed = Feed()
         }
@@ -88,6 +96,7 @@ class EditFeedActivity : AppCompatActivity() {
                 withContext(Dispatchers.Main) {
                     editUrl.setText(feed.url)
                     editTitle.setText(feed.title)
+                    editDescription.setText(feed.description)
                     editCategory.setText(category)
                     val icon = feed.icon
                     if (icon != null) imageView.setImageBitmap(BitmapFactory.decodeByteArray(icon, 0, icon.size))
@@ -195,6 +204,7 @@ class EditFeedActivity : AppCompatActivity() {
                     feed.idCategory = idCategory
                     feed.url = editUrl.text.toString()
                     feed.title = nullIfEmpty(editTitle.text.toString())
+                    feed.description = nullIfEmpty(editDescription.text.toString())
 
                     ApplicationContext.getFeedRepository().save(feed)
                     withContext(Dispatchers.Main) {

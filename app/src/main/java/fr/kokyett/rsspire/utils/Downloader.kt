@@ -1,19 +1,21 @@
 package fr.kokyett.rsspire.utils
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.webkit.URLUtil
 import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
 import java.nio.charset.Charset
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 import java.util.zip.GZIPInputStream
+
 
 class Downloader {
     companion object {
         private const val TIMEOUT = 30 * DateTime.SECOND
         private const val MAXIMUM_REDIRECTS = 7
+        private val patternXmlEncoding: Pattern = Pattern.compile("<\\?xml[^>]*encoding=\"([^\"]*)\"", Pattern.CASE_INSENSITIVE)
 
         fun getString(url: String): String? {
             return if (URLUtil.isValidUrl(url)) {
@@ -22,10 +24,16 @@ class Downloader {
                 val charset = getCharset(connection)
                 connection.disconnect()
 
-                if (charset == null)
+                val content: String = if (charset == null) {
                     String(bytes)
-                else
+                } else {
                     String(bytes, Charset.forName(charset))
+                }
+                val matcher: Matcher = patternXmlEncoding.matcher(content)
+                return if (matcher.find())
+                    String(bytes, Charset.forName(matcher.group(1)))
+                else
+                    content
             } else {
                 null
             }
@@ -66,8 +74,8 @@ class Downloader {
                 "User-Agent",
                 "Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/115.0"
             )
-            connection.connectTimeout = TIMEOUT
-            connection.readTimeout = TIMEOUT
+            connection.connectTimeout = TIMEOUT.toInt()
+            connection.readTimeout = TIMEOUT.toInt()
             connection.useCaches = false
             connection.connect()
             val location = connection.getHeaderField("Location")

@@ -12,6 +12,7 @@
     <string name="main_menu_export_opml">Exporter un fichier OPML</string>
     <string name="main_menu_settings">Settings</string>
     <string name="main_menu_about">À propos</string>
+    <string name="main_menu_test">Test</string>
 
     <!-- Feeds menu -->
     <string name="feeds_menu_add_feed">Ajouter un flux</string>
@@ -23,6 +24,9 @@
     <string name="edit_feed_menu_search_icon">Rechercher l\'icône</string>
     <string name="edit_feed_menu_delete">Supprimer</string>
 
+    <!-- Entry menu -->
+    <string name="entry_menu_open_nagigator">Ouvrir dans un navigateur</string>
+
     <!-- Search feed activity -->
     <string name="search_feed_activity_title">Rechercher un flux</string>
     <string name="search_feed_text_hint">Saisir des mots clé ou une URL</string>
@@ -31,6 +35,7 @@
     <string name="edit_feed_activity_title">Modification d\'un flux</string>
     <string name="edit_feed_url">URL</string>
     <string name="edit_feed_title">Titre</string>
+    <string name="edit_feed_description">Description</string>
     <string name="edit_feed_category">Catégorie</string>
     <string name="edit_feed_invalid_url">URL invalide</string>
     <string name="edit_feed_url_already_exists">L\'URL existe déjà</string>
@@ -52,9 +57,11 @@
     <!-- Settings activity -->
     <string name="settings_activity_title">Paramètres</string>
     <string name="logs_tab">Journaux</string>
-    <string name="pref_log_uncaught_exceptions">Log lors d\'un crash applicatif</string>
-    <string name="pref_log_import_opml">Log lors de l\'import d\'un fichier OPML</string>
-    <string name="pref_log_export_opml">Log lors de l\'export d\'un fichier OPML</string>
+    <string name="pref_log_uncaught_exceptions">Log des crashs applicatifs</string>
+    <string name="pref_log_import_opml">Log de l\'import d\'un fichier OPML</string>
+    <string name="pref_log_export_opml">Log de l\'export d\'un fichier OPML</string>
+    <string name="pref_log_update_feeds">Log de la mise à jour des flux</string>
+    <string name="pref_log_parse_date">Log des échecs de décodage de dates</string>
 
     <!-- About activity -->
     <string name="about_activity_title">À propos</string>

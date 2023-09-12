@@ -16,23 +16,23 @@ import org.xml.sax.InputSource
 import javax.xml.parsers.DocumentBuilderFactory
 
 class ImportWorker(context: Context, private var params: WorkerParameters) : CoroutineWorker(context, params) {
-    lateinit var log: Log
+    private lateinit var log: Log
 
     override suspend fun doWork(): Result {
-        Log(LogType.IMPORTOPML).use {
-            log = it
-            return try {
-                applicationContext.contentResolver.openInputStream(Uri.parse(params.inputData.getString("URI"))).use { inputStream ->
-                    val factory = DocumentBuilderFactory.newInstance()
-                    val builder = factory.newDocumentBuilder()
-                    readXml(builder.parse(InputSource(inputStream)))
-                }
-                Result.success()
-            } catch (e: Exception) {
-                it.writeException("Error on exporting OPML file")
-                it.writeException(e)
-                Result.failure()
+        log = Log(LogType.IMPORTOPML)
+        return try {
+            applicationContext.contentResolver.openInputStream(Uri.parse(params.inputData.getString("URI"))).use { inputStream ->
+                val factory = DocumentBuilderFactory.newInstance()
+                val builder = factory.newDocumentBuilder()
+                readXml(builder.parse(InputSource(inputStream)))
             }
+            log.save()
+            Result.success()
+        } catch (e: Exception) {
+            log.writeException("Error on exporting OPML file")
+            log.writeException(e)
+            log.save()
+            Result.failure()
         }
     }
 

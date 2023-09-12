@@ -27,9 +27,9 @@ class ApplicationContext : Application() {
         handle = this
 
         Thread.setDefaultUncaughtExceptionHandler { thread, e ->
-            Log(LogType.CRASH). use {
-                it.writeCrash(e)
-            }
+            val log = Log(LogType.CRASH)
+            log.writeCrash(e)
+            log.save()
             defaultUncaughtHandler?.uncaughtException(thread, e)
         }
     }

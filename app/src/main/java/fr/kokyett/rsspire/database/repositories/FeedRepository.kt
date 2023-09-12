@@ -16,6 +16,10 @@ class FeedRepository(private val feedDao: FeedDao) {
         return feedDao.getAll().asLiveData()
     }
 
+    fun getRefresh(): List<Feed> {
+        return feedDao.getRefresh()
+    }
+
     fun getLogsFeed(): Feed {
         return feedDao.getLogsFeed()
     }
@@ -35,6 +39,10 @@ class FeedRepository(private val feedDao: FeedDao) {
     fun urlExists(id: Long, url: String): Boolean {
         val feed = feedDao.getByUrl(url)
         return feed != null && feed.id != id
+    }
+
+    fun updateIcon(id: Long, icon: ByteArray) {
+        feedDao.updateIcon(id, icon)
     }
 
     fun save(feed: Feed) {

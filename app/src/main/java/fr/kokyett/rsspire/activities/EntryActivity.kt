@@ -1,24 +1,31 @@
 package fr.kokyett.rsspire.activities
 
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.webkit.WebView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import fr.kokyett.rsspire.ApplicationContext
 import fr.kokyett.rsspire.R
+import fr.kokyett.rsspire.database.entities.Entry
 import fr.kokyett.rsspire.utils.DateTime.Companion.toLocalizedString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.Date
 
 class EntryActivity : AppCompatActivity() {
     private lateinit var title: TextView
     private lateinit var informations: TextView
     private lateinit var webView: WebView
+    private lateinit var entry: Entry
 
+    @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_entry)
@@ -31,17 +38,38 @@ class EntryActivity : AppCompatActivity() {
         if (intent.extras?.containsKey("ID_ENTRY") == true)
             idEntry = intent.extras?.getLong("ID_ENTRY") ?: 0
 
-        ApplicationContext.getEntryRepository().get(idEntry).observe(this) { entry ->
-            title.text = entry.title
-            informations.text = entry.publishDate?.toLocalizedString()
+        lifecycleScope.launch {
+            withContext(Dispatchers.IO) {
+                ApplicationContext.getEntryRepository().markAsRead(idEntry)
+                entry = ApplicationContext.getEntryRepository().get(idEntry)
+                withContext(Dispatchers.Main) {
+                    title.text = entry.title
+                    informations.text = entry.publishDate?.toLocalizedString()
 
-            val html = HTML_START + entry.content + HTML_END
-            webView.setBackgroundColor(Color.TRANSPARENT)
-            webView.settings.loadWithOverviewMode = true
-            webView.settings.setSupportZoom(true)
-            webView.settings.builtInZoomControls = true
-            webView.loadDataWithBaseURL(null, html, "text/html", null, null)
+                    val html = HTML_START + entry.content + HTML_END
+                    webView.setBackgroundColor(Color.TRANSPARENT)
+                    webView.settings.loadWithOverviewMode = true
+                    webView.settings.javaScriptEnabled = true
+                    webView.loadDataWithBaseURL(null, html, "text/html", null, null)
+                }
+            }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.entry, menu)
+        return true
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_menu_open -> try {
+                val i = Intent(Intent.ACTION_VIEW)
+                i.data = Uri.parse(entry.link)
+                startActivity(i)
+            } catch (_: Exception) {
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     companion object {
@@ -49,6 +77,7 @@ class EntryActivity : AppCompatActivity() {
                 "body { color: white; text-align: justify; }" +
                 "a { color: #8ad0e8; }" +
                 "img { max-width: 100%; height: auto; }" +
+                "iframe { max-width: 100%; height: auto; }" +
                 "</style></head><body>"
 
         private const val HTML_END = "</body></html>"

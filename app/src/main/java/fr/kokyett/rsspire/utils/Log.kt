@@ -8,20 +8,33 @@ import fr.kokyett.rsspire.enums.LogType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.Closeable
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class Log(private val type: LogType): Closeable {
+class Log(private val type: LogType) {
+    private val entry: Entry
     private var logs: StringBuilder = StringBuilder()
     private val dateFormat = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
 
     init {
-        logs.append("<pre>")
         logs.append("Type: ${type}\r\n")
         logs.append("Version: ${String.format("%s / %d", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE)}\r\n")
         logs.append("****************************************\r\n")
+
+        val feed = ApplicationContext.getFeedRepository().getLogsFeed()
+        entry = Entry(
+            idFeed = feed.id,
+            title = when (type) {
+                LogType.CRASH -> "Application crash"
+                LogType.IMPORTOPML -> "OPML import"
+                LogType.EXPORTOPML -> "OPML export"
+                LogType.UPDATEFEEDS -> "Update feeds"
+                LogType.PARSEDATE -> "Date parsing error"
+                else -> "Unknown functionality log"
+            },
+            content = "",
+        )
     }
 
     fun writeInformation(line: String?) {
@@ -56,32 +69,23 @@ class Log(private val type: LogType): Closeable {
         }
     }
 
-    private fun canSaveLgg(): Boolean {
+    private fun canSaveLog(): Boolean {
         return when (type) {
             LogType.CRASH -> ApplicationContext.getBooleanPreference("pref_log_uncaught_exceptions", true)
             LogType.IMPORTOPML -> ApplicationContext.getBooleanPreference("pref_log_import_opml", false)
             LogType.EXPORTOPML -> ApplicationContext.getBooleanPreference("pref_log_export_opml", false)
+            LogType.UPDATEFEEDS -> ApplicationContext.getBooleanPreference("pref_log_update_feeds", true)
+            LogType.PARSEDATE -> ApplicationContext.getBooleanPreference("pref_log_parse_date", true)
         }
     }
 
-    override fun close() {
-        logs.append("</pre>")
-        if (canSaveLgg()) {
+    fun save() {
+        if (canSaveLog()) {
             ApplicationContext.getApplicationScope().launch {
                 withContext(Dispatchers.IO) {
-                    val feed = ApplicationContext.getFeedRepository().getLogsFeed()
-                    val entry = Entry(
-                        idFeed = feed.id,
-                        title = when (type) {
-                            LogType.CRASH -> "Application crash"
-                            LogType.IMPORTOPML -> "OPML import"
-                            LogType.EXPORTOPML -> "OPML export"
-                            else -> "Unknown functionality log"
-                        },
-                        content = "",
-                        publishDate = Date()
-                    )
-                    entry.content = logs.toString()
+                    entry.readDate = null
+                    entry.publishDate = Date()
+                    entry.content = "<pre>${logs}</pre>"
                     ApplicationContext.getEntryRepository().save(entry)
                 }
             }

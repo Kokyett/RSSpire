@@ -16,6 +16,9 @@ interface FeedDao {
     @Query("select * from Feed order by title, url")
     fun getAll(): Flow<List<Feed>>
 
+    @Query("select * from Feed where type <> 'LOG'")
+    fun getRefresh(): List<Feed>
+
     @Query("select * from Feed where type = 'LOG'")
     fun getLogsFeed(): Feed
 
@@ -27,6 +30,9 @@ interface FeedDao {
 
     @Query("select * from Feed where url = :url;")
     fun getByUrl(url: String): Feed?
+
+    @Query("update Feed set icon = :icon where id = :id")
+    fun updateIcon(id: Long, icon: ByteArray)
 
     @Insert
     fun insert(feed: Feed): Long
