@@ -35,6 +35,17 @@ class EntryListAdapter(context: Context) : SwipeListAdapter<EntryView, EntryList
     override fun onItemSwiped(direction: Int, position: Int) {
         val entry = getItem(position)
         when (direction) {
+            ItemTouchHelper.LEFT -> {
+                ApplicationContext.getApplicationScope().launch {
+                    withContext(Dispatchers.IO) {
+                        entry.isFavorite = !entry.isFavorite
+                        ApplicationContext.getEntryRepository().setFavorite(entry.id, entry.isFavorite)
+                        withContext(Dispatchers.Main) {
+                            notifyItemChanged(position)
+                        }
+                    }
+                }
+            }
             ItemTouchHelper.RIGHT -> {
                 ApplicationContext.getApplicationScope().launch {
                     withContext(Dispatchers.IO) {
@@ -51,16 +62,22 @@ class EntryListAdapter(context: Context) : SwipeListAdapter<EntryView, EntryList
                     }
                 }
             }
-            ItemTouchHelper.LEFT -> super.onItemSwiped(direction, position)
         }
     }
 
     override fun onDrawItemSwiped(direction: Int, position: Int) {
         val entry = getItem(position)
+
+        if (entry.isFavorite)
+            itemSwipedCallBack.setSwipe(ItemTouchHelper.LEFT, R.color.cardViewNotFavoriteEntry, R.drawable.ic_action_notfavorite, R.color.colorOnPrimary)
+        else
+            itemSwipedCallBack.setSwipe(ItemTouchHelper.LEFT, R.color.cardViewFavoriteEntry, R.drawable.ic_action_favorite, R.color.colorOnPrimary)
+
         if (entry.readDate == null)
             itemSwipedCallBack.setSwipe(ItemTouchHelper.RIGHT, R.color.cardViewReadEntry, R.drawable.ic_action_read, R.color.colorOnPrimary)
         else
             itemSwipedCallBack.setSwipe(ItemTouchHelper.RIGHT, R.color.cardViewUnreadEntry, R.drawable.ic_action_unread, R.color.colorOnPrimary)
+
         super.onDrawItemSwiped(direction, position)
     }
 
@@ -88,7 +105,9 @@ class EntryListAdapter(context: Context) : SwipeListAdapter<EntryView, EntryList
                 textView3.text = it.toLocalizedString()
             }
 
-            if (entryView.readDate == null)
+            if (entryView.isFavorite)
+                cardView.strokeColor = context.getColor(R.color.cardViewFavoriteEntry)
+            else if (entryView.readDate == null)
                 cardView.strokeColor = context.getColor(R.color.cardViewUnreadEntry)
             else
                 cardView.strokeColor = context.getColor(R.color.cardViewReadEntry)

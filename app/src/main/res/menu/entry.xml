@@ -4,7 +4,13 @@
     <item
         android:id="@+id/action_menu_open"
         android:icon="@drawable/ic_action_open"
-        android:title="@string/entry_menu_open_nagigator"
+        android:title="@string/entry_menu_open_navigator"
+        app:showAsAction="never|withText|ifRoom" />
+
+    <item
+        android:id="@+id/action_menu_favorite"
+        android:icon="@drawable/ic_action_favorite"
+        android:title="@string/entry_menu_favorite"
         app:showAsAction="never|withText|ifRoom" />
 
 </menu>

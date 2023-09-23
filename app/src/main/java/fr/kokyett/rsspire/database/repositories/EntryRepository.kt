@@ -2,6 +2,7 @@ package fr.kokyett.rsspire.database.repositories
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
+import androidx.room.Query
 import fr.kokyett.rsspire.database.dao.EntryDao
 import fr.kokyett.rsspire.database.entities.Entry
 import fr.kokyett.rsspire.database.entities.EntryIconsView
@@ -34,6 +35,11 @@ class EntryRepository(private val entryDao: EntryDao) {
     fun markAsUnread(id: Long) {
         entryDao.markAsUnread(id)
     }
+
+    fun setFavorite(id: Long, isFavorite: Boolean) {
+        entryDao.setFavorite(id, isFavorite)
+    }
+
 
     fun save(entry: Entry) {
         if (entry.id == 0L)

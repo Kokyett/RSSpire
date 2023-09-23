@@ -23,7 +23,8 @@
     <string name="edit_feed_menu_delete">Delete</string>
 
     <!-- Entry menu -->
-    <string name="entry_menu_open_nagigator">Open in navigator</string>
+    <string name="entry_menu_open_navigator">Open in navigator</string>
+    <string name="entry_menu_favorite">Set as favorite or not</string>
 
     <!-- Search feed activity -->
     <string name="search_feed_activity_title">Search feed</string>

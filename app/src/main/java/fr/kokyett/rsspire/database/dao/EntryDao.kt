@@ -35,6 +35,9 @@ interface EntryDao {
     @Query("update Entry set readDate = null where id = :id")
     fun markAsUnread(id: Long)
 
+    @Query("update Entry set isFavorite = :isFavorite where id = :id")
+    fun setFavorite(id: Long, isFavorite: Boolean)
+
     @Insert
     fun insert(entry: Entry): Long
 

@@ -24,7 +24,8 @@
     <string name="edit_feed_menu_delete">Supprimer</string>
 
     <!-- Entry menu -->
-    <string name="entry_menu_open_nagigator">Ouvrir dans un navigateur</string>
+    <string name="entry_menu_open_navigator">Ouvrir dans un navigateur</string>
+    <string name="entry_menu_favorite">Définir comme favori ou non</string>
 
     <!-- Search feed activity -->
     <string name="search_feed_activity_title">Rechercher un flux</string>

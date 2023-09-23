@@ -5,6 +5,8 @@
     <color name="colorOnPrimary">#ffffff</color>
     <color name="colorSurface">#183000</color>
     <color name="cardViewBackground">#000000</color>
-    <color name="cardViewUnreadEntry">@color/colorPrimary</color>
     <color name="cardViewReadEntry">#666666</color>
+    <color name="cardViewUnreadEntry">@color/colorPrimary</color>
+    <color name="cardViewFavoriteEntry">#e0b033</color>
+    <color name="cardViewNotFavoriteEntry">#666666</color>
 </resources>

@@ -58,6 +58,8 @@ class EntryActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.entry, menu)
+        val item = menu.findItem(R.id.action_menu_favorite)
+        updateFavoriteIcon(item)
         return true
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -67,6 +69,15 @@ class EntryActivity : AppCompatActivity() {
                 i.data = Uri.parse(entry.link)
                 startActivity(i)
             } catch (_: Exception) {
+            }
+            R.id.action_menu_favorite -> {
+                entry.isFavorite = !entry.isFavorite
+                updateFavoriteIcon(item)
+                ApplicationContext.getApplicationScope().launch {
+                    withContext(Dispatchers.IO) {
+                        ApplicationContext.getEntryRepository().setFavorite(entry.id, entry.isFavorite)
+                    }
+                }
             }
         }
         return super.onOptionsItemSelected(item)
@@ -84,5 +95,13 @@ class EntryActivity : AppCompatActivity() {
                 "</style></head><body>"
 
         private const val HTML_END = "</body></html>"
+    }
+
+    private fun updateFavoriteIcon(item: MenuItem) {
+        if (entry.isFavorite) {
+            item.setIcon(R.drawable.ic_action_favorite)
+        } else {
+            item.setIcon(R.drawable.ic_action_notfavorite)
+        }
     }
 }

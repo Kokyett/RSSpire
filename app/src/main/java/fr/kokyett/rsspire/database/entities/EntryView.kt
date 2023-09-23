@@ -13,7 +13,7 @@ data class EntryView (
     var title: String?,
     var feedUrl: String,
     var feedTitle: String?,
-    val isFavorite: Boolean,
+    var isFavorite: Boolean,
     var publishDate: Date?,
     var readDate: Date?,
 ) : Serializable {
