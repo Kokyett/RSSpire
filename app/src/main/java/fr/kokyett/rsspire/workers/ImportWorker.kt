@@ -73,6 +73,10 @@ class ImportWorker(context: Context, private var params: WorkerParameters) : Cor
                 continue
             }
 
+            var iconUrl = node.attributes.getNamedItem("rsspire:iconUrl")?.nodeValue
+            if (iconUrl != null && iconUrl.trim() == "")
+                iconUrl = null
+
             if (URLUtil.isValidUrl(url)) {
                 log.writeInformation("Saving $url")
                 var feed = feedRepository.getForUrl(url)
@@ -80,7 +84,8 @@ class ImportWorker(context: Context, private var params: WorkerParameters) : Cor
                     feed = Feed(
                         idCategory = category?.id,
                         url = url,
-                        title = title
+                        title = title,
+                        iconUrl = iconUrl
                     )
                     feedRepository.save(feed)
                 }

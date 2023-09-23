@@ -87,6 +87,9 @@ class ExportWorker(private var context: Context, private var params: WorkerParam
                 outline.setAttribute("title", feed.title)
                 outline.setAttribute("text", feed.title)
             }
+            if (feed.iconUrl != null) {
+                outline.setAttribute("rsspire:iconUrl", feed.iconUrl)
+            }
             node.appendChild(outline)
         }
     }
