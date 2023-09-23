@@ -33,7 +33,11 @@ class EntryListAdapter(context: Context) : SwipeListAdapter<EntryView, EntryList
     }
 
     override fun onItemSwiped(direction: Int, position: Int) {
+        if (position == -1)
+            return;
+
         val entry = getItem(position)
+        val displayUnreadEntries = ApplicationContext.getBooleanPreference("pref_display_unread_entries", true)
         when (direction) {
             ItemTouchHelper.LEFT -> {
                 ApplicationContext.getApplicationScope().launch {
@@ -41,7 +45,8 @@ class EntryListAdapter(context: Context) : SwipeListAdapter<EntryView, EntryList
                         entry.isFavorite = !entry.isFavorite
                         ApplicationContext.getEntryRepository().setFavorite(entry.id, entry.isFavorite)
                         withContext(Dispatchers.Main) {
-                            notifyItemChanged(position)
+                            if (!displayUnreadEntries || entry.readDate == null || entry.isFavorite)
+                                notifyItemChanged(position)
                         }
                     }
                 }
@@ -57,7 +62,8 @@ class EntryListAdapter(context: Context) : SwipeListAdapter<EntryView, EntryList
                             ApplicationContext.getEntryRepository().markAsUnread(entry.id)
                         }
                         withContext(Dispatchers.Main) {
-                            notifyItemChanged(position)
+                            if (!displayUnreadEntries || entry.readDate == null || entry.isFavorite)
+                                notifyItemChanged(position)
                         }
                     }
                 }
@@ -66,6 +72,9 @@ class EntryListAdapter(context: Context) : SwipeListAdapter<EntryView, EntryList
     }
 
     override fun onDrawItemSwiped(direction: Int, position: Int) {
+        if (position == -1)
+            return;
+
         val entry = getItem(position)
 
         if (entry.isFavorite)

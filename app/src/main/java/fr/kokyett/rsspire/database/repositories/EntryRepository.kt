@@ -15,10 +15,6 @@ class EntryRepository(private val entryDao: EntryDao) {
         return entryDao.get(id)
     }
 
-    fun getByCategory(id: Long?): LiveData<List<EntryView>> {
-        return entryDao.getByCategory(id).asLiveData()
-    }
-
     fun getExisting(idFeed: Long, guid: String?): Entry? {
         return entryDao.getExisting(idFeed, guid)
     }

@@ -39,7 +39,7 @@ class EntriesFragment : Fragment() {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        ApplicationContext.getEntryRepository().getByCategory(idCategory).observe(viewLifecycleOwner) { entries ->
+        ApplicationContext.getPreferencesRepository().getEntries(idCategory).observe(viewLifecycleOwner) { entries ->
             entries?.let { adapter.submitList(it) }
         }
     }

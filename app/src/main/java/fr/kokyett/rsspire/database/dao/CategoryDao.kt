@@ -26,6 +26,14 @@ interface CategoryDao {
     @Query("select distinct c.id, c.name from Entry e inner join Feed f on f.id  = e.idFeed left join Category c on c.id = f.idCategory order by name")
     fun getWithEntries(): Flow<List<NullableCategory>>
 
+    @Query("select distinct c.id, c.name"+
+            " from Entry e" +
+            " inner join Feed f on f.id  = e.idFeed" +
+            " left join Category c on c.id = f.idCategory" +
+            " where e.isFavorite = 1 or e.readDate is null" +
+            " order by name")
+    fun getWithUnreadEntries(): Flow<List<NullableCategory>>
+
     @Insert
     fun insert(category: Category): Long
 

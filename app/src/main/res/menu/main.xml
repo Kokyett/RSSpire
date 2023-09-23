@@ -3,6 +3,14 @@
     <group
         android:id="@+id/group_miscelaneous">
         <item
+            android:id="@+id/action_menu_unread"
+            android:icon="@drawable/ic_action_unread"
+            android:title="@string/main_menu_unread"
+            app:showAsAction="never|withText|ifRoom" />
+    </group>
+    <group
+        android:id="@+id/group_feeds">
+        <item
             android:id="@+id/action_menu_add_feed"
             android:icon="@drawable/ic_action_add"
             android:title="@string/main_menu_add_feed"

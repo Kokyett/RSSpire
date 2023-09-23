@@ -7,11 +7,13 @@ import fr.kokyett.rsspire.database.ApplicationDatabase
 import fr.kokyett.rsspire.database.repositories.CategoryRepository
 import fr.kokyett.rsspire.database.repositories.EntryRepository
 import fr.kokyett.rsspire.database.repositories.FeedRepository
-import fr.kokyett.rsspire.enums.LogLineType
+import fr.kokyett.rsspire.database.repositories.PreferencesRepository
 import fr.kokyett.rsspire.enums.LogType
 import fr.kokyett.rsspire.utils.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
+import java.security.AccessController.getContext
+
 
 class ApplicationContext : Application() {
     private val applicationScope = CoroutineScope(SupervisorJob())
@@ -19,6 +21,7 @@ class ApplicationContext : Application() {
     private val categoryRepository by lazy { CategoryRepository(database.categoryDao) }
     private val feedRepository by lazy { FeedRepository(database.feedDao) }
     private val entryRepository by lazy { EntryRepository(database.entryDao) }
+    private val preferencesRepository by lazy { PreferencesRepository(database.categoryDao, database.entryDao) }
     private val sharedPreferences by lazy { PreferenceManager.getDefaultSharedPreferences(this) }
     private val defaultUncaughtHandler = Thread.getDefaultUncaughtExceptionHandler()
 
@@ -48,6 +51,12 @@ class ApplicationContext : Application() {
             return handle.sharedPreferences.getBoolean(key, defaultValue)
         }
 
+        fun setBooleanPreference(key: String, value: Boolean) {
+            val editor = handle.sharedPreferences.edit()
+            editor.putBoolean(key, value)
+            editor.apply()
+        }
+
         fun getApplicationScope(): CoroutineScope {
             return handle.applicationScope
         }
@@ -62,6 +71,10 @@ class ApplicationContext : Application() {
 
         fun getEntryRepository(): EntryRepository {
             return handle.entryRepository
+        }
+
+        fun getPreferencesRepository(): PreferencesRepository {
+            return handle.preferencesRepository
         }
     }
 }

@@ -29,10 +29,6 @@ class CategoryRepository(private val categoryDao: CategoryDao) {
         return categoryDao.getWithFeeds().asLiveData()
     }
 
-    fun getWithEntries(): LiveData<List<NullableCategory>> {
-        return categoryDao.getWithEntries().asLiveData()
-    }
-
     fun save(category: Category) {
         if (category.id == 0L)
             category.id = categoryDao.insert(category)

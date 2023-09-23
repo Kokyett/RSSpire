@@ -11,7 +11,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.core.view.MenuCompat
-import androidx.lifecycle.distinctUntilChanged
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -24,6 +23,7 @@ import fr.kokyett.rsspire.utils.DateTime
 import fr.kokyett.rsspire.workers.Workers
 
 class MainActivity : AppCompatActivity() {
+    private var displayUnreadEntries: Boolean = true
     private lateinit var tabLayoutMediator: TabLayoutMediator
     private lateinit var adapter: CategoryViewPagerAdapter
 
@@ -42,7 +42,9 @@ class MainActivity : AppCompatActivity() {
         }
         tabLayoutMediator.attach()
 
-        ApplicationContext.getCategoryRepository().getWithEntries().observe(this) { categories ->
+        displayUnreadEntries = ApplicationContext.getBooleanPreference("pref_display_unread_entries", true)
+        ApplicationContext.getPreferencesRepository().setOnlyDisplayUnreadEntries(displayUnreadEntries)
+        ApplicationContext.getPreferencesRepository().getCategories().observe(this) { categories ->
             val tabs: ArrayList<CategoryTabInfo> = ArrayList()
             for (category in categories) {
                 tabs.add(CategoryTabInfo(EntriesFragment::class.java, category.id, category.name))
@@ -60,11 +62,22 @@ class MainActivity : AppCompatActivity() {
         if (menu is MenuBuilder)
             menu.setOptionalIconsVisible(true)
 
+        val item = menu?.findItem(R.id.action_menu_unread)
+        if (item != null) {
+            updateDisplayUnread(item)
+        }
+
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.action_menu_unread -> {
+                displayUnreadEntries = !displayUnreadEntries
+                ApplicationContext.setBooleanPreference("pref_display_unread_entries", displayUnreadEntries)
+                ApplicationContext.getPreferencesRepository().setOnlyDisplayUnreadEntries(displayUnreadEntries)
+                updateDisplayUnread(item)
+            }
             R.id.action_menu_add_feed -> startActivity(Intent(this, SearchFeedActivity::class.java))
             R.id.action_menu_feed_list -> startActivity(Intent(this, FeedsActivity::class.java))
             R.id.action_menu_import_opml -> importStartForResult.launch(Intent(Intent.ACTION_OPEN_DOCUMENT)
@@ -79,6 +92,7 @@ class MainActivity : AppCompatActivity() {
                     type = "*/*"
                     putExtra(Intent.EXTRA_TITLE, "RSSpire${DateTime.now("yyyy-MM-dd-HH-mm-ss-SSS")}.opml")
                 })
+
             R.id.action_menu_settings -> startActivity(Intent(this, SettingsActivity::class.java))
             R.id.action_menu_about -> startActivity(Intent(this, AboutActivity::class.java))
         }
@@ -96,4 +110,13 @@ class MainActivity : AppCompatActivity() {
             Workers.exportOpml(applicationContext, result.data?.data!!)
         }
     }
+
+    private fun updateDisplayUnread(item: MenuItem) {
+        if (displayUnreadEntries) {
+            item.setIcon(R.drawable.ic_action_unread)
+        } else {
+            item.setIcon(R.drawable.ic_action_read)
+        }
+    }
+
 }

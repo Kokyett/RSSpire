@@ -83,6 +83,14 @@ class EntryActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    private fun updateFavoriteIcon(item: MenuItem) {
+        if (entry.isFavorite) {
+            item.setIcon(R.drawable.ic_action_favorite)
+        } else {
+            item.setIcon(R.drawable.ic_action_notfavorite)
+        }
+    }
+
     companion object {
         private const val HTML_START = "<html><head><style>" +
                 "body { color: white; text-align: justify; }" +
@@ -95,13 +103,5 @@ class EntryActivity : AppCompatActivity() {
                 "</style></head><body>"
 
         private const val HTML_END = "</body></html>"
-    }
-
-    private fun updateFavoriteIcon(item: MenuItem) {
-        if (entry.isFavorite) {
-            item.setIcon(R.drawable.ic_action_favorite)
-        } else {
-            item.setIcon(R.drawable.ic_action_notfavorite)
-        }
     }
 }

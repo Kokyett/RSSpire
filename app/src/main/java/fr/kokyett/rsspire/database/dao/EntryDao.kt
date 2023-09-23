@@ -20,14 +20,35 @@ interface EntryDao {
     @Query("select * from Entry order by publishDate desc")
     fun getAll(): Flow<List<Entry>>
 
-    @Query("select e.id, e.idFeed, e.guid, e.link, e.title, f.url as feedUrl, f.title as feedTitle, e.isFavorite, e.publishDate, e.readDate from Entry e inner join Feed f on f.id = e.idFeed where idCategory = :id or (idCategory is null and :id is null) order by publishDate desc;")
+    @Query(
+        "select e.id, e.idFeed, e.guid, e.link, e.title, f.url as feedUrl, f.title as feedTitle, e.isFavorite, e.publishDate, e.readDate" +
+                " from Entry e" +
+                " inner join Feed f on f.id = e.idFeed" +
+                " where idCategory = :id or (idCategory is null and :id is null)" +
+                " order by publishDate desc;"
+    )
     fun getByCategory(id: Long?): Flow<List<EntryView>>
+
+    @Query(
+        "select e.id, e.idFeed, e.guid, e.link, e.title, f.url as feedUrl, f.title as feedTitle, e.isFavorite, e.publishDate, e.readDate" +
+                " from Entry e" +
+                " inner join Feed f on f.id = e.idFeed" +
+                " where (idCategory = :id or (idCategory is null and :id is null)) and (isFavorite = 1 or readDate is null)" +
+                " order by publishDate desc;"
+    )
+    fun getUnreadByCategory(id: Long?): Flow<List<EntryView>>
 
     @Query("select * from Entry where idFeed = :idFeed and ((guid is null and :guid is null) or (guid = :guid)) order by publishDate desc")
     fun getExisting(idFeed: Long, guid: String?): Entry?
 
     @Query("select e.icon as entryIcon, f.icon as feedIcon from Entry e inner join Feed f on f.id = e.idFeed where e.id = :id")
     fun getIcons(id: Long): EntryIconsView?
+
+    @Insert
+    fun insert(entry: Entry): Long
+
+    @Update
+    fun update(entry: Entry)
 
     @Query("update Entry set readDate = :date where id = :id")
     fun markAsRead(id: Long, date: Date)
@@ -37,12 +58,6 @@ interface EntryDao {
 
     @Query("update Entry set isFavorite = :isFavorite where id = :id")
     fun setFavorite(id: Long, isFavorite: Boolean)
-
-    @Insert
-    fun insert(entry: Entry): Long
-
-    @Update
-    fun update(entry: Entry)
 
     @Delete
     fun delete(entry: Entry)
