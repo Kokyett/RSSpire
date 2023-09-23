@@ -232,6 +232,8 @@ class RefreshFeedsWorker(context: Context, private var params: WorkerParameters)
         if (entry.link != null) Html.restoreLinks(entry.link!!, entry.content ?: "")
         if (entry.title == null) entry.title = entry.link
 
+        entry.content?.let { entry.content = Html.restoreLink(URL(entry.link), it) }
+
         val existingEntry = ApplicationContext.getEntryRepository().getExisting(entry.idFeed, entry.guid)
         if (existingEntry?.publishDate != null) {
             if (entry.publishDate == null)
