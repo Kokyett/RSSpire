@@ -66,7 +66,6 @@ class FeedsActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_menu_add_feed -> startActivity(Intent(this, SearchFeedActivity::class.java))
             R.id.action_menu_import_opml -> importStartForResult.launch(
                 Intent(Intent.ACTION_OPEN_DOCUMENT)
                 .apply {
