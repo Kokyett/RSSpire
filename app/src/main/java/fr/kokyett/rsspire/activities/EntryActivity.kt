@@ -77,7 +77,10 @@ class EntryActivity : AppCompatActivity() {
                 "body { color: white; text-align: justify; }" +
                 "a { color: #8ad0e8; }" +
                 "img { max-width: 100%; height: auto; }" +
+                "figure { max-width: 100%; height: auto; margin: auto; }" +
                 "iframe { max-width: 100%; height: auto; }" +
+                "video { max-width: 100%; height: auto; }" +
+                "pre { max-width: 100%; overflow-x:scroll; }" +
                 "</style></head><body>"
 
         private const val HTML_END = "</body></html>"
