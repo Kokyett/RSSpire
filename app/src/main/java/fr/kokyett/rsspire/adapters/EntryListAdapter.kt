@@ -103,7 +103,7 @@ class EntryListAdapter(context: Context) : SwipeListAdapter<EntryView, EntryList
                             withContext(Dispatchers.Main) {
                                 Glide.with(context).load(icons.entryIcon).into(imageView)
                             }
-                        } else {
+                        } else if (icons.feedIcon != null) {
                             withContext(Dispatchers.Main) {
                                 Glide.with(context).load(icons.feedIcon).into(imageView)
                             }
