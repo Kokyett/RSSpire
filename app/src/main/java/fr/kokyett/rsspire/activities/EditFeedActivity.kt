@@ -1,7 +1,6 @@
 package fr.kokyett.rsspire.activities
 
 import android.annotation.SuppressLint
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.Menu
@@ -25,6 +24,7 @@ import fr.kokyett.rsspire.models.FeedIcon
 import fr.kokyett.rsspire.utils.Downloader
 import fr.kokyett.rsspire.utils.Html
 import fr.kokyett.rsspire.views.InstantAutoComplete
+import fr.kokyett.rsspire.workers.Workers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -208,6 +208,7 @@ class EditFeedActivity : AppCompatActivity() {
 
                     ApplicationContext.getFeedRepository().save(feed)
                     withContext(Dispatchers.Main) {
+                        Workers.refreshFeeds(this@EditFeedActivity)
                         finish()
                     }
                 }
