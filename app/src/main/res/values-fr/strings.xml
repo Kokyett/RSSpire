@@ -8,6 +8,7 @@
 
     <!-- Main Menu -->
     <string name="main_menu_unread">Afficher les articlas lus ou non lus</string>
+    <string name="main_menu_mark_all_as_read">Marquer tous comme lus</string>
     <string name="main_menu_add_feed">Ajouter un flux</string>
     <string name="main_menu_feed_list">Liste de flux</string>
     <string name="main_menu_import_opml">Importer un fichier OPML</string>
@@ -43,6 +44,8 @@
     <string name="edit_feed_not_found_icons">Aucune icône n\'a été trouvée</string>
     <string name="edit_feed_select_icon">Selectioner une icône</string>
     <string name="edit_feed_select_icon_cancel">Annuler</string>
+    <string name="edit_feed_refresh_interval">Interval de rafraichissement</string>
+    <string name="edit_feed_delete_read_entries_interval">Interval de suppression des articles lus</string>
 
     <!-- Feeds activity -->
     <string name="feeds_activity_title">Liste de flux</string>
@@ -57,6 +60,32 @@
 
     <!-- Settings activity -->
     <string name="settings_activity_title">Paramètres</string>
+    <string name="feeds_tab">Flux</string>
+    <string name="pref_refresh_intervals_title">Interval de mise à jour d\'un flux par défaut</string>
+    <string-array name="pref_refresh_intervals_labels">
+        <item>1 heure</item>
+        <item>2 heures</item>
+        <item>3 heures</item>
+        <item>6 heures</item>
+        <item>12 heures</item>
+        <item>1 jour</item>
+        <item>2 jours</item>
+        <item>3 jours</item>
+        <item>1 semaine</item>
+        <item>2 semaines</item>
+        <item>4 semaines</item>
+        <item>8 semaines</item>
+    </string-array>
+    <string name="pref_delete_read_entries_intervals_title">Interval de suppression d\'articles lus par défaut</string>
+    <string-array name="pref_delete_read_entries_intervals_labels">
+        <item>Jamais</item>
+        <item>1 jour</item>
+        <item>2 jours</item>
+        <item>3 jours</item>
+        <item>1 semaine</item>
+        <item>2 semaines</item>
+        <item>4 semaines</item>
+    </string-array>
     <string name="logs_tab">Journaux</string>
     <string name="pref_log_uncaught_exceptions">Log des crashs applicatifs</string>
     <string name="pref_log_import_opml">Log de l\'import d\'un fichier OPML</string>

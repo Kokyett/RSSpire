@@ -15,9 +15,13 @@ class Html {
         private val patternOpenGraphIcon: Pattern = Pattern.compile("<meta[^>]*property=[\"']og:image[\"'][^>]*>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
         private val patternMetaContent: Pattern = Pattern.compile("content=[\"']([^\"']*)[\"']", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
         private val patternIcon: Pattern = Pattern.compile("<link[^>]*rel=[\"'][^\"']*icon[\"'][^>]*>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
+        private val patternImage: Pattern = Pattern.compile("<img[^>]*src=[\"']([^\"']*)[\"'][^>]*>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
         private val patternLogoImage: Pattern = Pattern.compile("<img[^>]*src=[\"']([^\"']*logo[^\"']*)[\"'][^>]*>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
 
         fun restoreLink(url: URL, link: String): String {
+            if (URLUtil.isValidUrl(link))
+                return link
+
             val newLink: String
             if (link.startsWith("//")) {
                 newLink = url.protocol + ":" + link
@@ -59,6 +63,17 @@ class Html {
             } catch (e: java.lang.Exception) {
                 return content
             }
+        }
+
+        fun getImages(content: String): ArrayList<String> {
+            val images = ArrayList<String>()
+            val matcher = patternImage.matcher(content)
+            while (matcher.find()) {
+                val matchContent = matcher.group(1) ?: continue
+                if (!images.contains(matchContent))
+                    images.add(matchContent)
+            }
+            return images
         }
 
         fun getIcons(url: String): ArrayList<FeedIcon> {

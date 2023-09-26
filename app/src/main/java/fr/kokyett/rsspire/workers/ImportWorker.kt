@@ -9,6 +9,7 @@ import fr.kokyett.rsspire.ApplicationContext
 import fr.kokyett.rsspire.database.entities.Category
 import fr.kokyett.rsspire.database.entities.Feed
 import fr.kokyett.rsspire.enums.LogType
+import fr.kokyett.rsspire.utils.DateTime
 import fr.kokyett.rsspire.utils.Log
 import org.w3c.dom.Document
 import org.w3c.dom.NodeList
@@ -77,6 +78,14 @@ class ImportWorker(context: Context, private var params: WorkerParameters) : Cor
             if (iconUrl != null && iconUrl.trim() == "")
                 iconUrl = null
 
+            var refreshInterval = node.attributes.getNamedItem("rsspire:refreshInterval")?.nodeValue ?: ""
+            if (refreshInterval.trim() == "")
+                refreshInterval = ApplicationContext.getStringPreference("pref_default_refresh_interval", "2D")!!
+
+            var deleteReadEntriesInterval = node.attributes.getNamedItem("rsspire:deleteReadEntriesInterval")?.nodeValue ?: ""
+            if (deleteReadEntriesInterval.trim() == "")
+                deleteReadEntriesInterval = ApplicationContext.getStringPreference("pref_default_delete_read_entries_interval", "1W")!!
+
             if (URLUtil.isValidUrl(url)) {
                 log.writeInformation("Saving $url")
                 var feed = feedRepository.getForUrl(url)
@@ -85,7 +94,9 @@ class ImportWorker(context: Context, private var params: WorkerParameters) : Cor
                         idCategory = category?.id,
                         url = url,
                         title = title,
-                        iconUrl = iconUrl
+                        iconUrl = iconUrl,
+                        refreshInterval = DateTime.decodeDelay(refreshInterval),
+                        deleteReadEntriesInterval = DateTime.decodeDelay(deleteReadEntriesInterval)
                     )
                     feedRepository.save(feed)
                 }

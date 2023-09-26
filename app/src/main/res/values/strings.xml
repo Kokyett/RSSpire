@@ -7,6 +7,7 @@
 
     <!-- Main menu -->
     <string name="main_menu_unread">Display all or unread entries</string>
+    <string name="main_menu_mark_all_as_read">Mark all as read</string>
     <string name="main_menu_add_feed">Add feed</string>
     <string name="main_menu_feed_list">Feed list</string>
     <string name="main_menu_import_opml">Import OPML file</string>
@@ -43,6 +44,8 @@
     <string name="edit_feed_not_found_icons">No icon have been found</string>
     <string name="edit_feed_select_icon">Select icon</string>
     <string name="edit_feed_select_icon_cancel">Cancel</string>
+    <string name="edit_feed_refresh_interval">Refresh interval</string>
+    <string name="edit_feed_delete_read_entries_interval">Delete read entries interval</string>
 
     <!-- Feeds activity -->
     <string name="feeds_activity_title">Feed list</string>
@@ -56,6 +59,55 @@
 
     <!-- Settings activity -->
     <string name="settings_activity_title">Settings</string>
+    <string name="feeds_tab">Feeds</string>
+    <string name="pref_refresh_intervals_title">Default refresh feed interval</string>
+    <string-array name="pref_refresh_intervals" translatable="false">
+        <item>1H</item>
+        <item>2H</item>
+        <item>3H</item>
+        <item>6H</item>
+        <item>12H</item>
+        <item>1D</item>
+        <item>2D</item>
+        <item>3D</item>
+        <item>1W</item>
+        <item>2W</item>
+        <item>4W</item>
+        <item>8W</item>
+    </string-array>
+    <string-array name="pref_refresh_intervals_labels">
+        <item>1 hour</item>
+        <item>2 hours</item>
+        <item>3 hours</item>
+        <item>6 hours</item>
+        <item>12 hours</item>
+        <item>1 day</item>
+        <item>2 days</item>
+        <item>3 days</item>
+        <item>1 week</item>
+        <item>2 weeks</item>
+        <item>4 weeks</item>
+        <item>8 weeks</item>
+    </string-array>
+    <string name="pref_delete_read_entries_intervals_title">Default delete read entries interval</string>
+    <string-array name="pref_delete_read_entries_intervals" translatable="false">
+        <item>0D</item>
+        <item>1D</item>
+        <item>2D</item>
+        <item>3D</item>
+        <item>1W</item>
+        <item>2W</item>
+        <item>4W</item>
+    </string-array>
+    <string-array name="pref_delete_read_entries_intervals_labels">
+        <item>Never</item>
+        <item>1 day</item>
+        <item>2 days</item>
+        <item>3 days</item>
+        <item>1 week</item>
+        <item>2 weeks</item>
+        <item>4 weeks</item>
+    </string-array>
     <string name="logs_tab">Logs</string>
     <string name="pref_log_uncaught_exceptions">Log application crash</string>
     <string name="pref_log_import_opml">Log import OPML file</string>

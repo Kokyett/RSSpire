@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import fr.kokyett.rsspire.ApplicationContext
 import fr.kokyett.rsspire.enums.FeedType
 import fr.kokyett.rsspire.utils.DateTime
 import java.io.Serializable
@@ -23,8 +24,13 @@ data class Feed(
     @ColumnInfo(collate = ColumnInfo.NOCASE) var description: String? = null,
     var lastEntryDate: Date? = null,
     var nextRefreshDate: Date? = null,
-    var refreshInterval: Long = DateTime.DAY,
-    var deleteReadEntriesInterval: Long = DateTime.DAY,
+    var refreshInterval: Long = DateTime.decodeDelay(ApplicationContext.getStringPreference("pref_default_refresh_interval", "2D")!!),
+    var deleteReadEntriesInterval: Long = DateTime.decodeDelay(
+        ApplicationContext.getStringPreference(
+            "pref_default_delete_read_entries_interval",
+            "1W"
+        )!!
+    ),
     var downloadFullContent: Boolean = false,
     var icon: ByteArray? = null,
     var iconUrl: String? = null,

@@ -1,14 +1,8 @@
 package fr.kokyett.rsspire.database.repositories
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.asLiveData
-import androidx.room.Query
 import fr.kokyett.rsspire.database.dao.EntryDao
 import fr.kokyett.rsspire.database.entities.Entry
 import fr.kokyett.rsspire.database.entities.EntryIconsView
-import fr.kokyett.rsspire.database.entities.EntryView
-import kotlinx.coroutines.flow.Flow
-import java.util.Date
 
 class EntryRepository(private val entryDao: EntryDao) {
     fun get(id: Long): Entry {
@@ -25,11 +19,15 @@ class EntryRepository(private val entryDao: EntryDao) {
     }
 
     fun markAsRead(id: Long) {
-        entryDao.markAsRead(id, Date())
+        entryDao.markAsRead(id)
     }
 
     fun markAsUnread(id: Long) {
         entryDao.markAsUnread(id)
+    }
+
+    fun markAllAsReadByCategory(idCategory: Long?) {
+        entryDao.markAllAsReadByCategory(idCategory)
     }
 
     fun setFavorite(id: Long, isFavorite: Boolean) {
@@ -46,5 +44,9 @@ class EntryRepository(private val entryDao: EntryDao) {
 
     fun delete(entry: Entry) {
         entryDao.delete(entry)
+    }
+
+    fun deleteReadEntries() {
+        entryDao.deleteReadEntries()
     }
 }

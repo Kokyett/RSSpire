@@ -7,6 +7,7 @@ import androidx.room.Query
 import androidx.room.Update
 import fr.kokyett.rsspire.database.entities.Feed
 import kotlinx.coroutines.flow.Flow
+import java.util.Date
 
 @Dao
 interface FeedDao {
@@ -16,8 +17,8 @@ interface FeedDao {
     @Query("select * from Feed order by title, url")
     fun getAll(): Flow<List<Feed>>
 
-    @Query("select * from Feed where type <> 'LOG'")
-    fun getRefresh(): List<Feed>
+    @Query("select * from Feed where nextRefreshDate is null or nextRefreshDate <= :date")
+    fun getRefresh(date: Date = Date()): List<Feed>
 
     @Query("select * from Feed where type = 'LOG'")
     fun getLogsFeed(): Feed

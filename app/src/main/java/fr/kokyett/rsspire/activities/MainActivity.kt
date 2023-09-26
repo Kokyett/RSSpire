@@ -11,6 +11,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.core.view.MenuCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -21,17 +22,23 @@ import fr.kokyett.rsspire.fragments.EntriesFragment
 import fr.kokyett.rsspire.models.CategoryTabInfo
 import fr.kokyett.rsspire.utils.DateTime
 import fr.kokyett.rsspire.workers.Workers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
     private var displayUnreadEntries: Boolean = true
     private lateinit var tabLayoutMediator: TabLayoutMediator
+    private lateinit var viewPager: ViewPager2
     private lateinit var adapter: CategoryViewPagerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tabs)
 
-        val viewPager = findViewById<ViewPager2>(R.id.viewpager)
+        Workers.setPeriodicRefreshFeeds(this);
+
+        viewPager = findViewById<ViewPager2>(R.id.viewpager)
         adapter = CategoryViewPagerAdapter(supportFragmentManager, lifecycle)
         viewPager.adapter = adapter
         viewPager.isUserInputEnabled = false
@@ -77,6 +84,17 @@ class MainActivity : AppCompatActivity() {
                 ApplicationContext.setBooleanPreference("pref_display_unread_entries", displayUnreadEntries)
                 ApplicationContext.getPreferencesRepository().setOnlyDisplayUnreadEntries(displayUnreadEntries)
                 updateDisplayUnread(item)
+            }
+            R.id.action_menu_marl_all_as_read -> {
+                val position = viewPager.currentItem
+                if (position >= 0) {
+                    val categoryId = adapter.getCategoryId(position)
+                    lifecycleScope.launch {
+                        withContext(Dispatchers.IO) {
+                            ApplicationContext.getEntryRepository().markAllAsReadByCategory(categoryId)
+                        }
+                    }
+                }
             }
             R.id.action_menu_add_feed -> startActivity(Intent(this, SearchFeedActivity::class.java))
             R.id.action_menu_feed_list -> startActivity(Intent(this, FeedsActivity::class.java))

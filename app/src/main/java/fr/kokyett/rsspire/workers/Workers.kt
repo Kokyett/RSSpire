@@ -3,8 +3,12 @@ package fr.kokyett.rsspire.workers
 import android.content.Context
 import android.net.Uri
 import androidx.work.Data
+import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import fr.kokyett.rsspire.utils.DateTime
+import java.util.concurrent.TimeUnit
 
 class Workers {
     companion object {
@@ -23,6 +27,11 @@ class Workers {
         fun refreshFeeds(context: Context) {
             val request = OneTimeWorkRequestBuilder<RefreshFeedsWorker>().build()
             WorkManager.getInstance(context).enqueue(request)
+        }
+
+        fun setPeriodicRefreshFeeds(context: Context) {
+            val request = PeriodicWorkRequestBuilder<RefreshFeedsWorker>(DateTime.REFRESH_INTERVAL, TimeUnit.MILLISECONDS).build()
+            WorkManager.getInstance(context).enqueueUniquePeriodicWork("REFRESH", ExistingPeriodicWorkPolicy.KEEP, request)
         }
     }
 }

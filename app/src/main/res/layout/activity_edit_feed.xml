@@ -75,4 +75,29 @@
         android:singleLine="true"
         tools:ignore="SmallSp" />
 
+    <TextView
+        android:labelFor="@+id/spinner_refresh_interval"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/edit_feed_refresh_interval"
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+    <Spinner
+        android:id="@+id/spinner_refresh_interval"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/pref_refresh_intervals_labels"/>
+
+    <TextView
+        android:labelFor="@+id/spinner_delete_read_entries_interval"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/edit_feed_delete_read_entries_interval"
+        android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+    <Spinner
+        android:id="@+id/spinner_delete_read_entries_interval"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/pref_delete_read_entries_intervals_labels"/>
 </LinearLayout>

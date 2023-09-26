@@ -7,6 +7,11 @@
             android:icon="@drawable/ic_action_unread"
             android:title="@string/main_menu_unread"
             app:showAsAction="never|withText|ifRoom" />
+        <item
+            android:id="@+id/action_menu_marl_all_as_read"
+            android:icon="@drawable/ic_action_mark_all_as_read"
+            android:title="@string/main_menu_mark_all_as_read"
+            app:showAsAction="never|withText|ifRoom" />
     </group>
     <group
         android:id="@+id/group_feeds">

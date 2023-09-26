@@ -40,13 +40,13 @@ class EntryActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             withContext(Dispatchers.IO) {
-                ApplicationContext.getEntryRepository().markAsRead(idEntry)
                 entry = ApplicationContext.getEntryRepository().get(idEntry)
+                ApplicationContext.getEntryRepository().markAsRead(idEntry)
                 withContext(Dispatchers.Main) {
                     title.text = entry.title
                     informations.text = entry.publishDate?.toLocalizedString()
 
-                    val html = HTML_START + entry.content + HTML_END
+                    val html = "$HTML_START${entry.content} $HTML_END"
                     webView.setBackgroundColor(Color.TRANSPARENT)
                     webView.settings.loadWithOverviewMode = true
                     webView.settings.javaScriptEnabled = true
@@ -62,6 +62,7 @@ class EntryActivity : AppCompatActivity() {
         updateFavoriteIcon(item)
         return true
     }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_menu_open -> try {

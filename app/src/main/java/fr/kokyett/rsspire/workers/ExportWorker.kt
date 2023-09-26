@@ -7,8 +7,8 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import fr.kokyett.rsspire.ApplicationContext
 import fr.kokyett.rsspire.R
-import fr.kokyett.rsspire.enums.LogLineType
 import fr.kokyett.rsspire.enums.LogType
+import fr.kokyett.rsspire.utils.DateTime
 import fr.kokyett.rsspire.utils.Log
 import kotlinx.coroutines.flow.first
 import org.w3c.dom.Document
@@ -90,6 +90,8 @@ class ExportWorker(private var context: Context, private var params: WorkerParam
             if (feed.iconUrl != null) {
                 outline.setAttribute("rsspire:iconUrl", feed.iconUrl)
             }
+            outline.setAttribute("rsspire:refreshInterval", DateTime.encodeDelay(feed.refreshInterval))
+            outline.setAttribute("rsspire:deleteReadEntriesInterval", DateTime.encodeDelay(feed.deleteReadEntriesInterval))
             node.appendChild(outline)
         }
     }

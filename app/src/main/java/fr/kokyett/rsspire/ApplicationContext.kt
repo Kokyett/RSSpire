@@ -12,8 +12,6 @@ import fr.kokyett.rsspire.enums.LogType
 import fr.kokyett.rsspire.utils.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
-import java.security.AccessController.getContext
-
 
 class ApplicationContext : Application() {
     private val applicationScope = CoroutineScope(SupervisorJob())
@@ -49,6 +47,10 @@ class ApplicationContext : Application() {
 
         fun getBooleanPreference(key: String, defaultValue: Boolean): Boolean {
             return handle.sharedPreferences.getBoolean(key, defaultValue)
+        }
+
+        fun getStringPreference(key: String, defaultValue: String): String? {
+            return handle.sharedPreferences.getString(key, defaultValue)
         }
 
         fun setBooleanPreference(key: String, value: Boolean) {

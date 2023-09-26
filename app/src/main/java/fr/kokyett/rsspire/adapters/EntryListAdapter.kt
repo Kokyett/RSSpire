@@ -14,7 +14,9 @@ import com.google.android.material.card.MaterialCardView
 import fr.kokyett.rsspire.ApplicationContext
 import fr.kokyett.rsspire.R
 import fr.kokyett.rsspire.database.entities.EntryView
+import fr.kokyett.rsspire.enums.LogType
 import fr.kokyett.rsspire.utils.DateTime.Companion.toLocalizedString
+import fr.kokyett.rsspire.utils.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

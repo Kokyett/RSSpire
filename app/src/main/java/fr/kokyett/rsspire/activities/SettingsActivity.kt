@@ -7,6 +7,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import fr.kokyett.rsspire.R
 import fr.kokyett.rsspire.adapters.ViewPagerAdapter
+import fr.kokyett.rsspire.fragments.FeedsPreferencesFragment
 import fr.kokyett.rsspire.fragments.LogsPreferencesFragment
 import fr.kokyett.rsspire.models.TabInfo
 
@@ -16,6 +17,7 @@ class SettingsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_tabs)
 
         val tabs: ArrayList<TabInfo> = ArrayList()
+        tabs.add(TabInfo(FeedsPreferencesFragment::class.java, resources.getString(R.string.feeds_tab), R.drawable.ic_tab_feeds))
         tabs.add(TabInfo(LogsPreferencesFragment::class.java, resources.getString(R.string.logs_tab), R.drawable.ic_tab_logs))
 
         val viewPager = findViewById<ViewPager2>(R.id.viewpager)

@@ -9,6 +9,7 @@ import android.webkit.URLUtil
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -21,6 +22,7 @@ import fr.kokyett.rsspire.adapters.IconListAdapter
 import fr.kokyett.rsspire.database.entities.Feed
 import fr.kokyett.rsspire.enums.FeedType
 import fr.kokyett.rsspire.models.FeedIcon
+import fr.kokyett.rsspire.utils.DateTime
 import fr.kokyett.rsspire.utils.Downloader
 import fr.kokyett.rsspire.utils.Html
 import fr.kokyett.rsspire.views.InstantAutoComplete
@@ -36,6 +38,10 @@ class EditFeedActivity : AppCompatActivity() {
     private lateinit var editTitle: EditText
     private lateinit var editDescription: EditText
     private lateinit var editCategory: InstantAutoComplete
+    private lateinit var spinnerRefreshInterval: Spinner
+    private lateinit var spinnerDeleteReadIntervalInterval: Spinner
+    private lateinit var refreshIntervalValues: Array<out String>
+    private lateinit var deleteReadEntriesIntervalValues: Array<out String>
     private lateinit var feed: Feed
 
     @SuppressLint("ClickableViewAccessibility")
@@ -43,11 +49,16 @@ class EditFeedActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_feed)
 
+        refreshIntervalValues = resources.getStringArray(R.array.pref_refresh_intervals)
+        deleteReadEntriesIntervalValues = resources.getStringArray(R.array.pref_delete_read_entries_intervals)
+
         imageView = findViewById(R.id.imageview)
         editUrl = findViewById(R.id.url)
         editTitle = findViewById(R.id.title)
         editDescription = findViewById(R.id.description)
         editCategory = findViewById(R.id.category)
+        spinnerRefreshInterval = findViewById(R.id.spinner_refresh_interval)
+        spinnerDeleteReadIntervalInterval = findViewById(R.id.spinner_delete_read_entries_interval)
         editCategory.threshold = 0
 
         ApplicationContext.getCategoryRepository().getAll().observe(this) { categories ->
@@ -69,8 +80,10 @@ class EditFeedActivity : AppCompatActivity() {
                 url = editUrl.text.toString(),
                 title = nullIfEmpty(editTitle.text.toString())
             )
+            initSpinners()
         } else {
             feed = Feed()
+            initSpinners()
         }
     }
 
@@ -98,9 +111,28 @@ class EditFeedActivity : AppCompatActivity() {
                     editTitle.setText(feed.title)
                     editDescription.setText(feed.description)
                     editCategory.setText(category)
+
+                    initSpinners()
+
                     val icon = feed.icon
                     if (icon != null) imageView.setImageBitmap(BitmapFactory.decodeByteArray(icon, 0, icon.size))
                 }
+            }
+        }
+    }
+
+    private fun initSpinners() {
+        for (i in refreshIntervalValues.indices) {
+            if (DateTime.decodeDelay(refreshIntervalValues[i]) == feed.refreshInterval) {
+                spinnerRefreshInterval.setSelection(i)
+                break
+            }
+        }
+
+        for (i in deleteReadEntriesIntervalValues.indices) {
+            if (DateTime.decodeDelay(deleteReadEntriesIntervalValues[i]) == feed.deleteReadEntriesInterval) {
+                spinnerDeleteReadIntervalInterval.setSelection(i)
+                break
             }
         }
     }
@@ -132,7 +164,12 @@ class EditFeedActivity : AppCompatActivity() {
                     val icons = Html.getIcons(url.protocol + "://" + url.host)
                     withContext(Dispatchers.Main) {
                         when (icons.size) {
-                            0 -> Toast.makeText(this@EditFeedActivity, applicationContext.getText(R.string.edit_feed_not_found_icons), Toast.LENGTH_LONG).show()
+                            0 -> Toast.makeText(
+                                this@EditFeedActivity,
+                                applicationContext.getText(R.string.edit_feed_not_found_icons),
+                                Toast.LENGTH_LONG
+                            ).show()
+
                             else -> showDialogIcons(icons)
                         }
                     }
@@ -199,12 +236,17 @@ class EditFeedActivity : AppCompatActivity() {
                     }
                 } else {
                     var idCategory: Long? = null
-                    if (editCategory.text.toString().trim() != "") idCategory = ApplicationContext.getCategoryRepository().get(editCategory.text.toString()).id
+                    if (editCategory.text.toString().trim() != "") idCategory =
+                        ApplicationContext.getCategoryRepository().get(editCategory.text.toString()).id
 
                     feed.idCategory = idCategory
                     feed.url = editUrl.text.toString()
                     feed.title = nullIfEmpty(editTitle.text.toString())
                     feed.description = nullIfEmpty(editDescription.text.toString())
+                    feed.refreshInterval = DateTime.decodeDelay(refreshIntervalValues[spinnerRefreshInterval.selectedItemPosition])
+                    feed.deleteReadEntriesInterval =
+                        DateTime.decodeDelay(deleteReadEntriesIntervalValues[spinnerDeleteReadIntervalInterval.selectedItemPosition])
+                    feed.nextRefreshDate = null
 
                     ApplicationContext.getFeedRepository().save(feed)
                     withContext(Dispatchers.Main) {

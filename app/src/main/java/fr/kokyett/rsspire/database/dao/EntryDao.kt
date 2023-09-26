@@ -51,7 +51,15 @@ interface EntryDao {
     fun update(entry: Entry)
 
     @Query("update Entry set readDate = :date where id = :id")
-    fun markAsRead(id: Long, date: Date)
+    fun markAsRead(id: Long, date: Date = Date())
+
+    @Query("update Entry set readDate = :date where id in (" +
+            "select e. id" +
+            " from Entry e" +
+            " inner join Feed f on f.id = e.idFeed" +
+            " left join Category c on c.id = f.idCategory" +
+            " where (idCategory is null and :idCategory is null) or idCategory = :idCategory)")
+    fun markAllAsReadByCategory(idCategory: Long?, date: Date = Date())
 
     @Query("update Entry set readDate = null where id = :id")
     fun markAsUnread(id: Long)
@@ -61,4 +69,14 @@ interface EntryDao {
 
     @Delete
     fun delete(entry: Entry)
+
+    @Query("delete from Entry where id in" +
+            "(select e.id" +
+            " from Entry e" +
+            " inner join Feed f on f.id = e.idFeed" +
+            " where isFavorite = 0" +
+            " and readDate is not null" +
+            " and f.deleteReadEntriesInterval <> 0" +
+            " and (f.deleteReadEntriesInterval + e.readDate) < :date)")
+    fun deleteReadEntries(date: Date = Date())
 }

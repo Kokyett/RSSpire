@@ -9,9 +9,7 @@ import androidx.work.WorkerParameters
 import fr.kokyett.rsspire.ApplicationContext
 import fr.kokyett.rsspire.database.entities.Entry
 import fr.kokyett.rsspire.database.entities.Feed
-import fr.kokyett.rsspire.enums.EnclosureType
 import fr.kokyett.rsspire.enums.LogType
-import fr.kokyett.rsspire.models.Enclosure
 import fr.kokyett.rsspire.models.FeedIcon
 import fr.kokyett.rsspire.utils.Downloader
 import fr.kokyett.rsspire.utils.Html
@@ -32,7 +30,6 @@ import java.util.Locale
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 import javax.xml.parsers.DocumentBuilderFactory
-
 
 class RefreshFeedsWorker(context: Context, private var params: WorkerParameters) : CoroutineWorker(context, params) {
     private lateinit var log: Log
@@ -73,11 +70,25 @@ class RefreshFeedsWorker(context: Context, private var params: WorkerParameters)
     override suspend fun doWork(): Result {
         log = Log(LogType.UPDATEFEEDS)
         return try {
+            log.writeInformation("Delete entries")
+            ApplicationContext.getEntryRepository().deleteReadEntries()
             log.writeInformation("Start refresh feeds")
-
             for (feed in feedRepository.getRefresh()) {
                 log.writeInformation("--> ${feed.url}")
+
                 try {
+                    if (feed.icon == null && feed.iconUrl != null) {
+                        try {
+                            feed.icon = Downloader.getBytes(URL(feed.iconUrl))
+                            ApplicationContext.getFeedRepository().save(feed)
+                        } catch (_: Exception) {
+
+                        }
+                    }
+
+                    if (!URLUtil.isValidUrl(feed.url))
+                        continue
+
                     var content = Downloader.getString(feed.url) ?: ""
                     val builder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
                     val document = withContext(Dispatchers.IO) {
@@ -97,6 +108,7 @@ class RefreshFeedsWorker(context: Context, private var params: WorkerParameters)
                         }
                     }
                     readXml(document, feed)
+                    feed.nextRefreshDate = Date(System.currentTimeMillis() + feed.refreshInterval)
                     feedRepository.save(feed)
                 } catch (e: Exception) {
                     log.writeException(e)
@@ -203,7 +215,7 @@ class RefreshFeedsWorker(context: Context, private var params: WorkerParameters)
     }
 
     private fun readEntry(nodes: NodeList, feed: Feed, previousLastEntryDate: Date?) {
-        val enclosureList = ArrayList<Enclosure>()
+        val imageList = ArrayList<String>()
         val entry = Entry(idFeed = feed.id)
         for (i in 0 until nodes.length) {
             val node = nodes.item(i)
@@ -218,7 +230,7 @@ class RefreshFeedsWorker(context: Context, private var params: WorkerParameters)
                 "pubdate", "published", "dc:date", "dc:modified", "dc:created" -> readDate(node, feed, entry)
                 "updated", "atom:updated" -> readDate(node, feed, entry)
                 "author", "dc:creator", "dc:publisher" -> readAuthor(node, entry)
-                "enclosure", "media:thumbnail", "media:content", "itunes:image", "image" -> readEnclosure(node, enclosureList)
+                "enclosure", "media:thumbnail", "media:content", "itunes:image", "image" -> readEnclosure(node, imageList)
 
                 "#cdata-section",
                 "dc:format", "dc:language", "source", "thr:total",
@@ -232,7 +244,12 @@ class RefreshFeedsWorker(context: Context, private var params: WorkerParameters)
         if (entry.link != null) Html.restoreLinks(entry.link!!, entry.content ?: "")
         if (entry.title == null) entry.title = entry.link
 
-        entry.content?.let { entry.content = Html.restoreLink(URL(entry.link), it) }
+        entry.content?.let { entry.content = Html.restoreLinks(entry.link!!, it) }
+        for (imageUrl in Html.getImages(entry.content ?: "")){
+            if (!imageList.contains(imageUrl))
+                imageList.add(imageUrl)
+        }
+
 
         val existingEntry = ApplicationContext.getEntryRepository().getExisting(entry.idFeed, entry.guid)
         if (existingEntry?.publishDate != null) {
@@ -251,6 +268,34 @@ class RefreshFeedsWorker(context: Context, private var params: WorkerParameters)
         if (previousLastEntryDate != null && entry.publishDate!! <= previousLastEntryDate)
             return
 
+        var maxBytes: ByteArray? = null
+        var maxBitmap: Bitmap? = null
+        for (imageUrl in imageList) {6
+            try {
+                val url = Html.restoreLink(URL(entry.link), imageUrl)
+                val bytes = Downloader.getBytes(URL(url))
+                val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                if (maxBitmap == null || maxBitmap.width < bitmap.width || maxBitmap.height < bitmap.height) {
+                    maxBytes = bytes
+                    maxBitmap = bitmap
+
+                    if (maxBitmap.width >= 500 || maxBitmap.height >= 500) {
+                        maxBitmap = if (maxBitmap.width > maxBitmap.height)
+                            Bitmap.createScaledBitmap(maxBitmap, 500, maxBitmap.height * 500 / maxBitmap.width, true)
+                        else
+                            Bitmap.createScaledBitmap(maxBitmap, maxBitmap.width * 500 / maxBitmap.height, 500, true)
+                        val stream = ByteArrayOutputStream()
+                        maxBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream)
+                        maxBytes = stream.toByteArray()
+                        break
+                    }
+                }
+            } catch (e: Exception) {
+                log.writeInformation("Error on getting entry icon $imageUrl")
+            }
+        }
+        entry.icon = maxBytes
+
         try {
             entryRepository.save(entry)
         } catch (e: Exception) {
@@ -258,7 +303,7 @@ class RefreshFeedsWorker(context: Context, private var params: WorkerParameters)
         }
     }
 
-    private fun readEnclosure(node: Node, enclosureList: ArrayList<Enclosure>) {
+    private fun readEnclosure(node: Node, imageList: ArrayList<String>) {
         var url = ""
         var type = ""
         try {
@@ -275,16 +320,16 @@ class RefreshFeedsWorker(context: Context, private var params: WorkerParameters)
                     when (child.nodeName.lowercase()) {
                         "url" -> url = child.textContent.trim()
                         "type" -> type = node.attributes.item(i).textContent.trim()
-                        "enclosure" -> readEnclosure(child, enclosureList)
+                        "enclosure" -> readEnclosure(child, imageList)
                         else -> logNode(child, "Enclosure ")
                     }
                 }
             }
 
-            if (type == "")
-                type = "image"
-            if (url != "" && enclosureList.none { it.url == url })
-                enclosureList.add(Enclosure(url, if (type.lowercase().contains("image")) EnclosureType.IMAGE else EnclosureType.OTHER))
+            if (type == "" || type.contains("image")) {
+                if (url != "" && !imageList.contains(url))
+                    imageList.add(url)
+            }
         } catch (e: Exception) {
             logNode(node, "ReadEnclosure ")
             log.writeException(e)
@@ -330,18 +375,14 @@ class RefreshFeedsWorker(context: Context, private var params: WorkerParameters)
                         "rel" -> rel = node.attributes.item(i).textContent.lowercase().trim()
                     }
                 }
-                if (type != "text/html" && rel != "alternate") link = ""
+                if (type != "text/html" || rel != "alternate") link = ""
             } catch (e: Exception) {
                 // Do nothing
             }
         }
 
         if (link != "") {
-            if (!URLUtil.isValidUrl(link)) {
-                link = Html.restoreLink(URL(feed.url), link)
-            }
-
-            entry.link = link
+            entry.link = Html.restoreLink(URL(feed.url), link)
         }
     }
 

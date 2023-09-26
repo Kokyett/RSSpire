@@ -32,6 +32,10 @@ class CategoryViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Life
         return tabs.any { (it.id ?: 0) == itemId }
     }
 
+    fun getCategoryId(position: Int): Long? {
+        return tabs[position].id
+    }
+
     fun getText(position: Int): String? {
         return tabs[position].text
     }
