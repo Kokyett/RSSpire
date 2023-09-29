@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.webkit.URLUtil
 import android.widget.ArrayAdapter
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Spinner
@@ -40,6 +41,7 @@ class EditFeedActivity : AppCompatActivity() {
     private lateinit var editCategory: InstantAutoComplete
     private lateinit var spinnerRefreshInterval: Spinner
     private lateinit var spinnerDeleteReadIntervalInterval: Spinner
+    private lateinit var checkBoxDownloadFullContent: CheckBox
     private lateinit var refreshIntervalValues: Array<out String>
     private lateinit var deleteReadEntriesIntervalValues: Array<out String>
     private lateinit var feed: Feed
@@ -59,6 +61,7 @@ class EditFeedActivity : AppCompatActivity() {
         editCategory = findViewById(R.id.category)
         spinnerRefreshInterval = findViewById(R.id.spinner_refresh_interval)
         spinnerDeleteReadIntervalInterval = findViewById(R.id.spinner_delete_read_entries_interval)
+        checkBoxDownloadFullContent = findViewById(R.id.check_download_full_content)
         editCategory.threshold = 0
 
         ApplicationContext.getCategoryRepository().getAll().observe(this) { categories ->
@@ -111,6 +114,7 @@ class EditFeedActivity : AppCompatActivity() {
                     editTitle.setText(feed.title)
                     editDescription.setText(feed.description)
                     editCategory.setText(category)
+                    checkBoxDownloadFullContent.isChecked = feed.downloadFullContent
 
                     initSpinners()
 
@@ -247,6 +251,7 @@ class EditFeedActivity : AppCompatActivity() {
                     feed.deleteReadEntriesInterval =
                         DateTime.decodeDelay(deleteReadEntriesIntervalValues[spinnerDeleteReadIntervalInterval.selectedItemPosition])
                     feed.nextRefreshDate = null
+                    feed.downloadFullContent = checkBoxDownloadFullContent.isChecked
 
                     ApplicationContext.getFeedRepository().save(feed)
                     withContext(Dispatchers.Main) {

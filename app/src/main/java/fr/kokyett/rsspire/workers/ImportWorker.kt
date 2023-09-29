@@ -86,6 +86,8 @@ class ImportWorker(context: Context, private var params: WorkerParameters) : Cor
             if (deleteReadEntriesInterval.trim() == "")
                 deleteReadEntriesInterval = ApplicationContext.getStringPreference("pref_default_delete_read_entries_interval", "1W")!!
 
+            val downloadFullContent = node.attributes.getNamedItem("rsspire:downloadFullContent")?.nodeValue?.lowercase() == "true"
+
             if (URLUtil.isValidUrl(url)) {
                 log.writeInformation("Saving $url")
                 var feed = feedRepository.getForUrl(url)
@@ -96,7 +98,8 @@ class ImportWorker(context: Context, private var params: WorkerParameters) : Cor
                         title = title,
                         iconUrl = iconUrl,
                         refreshInterval = DateTime.decodeDelay(refreshInterval),
-                        deleteReadEntriesInterval = DateTime.decodeDelay(deleteReadEntriesInterval)
+                        deleteReadEntriesInterval = DateTime.decodeDelay(deleteReadEntriesInterval),
+                        downloadFullContent = downloadFullContent
                     )
                     feedRepository.save(feed)
                 }

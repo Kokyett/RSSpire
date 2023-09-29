@@ -46,6 +46,7 @@
     <string name="edit_feed_select_icon_cancel">Annuler</string>
     <string name="edit_feed_refresh_interval">Interval de rafraichissement</string>
     <string name="edit_feed_delete_read_entries_interval">Interval de suppression des articles lus</string>
+    <string name="edit_feed_download_full_content">Télécharger le contenu complet</string>
 
     <!-- Feeds activity -->
     <string name="feeds_activity_title">Liste de flux</string>

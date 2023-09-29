@@ -11,6 +11,7 @@ import fr.kokyett.rsspire.database.entities.Entry
 import fr.kokyett.rsspire.database.entities.Feed
 import fr.kokyett.rsspire.enums.LogType
 import fr.kokyett.rsspire.models.FeedIcon
+import fr.kokyett.rsspire.utils.DateTime
 import fr.kokyett.rsspire.utils.Downloader
 import fr.kokyett.rsspire.utils.Html
 import fr.kokyett.rsspire.utils.Log
@@ -68,12 +69,18 @@ class RefreshFeedsWorker(context: Context, private var params: WorkerParameters)
     )
 
     override suspend fun doWork(): Result {
+        val startDate = System.currentTimeMillis()
         log = Log(LogType.UPDATEFEEDS)
         return try {
             log.writeInformation("Delete entries")
             ApplicationContext.getEntryRepository().deleteReadEntries()
             log.writeInformation("Start refresh feeds")
             for (feed in feedRepository.getRefresh()) {
+                if (System.currentTimeMillis() - startDate > 10 * DateTime.MINUTE) {
+                    log.writeInformation("Stopping refresh : 10 minutes have passed")
+                    break
+                }
+
                 log.writeInformation("--> ${feed.url}")
 
                 try {
@@ -128,7 +135,7 @@ class RefreshFeedsWorker(context: Context, private var params: WorkerParameters)
         val root = document.documentElement
         when (root.nodeName.lowercase()) {
             "rss" -> readRss(root.childNodes, feed)
-            "feed" -> readFeed(root.childNodes, feed)
+            "feed", "rdf:rdf" -> readFeed(root.childNodes, feed)
             else -> log.writeInformation("readXml -> Unknown node: " + root.nodeName)
         }
     }
@@ -244,13 +251,6 @@ class RefreshFeedsWorker(context: Context, private var params: WorkerParameters)
         if (entry.link != null) Html.restoreLinks(entry.link!!, entry.content ?: "")
         if (entry.title == null) entry.title = entry.link
 
-        entry.content?.let { entry.content = Html.restoreLinks(entry.link!!, it) }
-        for (imageUrl in Html.getImages(entry.content ?: "")){
-            if (!imageList.contains(imageUrl))
-                imageList.add(imageUrl)
-        }
-
-
         val existingEntry = ApplicationContext.getEntryRepository().getExisting(entry.idFeed, entry.guid)
         if (existingEntry?.publishDate != null) {
             if (entry.publishDate == null)
@@ -268,9 +268,27 @@ class RefreshFeedsWorker(context: Context, private var params: WorkerParameters)
         if (previousLastEntryDate != null && entry.publishDate!! <= previousLastEntryDate)
             return
 
+        if (feed.downloadFullContent) {
+            try {
+                val content = Downloader.getString(entry.link!!)
+                if (content != null && content.lowercase() != "") {
+                    entry.content = Html.restoreLinks(entry.link!!, content)
+                    entry.content = Html.formatFullContent(entry.content!!)
+                }
+            } catch (_: Exception) {
+
+            }
+        }
+
+        entry.content?.let { entry.content = Html.restoreLinks(entry.link!!, it) }
+        for (imageUrl in Html.getImages(entry.content ?: "")){
+            if (!imageList.contains(imageUrl))
+                imageList.add(imageUrl)
+        }
+
         var maxBytes: ByteArray? = null
         var maxBitmap: Bitmap? = null
-        for (imageUrl in imageList) {6
+        for (imageUrl in imageList) {
             try {
                 val url = Html.restoreLink(URL(entry.link), imageUrl)
                 val bytes = Downloader.getBytes(URL(url))

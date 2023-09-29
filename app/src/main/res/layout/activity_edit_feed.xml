@@ -33,6 +33,21 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:labelFor="@id/category"
+        android:text="@string/edit_feed_category" />
+
+    <fr.kokyett.rsspire.views.InstantAutoComplete
+        android:id="@+id/category"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:autofillHints=""
+        android:inputType="text"
+        android:singleLine="true"
+        tools:ignore="SmallSp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:labelFor="@id/title"
         android:text="@string/edit_feed_title" />
 
@@ -53,21 +68,6 @@
 
     <EditText
         android:id="@+id/description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:autofillHints=""
-        android:inputType="text"
-        android:singleLine="true"
-        tools:ignore="SmallSp" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:labelFor="@id/category"
-        android:text="@string/edit_feed_category" />
-
-    <fr.kokyett.rsspire.views.InstantAutoComplete
-        android:id="@+id/category"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:autofillHints=""
@@ -100,4 +100,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:entries="@array/pref_delete_read_entries_intervals_labels"/>
+
+    <CheckBox
+        android:id="@+id/check_download_full_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/edit_feed_download_full_content"/>
+
 </LinearLayout>

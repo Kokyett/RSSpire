@@ -92,6 +92,7 @@ class ExportWorker(private var context: Context, private var params: WorkerParam
             }
             outline.setAttribute("rsspire:refreshInterval", DateTime.encodeDelay(feed.refreshInterval))
             outline.setAttribute("rsspire:deleteReadEntriesInterval", DateTime.encodeDelay(feed.deleteReadEntriesInterval))
+            outline.setAttribute("rsspire:downloadFullContent", if (feed.downloadFullContent) "true" else "false")
             node.appendChild(outline)
         }
     }

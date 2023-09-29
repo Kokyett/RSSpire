@@ -1,11 +1,13 @@
 package fr.kokyett.rsspire.utils
 
 import android.webkit.URLUtil
+import fr.kokyett.rsspire.database.entities.Feed
 import fr.kokyett.rsspire.models.FeedIcon
 import java.net.URL
 import java.util.Locale
 import java.util.regex.Matcher
 import java.util.regex.Pattern
+
 
 class Html {
     companion object {
@@ -17,6 +19,12 @@ class Html {
         private val patternIcon: Pattern = Pattern.compile("<link[^>]*rel=[\"'][^\"']*icon[\"'][^>]*>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
         private val patternImage: Pattern = Pattern.compile("<img[^>]*src=[\"']([^\"']*)[\"'][^>]*>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
         private val patternLogoImage: Pattern = Pattern.compile("<img[^>]*src=[\"']([^\"']*logo[^\"']*)[\"'][^>]*>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
+
+        private val patternBody = Pattern.compile("<body[^>]*>(.*)</body>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
+        private val patternArticle = Pattern.compile("<article[^>]*>((?!</article>).)*</article>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
+        private val patternLazyImg = Pattern.compile("<img[^>]*(data-src|data-lazy-src)=[\"']([^\"']*)[\"'][^>]*>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
+        private val patternTagToDelete = Pattern.compile("<(aside|footer|header|nav|noscript|script|style)[^>]*>((?!<(/\\1|\\1[^>]*)>).)*</\\1>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
+        private val patternStyleAttribute = Pattern.compile("style=[\"'][^\"']*[\"']", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
 
         fun restoreLink(url: URL, link: String): String {
             if (URLUtil.isValidUrl(link))
@@ -52,7 +60,8 @@ class Html {
                     if (list.contains(matchContent)) continue
 
                     list.add(matchContent)
-                    if (link.trim() == "" || link == "/" || link.lowercase(Locale.getDefault()).startsWith("http://") || link.lowercase(Locale.getDefault())
+                    if (link.trim() == "" || link == "/" || link.lowercase(Locale.getDefault())
+                            .startsWith("http://") || link.lowercase(Locale.getDefault())
                             .startsWith("https://") || link.lowercase(Locale.getDefault()).startsWith("data:")
                     ) continue
 
@@ -130,6 +139,47 @@ class Html {
                 // TODO LOGS
             }
             return list
+        }
+
+        fun formatFullContent(initialContent: String): String? {
+            var content: String = initialContent
+            if (content.trim() == "") {
+                return null
+            }
+
+            try {
+                var matcher = patternBody.matcher(content)
+                if (matcher.find()) {
+                    content = matcher.group(1) ?: ""
+                }
+
+                matcher = patternTagToDelete.matcher(content)
+                while (matcher.find()) {
+                    matcher.group(0)?.let { content = content.replace(it, "") }
+                }
+
+                matcher = patternLazyImg.matcher(content)
+                while (matcher.find()) {
+                    matcher.group(0)?.let { content = content.replace(it, "<img src=\"" + matcher.group(2) + "\">") }
+                }
+
+                val newContent = StringBuilder()
+                matcher = patternArticle.matcher(content)
+                while (matcher.find()) {
+                    newContent.append(matcher.group(0))
+                }
+                if (newContent.toString().trim().isNotEmpty()) {
+                    content = newContent.toString()
+                }
+
+                matcher = patternStyleAttribute.matcher(content)
+                while (matcher.find()) {
+                    matcher.group(0)?.let { content = content.replace(it, "") }
+                }
+            } catch (_: Exception) {
+
+            }
+            return content.ifEmpty { null }
         }
     }
 }
