@@ -205,9 +205,26 @@ class EditFeedActivity : AppCompatActivity() {
 
             R.id.action_menu_save -> saveFeed()
             R.id.action_menu_search_icon -> getIcons()
+            R.id.action_menu_reinitialize -> reinitializeFeed()
             R.id.action_menu_delete -> deleteFeed()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun reinitializeFeed() {
+        lifecycleScope.launch {
+            withContext(Dispatchers.IO) {
+                ApplicationContext.getFeedRepository().reinitialize(feed.id)
+                ApplicationContext.getEntryRepository().deleteFeedEntries(feed.id)
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(
+                        this@EditFeedActivity,
+                        resources.getString(R.string.edit_feed_reinitialized),
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+        }
     }
 
     private fun deleteFeed() {

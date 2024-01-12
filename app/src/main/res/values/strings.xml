@@ -22,6 +22,7 @@
     <!-- Edit feed menu -->
     <string name="edit_feed_menu_save">Save</string>
     <string name="edit_feed_menu_search_icon">Search icon</string>
+    <string name="edit_feed_menu_reinitialize">Reinitialize</string>
     <string name="edit_feed_menu_delete">Delete</string>
 
     <!-- Entry menu -->
@@ -47,6 +48,7 @@
     <string name="edit_feed_refresh_interval">Refresh interval</string>
     <string name="edit_feed_delete_read_entries_interval">Delete read entries interval</string>
     <string name="edit_feed_download_full_content">Download full content</string>
+    <string name="edit_feed_reinitialized">Feed dates reinitialised and entries deleted</string>
 
     <!-- Feeds activity -->
     <string name="feeds_activity_title">Feed list</string>

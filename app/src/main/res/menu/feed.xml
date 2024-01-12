@@ -11,6 +11,11 @@
         android:title="@string/edit_feed_menu_search_icon"
         app:showAsAction="never|withText" />
     <item
+        android:id="@+id/action_menu_reinitialize"
+        android:icon="@drawable/ic_action_reinitialize"
+        android:title="@string/edit_feed_menu_reinitialize"
+        app:showAsAction="never|withText" />
+    <item
         android:id="@+id/action_menu_delete"
         android:icon="@drawable/ic_action_delete"
         android:title="@string/edit_feed_menu_delete"

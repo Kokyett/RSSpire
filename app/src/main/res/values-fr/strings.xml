@@ -23,6 +23,7 @@
     <!-- Edit feed menu -->
     <string name="edit_feed_menu_save">Enregistrer</string>
     <string name="edit_feed_menu_search_icon">Rechercher l\'icône</string>
+    <string name="edit_feed_menu_reinitialize">Réinitialiser</string>
     <string name="edit_feed_menu_delete">Supprimer</string>
 
     <!-- Entry menu -->
@@ -47,6 +48,7 @@
     <string name="edit_feed_refresh_interval">Interval de rafraichissement</string>
     <string name="edit_feed_delete_read_entries_interval">Interval de suppression des articles lus</string>
     <string name="edit_feed_download_full_content">Télécharger le contenu complet</string>
+    <string name="edit_feed_reinitialized">Dates du flux réinitialisées et articles supprimés</string>
 
     <!-- Feeds activity -->
     <string name="feeds_activity_title">Liste de flux</string>

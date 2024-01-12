@@ -72,6 +72,14 @@ interface EntryDao {
     fun delete(entry: Entry)
 
     @Query("delete from Entry where id in" +
+            "(select id" +
+            " from Entry " +
+            " where isFavorite = 0" +
+            " and readDate is not null" +
+            " and idFeed = :idFeed)")
+    fun deleteFeedEntries(idFeed: Long)
+
+    @Query("delete from Entry where id in" +
             "(select e.id" +
             " from Entry e" +
             " inner join Feed f on f.id = e.idFeed" +

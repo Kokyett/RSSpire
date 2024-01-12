@@ -5,7 +5,9 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import fr.kokyett.rsspire.ApplicationContext
 import fr.kokyett.rsspire.database.entities.Feed
+import fr.kokyett.rsspire.utils.DateTime
 import kotlinx.coroutines.flow.Flow
 import java.util.Date
 
@@ -34,6 +36,9 @@ interface FeedDao {
 
     @Query("update Feed set icon = :icon where id = :id")
     fun updateIcon(id: Long, icon: ByteArray)
+
+    @Query("update Feed set lastEntryDate = null, nextRefreshDate = null where id = :id")
+    fun reinitialize(id: Long)
 
     @Insert
     fun insert(feed: Feed): Long

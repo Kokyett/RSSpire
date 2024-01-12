@@ -34,7 +34,6 @@ class EntryRepository(private val entryDao: EntryDao) {
         entryDao.setFavorite(id, isFavorite)
     }
 
-
     fun save(entry: Entry) {
         if (entry.id == 0L)
             entry.id = entryDao.insert(entry)
@@ -44,6 +43,10 @@ class EntryRepository(private val entryDao: EntryDao) {
 
     fun delete(entry: Entry) {
         entryDao.delete(entry)
+    }
+
+    fun deleteFeedEntries(idFeed: Long) {
+        entryDao.deleteFeedEntries(idFeed)
     }
 
     fun deleteReadEntries() {

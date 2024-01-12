@@ -45,6 +45,10 @@ class FeedRepository(private val feedDao: FeedDao) {
         feedDao.updateIcon(id, icon)
     }
 
+    fun reinitialize(id: Long) {
+        feedDao.reinitialize(id)
+    }
+
     fun save(feed: Feed) {
         if (feed.id == 0L)
             feed.id = feedDao.insert(feed)
