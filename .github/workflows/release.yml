@@ -69,6 +69,8 @@ jobs:
     - name: Sign app APK
       uses: r0adkll/sign-android-release@v1
       id: sign_app
+      env:
+        BUILD_TOOLS_VERSION: "34.0.0"
       with:
         releaseDirectory: app/build/outputs/apk/release
         signingKeyBase64: ${{ secrets.SIGNING_KEY }}
