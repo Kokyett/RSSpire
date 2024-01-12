@@ -1,13 +1,11 @@
 package fr.kokyett.rsspire.utils
 
 import android.webkit.URLUtil
-import fr.kokyett.rsspire.database.entities.Feed
 import fr.kokyett.rsspire.models.FeedIcon
 import java.net.URL
 import java.util.Locale
 import java.util.regex.Matcher
 import java.util.regex.Pattern
-
 
 class Html {
     companion object {
@@ -23,7 +21,12 @@ class Html {
         private val patternBody = Pattern.compile("<body[^>]*>(.*)</body>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
         private val patternArticle = Pattern.compile("<article[^>]*>((?!</article>).)*</article>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
         private val patternLazyImg = Pattern.compile("<img[^>]*(data-src|data-lazy-src)=[\"']([^\"']*)[\"'][^>]*>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
+
         private val patternTagToDelete = Pattern.compile("<(aside|footer|header|nav|noscript|script|style)[^>]*>((?!<(/\\1|\\1[^>]*)>).)*</\\1>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
+        private val patternTagCLassToDelete = Pattern.compile("<(div|ul|ins)[^>]*(class|id)=\"[^\"]*(header|footer|menu|adsbygoogle)[^\"]*\"[^>]*>((?!</\\1>).)*</\\1>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
+        private val patternTag = Pattern.compile("<([a-z]*)[^>]*>((?!<(/\\1|\\1[^>]*)>).)*</\\1>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
+        private val patternComment = Pattern.compile("<!--((?!-->).)*-->", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
+        private val patternEmptyTag = Pattern.compile("<([a-z]*)[^>]*>\\s</\\1>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
         private val patternStyleAttribute = Pattern.compile("style=[\"'][^\"']*[\"']", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
 
         fun restoreLink(url: URL, link: String): String {
@@ -158,6 +161,23 @@ class Html {
                     matcher.group(0)?.let { content = content.replace(it, "") }
                 }
 
+                matcher = patternComment.matcher(content)
+                while (matcher.find()) {
+                    matcher.group(0)?.let { content = content.replace(it, "") }
+                }
+
+                matcher = patternTagCLassToDelete.matcher(content)
+                while (matcher.find()) {
+                    matcher.group(0)?.let {
+                        val matcher2 = patternTag.matcher(it)
+                        if (matcher2.find())
+                            matcher2.group(0)?.let {it2 ->
+                                content = content.replace(it2, "")
+                            }
+                    }
+                    matcher = patternTagCLassToDelete.matcher(content)
+                }
+
                 matcher = patternLazyImg.matcher(content)
                 while (matcher.find()) {
                     matcher.group(0)?.let { content = content.replace(it, "<img src=\"" + matcher.group(2) + "\">") }
@@ -176,6 +196,12 @@ class Html {
                 while (matcher.find()) {
                     matcher.group(0)?.let { content = content.replace(it, "") }
                 }
+
+                matcher = patternEmptyTag.matcher(content)
+                while (matcher.find()) {
+                    matcher.group(0)?.let { content = content.replace(it, "") }
+                }
+
             } catch (_: Exception) {
 
             }
