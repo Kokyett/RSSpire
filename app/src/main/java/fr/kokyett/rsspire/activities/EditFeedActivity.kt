@@ -212,6 +212,8 @@ class EditFeedActivity : AppCompatActivity() {
     }
 
     private fun reinitializeFeed() {
+        feed.lastEntryDate = null
+        feed.nextRefreshDate = null
         lifecycleScope.launch {
             withContext(Dispatchers.IO) {
                 ApplicationContext.getFeedRepository().reinitialize(feed.id)
