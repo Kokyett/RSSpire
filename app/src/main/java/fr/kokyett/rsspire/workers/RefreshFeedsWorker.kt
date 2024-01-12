@@ -74,6 +74,7 @@ class RefreshFeedsWorker(context: Context, private var params: WorkerParameters)
         return try {
             log.writeInformation("Delete entries")
             ApplicationContext.getEntryRepository().deleteReadEntries()
+            ApplicationContext.getRawRepository().vacuum()
             log.writeInformation("Start refresh feeds")
             for (feed in feedRepository.getRefresh()) {
                 if (System.currentTimeMillis() - startDate > 10 * DateTime.MINUTE) {

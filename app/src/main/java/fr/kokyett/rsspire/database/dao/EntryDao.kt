@@ -11,6 +11,7 @@ import fr.kokyett.rsspire.database.entities.EntryView
 import kotlinx.coroutines.flow.Flow
 import java.util.Date
 
+
 @Dao
 interface EntryDao {
 

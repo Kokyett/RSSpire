@@ -8,6 +8,7 @@ import fr.kokyett.rsspire.database.repositories.CategoryRepository
 import fr.kokyett.rsspire.database.repositories.EntryRepository
 import fr.kokyett.rsspire.database.repositories.FeedRepository
 import fr.kokyett.rsspire.database.repositories.PreferencesRepository
+import fr.kokyett.rsspire.database.repositories.RawRepository
 import fr.kokyett.rsspire.enums.LogType
 import fr.kokyett.rsspire.utils.Log
 import kotlinx.coroutines.CoroutineScope
@@ -19,6 +20,7 @@ class ApplicationContext : Application() {
     private val categoryRepository by lazy { CategoryRepository(database.categoryDao) }
     private val feedRepository by lazy { FeedRepository(database.feedDao) }
     private val entryRepository by lazy { EntryRepository(database.entryDao) }
+    private val rawRepository by lazy { RawRepository(database.rawDao) }
     private val preferencesRepository by lazy { PreferencesRepository(database.categoryDao, database.entryDao) }
     private val sharedPreferences by lazy { PreferenceManager.getDefaultSharedPreferences(this) }
     private val defaultUncaughtHandler = Thread.getDefaultUncaughtExceptionHandler()
@@ -73,6 +75,10 @@ class ApplicationContext : Application() {
 
         fun getEntryRepository(): EntryRepository {
             return handle.entryRepository
+        }
+
+        fun getRawRepository(): RawRepository {
+            return handle.rawRepository
         }
 
         fun getPreferencesRepository(): PreferencesRepository {

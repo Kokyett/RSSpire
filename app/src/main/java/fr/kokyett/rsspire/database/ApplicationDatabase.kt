@@ -11,6 +11,7 @@ import fr.kokyett.rsspire.R
 import fr.kokyett.rsspire.database.dao.CategoryDao
 import fr.kokyett.rsspire.database.dao.EntryDao
 import fr.kokyett.rsspire.database.dao.FeedDao
+import fr.kokyett.rsspire.database.dao.RawDao
 import fr.kokyett.rsspire.database.entities.Category
 import fr.kokyett.rsspire.database.entities.Entry
 import fr.kokyett.rsspire.database.entities.Feed
@@ -25,6 +26,7 @@ abstract class ApplicationDatabase : RoomDatabase() {
     abstract val categoryDao: CategoryDao
     abstract val feedDao: FeedDao
     abstract val entryDao: EntryDao
+    abstract val rawDao: RawDao
 
     companion object {
         @Volatile
