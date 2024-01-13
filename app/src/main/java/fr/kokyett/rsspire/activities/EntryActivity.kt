@@ -94,7 +94,7 @@ class EntryActivity : AppCompatActivity() {
 
     companion object {
         private const val HTML_START = "<html><head><style>" +
-                "body { color: white; text-align: justify; }" +
+                "body { color: white; text-align: justify; overflow-wrap: break-word; }" +
                 "a { color: #8ad0e8; }" +
                 "img { max-width: 100%; height: auto; }" +
                 "figure { max-width: 100%; height: auto; margin: auto; }" +
