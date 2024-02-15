@@ -59,7 +59,7 @@ interface EntryDao {
             " from Entry e" +
             " inner join Feed f on f.id = e.idFeed" +
             " left join Category c on c.id = f.idCategory" +
-            " where (idCategory is null and :idCategory is null) or idCategory = :idCategory)")
+            " where readDate is null and ((idCategory is null and :idCategory is null) or idCategory = :idCategory))")
     fun markAllAsReadByCategory(idCategory: Long?, date: Date = Date())
 
     @Query("update Entry set readDate = null where id = :id")
