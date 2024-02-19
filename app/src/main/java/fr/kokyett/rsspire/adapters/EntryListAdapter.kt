@@ -1,6 +1,7 @@
 package fr.kokyett.rsspire.adapters
 
 import android.content.Context
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,9 +15,7 @@ import com.google.android.material.card.MaterialCardView
 import fr.kokyett.rsspire.ApplicationContext
 import fr.kokyett.rsspire.R
 import fr.kokyett.rsspire.database.entities.EntryView
-import fr.kokyett.rsspire.enums.LogType
 import fr.kokyett.rsspire.utils.DateTime.Companion.toLocalizedString
-import fr.kokyett.rsspire.utils.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -36,7 +35,7 @@ class EntryListAdapter(context: Context) : SwipeListAdapter<EntryView, EntryList
 
     override fun onItemSwiped(direction: Int, position: Int) {
         if (position == -1)
-            return;
+            return
 
         val entry = getItem(position)
         val displayUnreadEntries = ApplicationContext.getBooleanPreference("pref_display_unread_entries", true)
@@ -75,7 +74,7 @@ class EntryListAdapter(context: Context) : SwipeListAdapter<EntryView, EntryList
 
     override fun onDrawItemSwiped(direction: Int, position: Int) {
         if (position == -1)
-            return;
+            return
 
         val entry = getItem(position)
 
@@ -104,7 +103,7 @@ class EntryListAdapter(context: Context) : SwipeListAdapter<EntryView, EntryList
                 onItemClick?.invoke(entryView)
             }
 
-            textView1.text = entryView.title
+            textView1.text = Html.fromHtml(entryView.title, Html.FROM_HTML_MODE_COMPACT)
 
             if ((entryView.feedTitle?.trim() ?: "") == "") {
                 textView2.text = entryView.feedUrl
