@@ -9,21 +9,21 @@ import java.util.regex.Pattern
 
 class Html {
     companion object {
-        val patternHref: Pattern = Pattern.compile("href=[\"']([^\"']*)[\"']", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
-        private val patternLinks: Pattern = Pattern.compile("(href|src)=[\"']([^\"']*)[\"']", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
-        val patternLinkRss: Pattern = Pattern.compile("<link[^>]*type=[\"']application/rss\\+xml[\"'][^>]*>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
-        private val patternOpenGraphIcon: Pattern = Pattern.compile("<meta[^>]*property=[\"']og:image[\"'][^>]*>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
-        private val patternMetaContent: Pattern = Pattern.compile("content=[\"']([^\"']*)[\"']", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
-        private val patternIcon: Pattern = Pattern.compile("<link[^>]*rel=[\"'][^\"']*icon[\"'][^>]*>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
-        private val patternImage: Pattern = Pattern.compile("<img[^>]*src=[\"']([^\"']*)[\"'][^>]*>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
-        private val patternLogoImage: Pattern = Pattern.compile("<img[^>]*src=[\"']([^\"']*logo[^\"']*)[\"'][^>]*>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
+        val patternHref = Pattern.compile("href=[\"']([^\"']*)[\"']", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
+        private val patternLinks = Pattern.compile("(href|src)=[\"']([^\"']*)[\"']", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
+        val patternLinkRss = Pattern.compile("<link[^>]*type=[\"']application/rss\\+xml[\"'][^>]*>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
+        private val patternOpenGraphIcon = Pattern.compile("<meta[^>]*property=[\"']og:image[\"'][^>]*>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
+        private val patternMetaContent = Pattern.compile("content=[\"']([^\"']*)[\"']", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
+        private val patternIcon = Pattern.compile("<link[^>]*rel=[\"'][^\"']*icon[\"'][^>]*>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
+        private val patternImage = Pattern.compile("<img[^>]*src=[\"']([^\"']*)[\"'][^>]*>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
+        private val patternLogoImage = Pattern.compile("<img[^>]*src=[\"']([^\"']*logo[^\"']*)[\"'][^>]*>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
 
         private val patternBody = Pattern.compile("<body[^>]*>(.*)</body>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
         private val patternArticle = Pattern.compile("<article[^>]*>((?!</article>).)*</article>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
         private val patternLazyImg = Pattern.compile("<img[^>]*(data-src|data-lazy-src)=[\"']([^\"']*)[\"'][^>]*>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
 
-        private val patternTagToDelete = Pattern.compile("<(aside|footer|header|nav|noscript|script|style)[^>]*>((?!<(/\\1|\\1[^>]*)>).)*</\\1>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
-        private val patternTagCLassToDelete = Pattern.compile("<(div|ul|ins)[^>]*(class|id)=\"[^\"]*(header|footer|menu|adsbygoogle)[^\"]*\"[^>]*>((?!</\\1>).)*</\\1>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
+        private val patternTagToDelete = Pattern.compile("<(aside|footer|header|nav|noscript|script|style|form)[^>]*>((?!<(/\\1|\\1[^>]*)>).)*</\\1>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
+        private val patternTagCLassToDelete = Pattern.compile("<(section|div|ul|ins)[^>]*(class|id)=\"[^\"]*(header|footer|menu|nav|adsbygoogle|comment|related)[^\"]*\"[^>]*>((?!</\\1>).)*</\\1>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
         private val patternTag = Pattern.compile("<([a-z]*)[^>]*>((?!<(/\\1|\\1[^>]*)>).)*</\\1>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
         private val patternComment = Pattern.compile("<!--((?!-->).)*-->", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
         private val patternEmptyTag = Pattern.compile("<([a-z]*)[^>]*>\\s</\\1>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
@@ -201,7 +201,6 @@ class Html {
                 while (matcher.find()) {
                     matcher.group(0)?.let { content = content.replace(it, "") }
                 }
-
             } catch (_: Exception) {
 
             }
