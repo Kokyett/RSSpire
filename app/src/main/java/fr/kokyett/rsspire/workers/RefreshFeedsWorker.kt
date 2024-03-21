@@ -52,7 +52,7 @@ class RefreshFeedsWorker(context: Context, private var params: WorkerParameters)
         SimpleDateFormat("EEE', 'd' 'MMM' 'yy' 'HH:mm:ss' 'z", Locale.getDefault()),
         SimpleDateFormat("EEE', 'd' 'MMM' 'yy' 'HH:mm:ss' 'z", Locale.ENGLISH),
         SimpleDateFormat("EEE', 'd' 'MMM' 'yy' 'HH:mm' 'z", Locale.getDefault()),
-        SimpleDateFormat("EEE', 'd' 'MMM' 'yy' 'HH:mm' 'z", Locale.US),
+        SimpleDateFormat("EEE', 'd' 'MMM' 'yy' 'HH:mm' 'z", Locale.ENGLISH),
 
         SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSz", Locale.getDefault()),
         SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()),
@@ -65,7 +65,9 @@ class RefreshFeedsWorker(context: Context, private var params: WorkerParameters)
         SimpleDateFormat("EEE', 'd' 'MMM' 'yyyy' 'HH:mm:ss' 'z", Locale.getDefault()),
         SimpleDateFormat("EEE', 'd' 'MMM' 'yyyy' 'HH:mm:ss' 'z", Locale.ENGLISH),
         SimpleDateFormat("EEE', 'd' 'MMM' 'yyyy' 'HH:mm' 'z", Locale.getDefault()),
-        SimpleDateFormat("EEE', 'd' 'MMM' 'yyyy' 'HH:mm' 'z", Locale.US),
+        SimpleDateFormat("EEE', 'd' 'MMM' 'yyyy' 'HH:mm' 'z", Locale.ENGLISH),
+        SimpleDateFormat("MMM' 'dd', 'yyyy", Locale.getDefault()),
+        SimpleDateFormat("MMM' 'dd', 'yyyy", Locale.ENGLISH),
     )
 
     override suspend fun doWork(): Result {
