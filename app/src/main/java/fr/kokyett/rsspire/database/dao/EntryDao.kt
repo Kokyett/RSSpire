@@ -86,6 +86,7 @@ interface EntryDao {
             " where isFavorite = 0" +
             " and readDate is not null" +
             " and f.deleteReadEntriesInterval <> 0" +
-            " and (f.deleteReadEntriesInterval + e.readDate) < :date)")
+            " and (f.deleteReadEntriesInterval + e.readDate) < :date" +
+            " and e.publishDate < :date)")
     fun deleteReadEntries(date: Date = Date())
 }

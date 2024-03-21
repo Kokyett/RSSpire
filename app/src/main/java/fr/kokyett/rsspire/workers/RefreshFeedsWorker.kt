@@ -32,7 +32,7 @@ import java.util.regex.Matcher
 import java.util.regex.Pattern
 import javax.xml.parsers.DocumentBuilderFactory
 
-class RefreshFeedsWorker(context: Context, private var params: WorkerParameters) : CoroutineWorker(context, params) {
+class RefreshFeedsWorker(context: Context, params: WorkerParameters) : CoroutineWorker(context, params) {
     private lateinit var log: Log
     private var feedRepository = ApplicationContext.getFeedRepository()
     private var entryRepository = ApplicationContext.getEntryRepository()
@@ -258,14 +258,14 @@ class RefreshFeedsWorker(context: Context, private var params: WorkerParameters)
         if (existingEntry?.publishDate != null) {
             if (entry.publishDate == null)
                 return
-            if (entry.publishDate!! >= existingEntry.publishDate)
+            if (entry.publishDate!! <= existingEntry.publishDate)
                 return
         }
 
         if (entry.publishDate == null)
             entry.publishDate = Date()
 
-        if (feed.lastEntryDate == null || entry.publishDate!! > feed.lastEntryDate)
+        if ((feed.lastEntryDate == null || entry.publishDate!! > feed.lastEntryDate) && entry.publishDate!! <= Date())
             feed.lastEntryDate = entry.publishDate
 
         if (previousLastEntryDate != null && entry.publishDate!! <= previousLastEntryDate)
