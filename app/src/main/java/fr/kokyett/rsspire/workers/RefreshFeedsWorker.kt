@@ -26,6 +26,7 @@ import java.io.StringReader
 import java.net.URL
 import java.text.ParseException
 import java.text.SimpleDateFormat
+import java.util.Base64
 import java.util.Date
 import java.util.Locale
 import java.util.regex.Matcher
@@ -295,8 +296,15 @@ class RefreshFeedsWorker(context: Context, params: WorkerParameters) : Coroutine
         var maxBitmap: Bitmap? = null
         for (imageUrl in imageList) {
             try {
-                val url = Html.restoreLink(URL(entry.link), imageUrl)
-                val bytes = Downloader.getBytes(URL(url))
+                val bytes = if (imageUrl.startsWith("data:")) {
+                    val pos = imageUrl.indexOf(";base64,")
+                    if (pos == -1)
+                        return
+                    Base64.getDecoder().decode(imageUrl.substring(pos + 8))
+                } else {
+                    val url = Html.restoreLink(URL(entry.link), imageUrl)
+                    Downloader.getBytes(URL(url))
+                }
                 val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
                 if (maxBitmap == null || maxBitmap.width < bitmap.width || maxBitmap.height < bitmap.height) {
                     maxBytes = bytes
