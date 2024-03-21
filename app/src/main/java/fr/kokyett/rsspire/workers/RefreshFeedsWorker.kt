@@ -281,6 +281,8 @@ class RefreshFeedsWorker(context: Context, params: WorkerParameters) : Coroutine
             } catch (_: Exception) {
 
             }
+        } else {
+            entry.content = Html.cleanUpContent(entry.content!!)
         }
 
         entry.content?.let { entry.content = Html.restoreLinks(entry.link!!, it) }

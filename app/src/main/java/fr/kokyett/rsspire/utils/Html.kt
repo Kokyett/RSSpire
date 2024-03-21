@@ -20,13 +20,12 @@ class Html {
 
         private val patternBody = Pattern.compile("<body[^>]*>(.*)</body>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
         private val patternArticle = Pattern.compile("<article[^>]*>((?!</article>).)*</article>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
-        private val patternLazyImg = Pattern.compile("<img[^>]*(data-src|data-lazy-src)=[\"']([^\"']*)[\"'][^>]*>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
 
         private val patternTagToDelete = Pattern.compile("<(aside|footer|header|nav|noscript|script|style)[^>]*>((?!<(/\\1|\\1[^>]*)>).)*</\\1>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
         private val patternTagCLassToDelete = Pattern.compile("<(section|div|ul|ins)[^>]*(class|id)=\"[^\"]*(header|footer|menu|nav|adsbygoogle|comment|related)[^\"]*\"[^>]*>((?!</\\1>).)*</\\1>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
         private val patternTag = Pattern.compile("<([a-z]*)[^>]*>((?!<(/\\1|\\1[^>]*)>).)*</\\1>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
         private val patternComment = Pattern.compile("<!--((?!-->).)*-->", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
-        private val patternEmptyTag = Pattern.compile("<([a-z]*)[^>]*>\\s</\\1>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
+        private val patternEmptyTag = Pattern.compile("<([a-z]*)[^>]*>\\s*</\\1>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
         private val patternStyleAttribute = Pattern.compile("style=[\"'][^\"']*[\"']", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
 
         fun restoreLink(url: URL, link: String): String {
@@ -144,6 +143,39 @@ class Html {
             return list
         }
 
+        fun cleanUpContent(initialContent: String): String? {
+            var content: String = initialContent
+            if (content.trim() == "") {
+                return null
+            }
+
+            try {
+                var matcher = patternComment.matcher(content)
+                while (matcher.find()) {
+                    matcher.group(0)?.let { content = content.replace(it, "") }
+                }
+
+                matcher = patternImage.matcher(content)
+                while (matcher.find()) {
+                    matcher.group(0)?.let { content = content.replace(it, "<img src=\"" + matcher.group(1) + "\">") }
+                }
+
+                matcher = patternStyleAttribute.matcher(content)
+                while (matcher.find()) {
+                    matcher.group(0)?.let { content = content.replace(it, "") }
+                }
+
+                matcher = patternEmptyTag.matcher(content)
+                while (matcher.find()) {
+                    matcher.group(0)?.let { content = content.replace(it, "") }
+                    matcher = patternEmptyTag.matcher(content)
+                }
+            } catch (_: Exception) {
+
+            }
+            return content.ifEmpty { null }
+        }
+
         fun formatFullContent(initialContent: String): String? {
             var content: String = initialContent
             if (content.trim() == "") {
@@ -178,9 +210,9 @@ class Html {
                     matcher = patternTagCLassToDelete.matcher(content)
                 }
 
-                matcher = patternLazyImg.matcher(content)
+                matcher = patternImage.matcher(content)
                 while (matcher.find()) {
-                    matcher.group(0)?.let { content = content.replace(it, "<img src=\"" + matcher.group(2) + "\">") }
+                    matcher.group(0)?.let { content = content.replace(it, "<img src=\"" + matcher.group(1) + "\">") }
                 }
 
                 val newContent = StringBuilder()
@@ -200,6 +232,7 @@ class Html {
                 matcher = patternEmptyTag.matcher(content)
                 while (matcher.find()) {
                     matcher.group(0)?.let { content = content.replace(it, "") }
+                    matcher = patternEmptyTag.matcher(content)
                 }
             } catch (_: Exception) {
 
