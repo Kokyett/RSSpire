@@ -25,7 +25,7 @@ class Html {
         private val patternTagCLassToDelete = Pattern.compile("<(section|div|ul|ins)[^>]*(class|id)=\"[^\"]*(header|footer|menu|nav|adsbygoogle|comment|related)[^\"]*\"[^>]*>((?!</\\1>).)*</\\1>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
         private val patternTag = Pattern.compile("<([a-z]*)[^>]*>((?!<(/\\1|\\1[^>]*)>).)*</\\1>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
         private val patternComment = Pattern.compile("<!--((?!-->).)*-->", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
-        private val patternEmptyTag = Pattern.compile("<([a-z]*)[^>]*>\\s*</\\1>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
+        private val patternEmptyTag = Pattern.compile("<(div)[^>]*>\\s*</\\1>", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
         private val patternStyleAttribute = Pattern.compile("style=[\"'][^\"']*[\"']", Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
 
         fun restoreLink(url: URL, link: String): String {
