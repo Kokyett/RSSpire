@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group
+        android:id="@+id/group_miscelaneous">
+        <item
+            android:id="@+id/action_menu_unread"
+            android:icon="@drawable/ic_action_unread"
+            android:title="@string/main_menu_unread"
+            app:showAsAction="never|withText|ifRoom" />
+        <item
+            android:id="@+id/action_menu_marl_all_as_read"
+            android:icon="@drawable/ic_action_mark_all_as_read"
+            android:title="@string/main_menu_mark_all_as_read"
+            app:showAsAction="never|withText" />
+    </group>
+    <group
+        android:id="@+id/group_feeds">
+        <item
+            android:id="@+id/action_menu_add_feed"
+            android:icon="@drawable/ic_action_add"
+            android:title="@string/main_menu_add_feed"
+            app:showAsAction="never|withText|ifRoom" />
+        <item
+            android:id="@+id/action_menu_feed_list"
+            android:icon="@drawable/ic_action_feed_list"
+            android:title="@string/main_menu_feed_list"
+            app:showAsAction="never|withText|ifRoom" />
+    </group>
+    <group
+        android:id="@+id/group_opml">
+        <item
+            android:id="@+id/action_menu_import_opml"
+            android:icon="@drawable/ic_action_import"
+            android:title="@string/main_menu_import_opml"
+            app:showAsAction="never|withText" />
+        <item
+            android:id="@+id/action_menu_export_opml"
+            android:icon="@drawable/ic_action_export"
+            android:title="@string/main_menu_export_opml"
+            app:showAsAction="never|withText" />
+    </group>
+    <group
+        android:id="@+id/group_settings_about">
+        <item
+            android:id="@+id/action_menu_settings"
+            android:icon="@drawable/ic_action_settings"
+            android:title="@string/main_menu_settings"
+            app:showAsAction="never|withText" />
+        <item
+            android:id="@+id/action_menu_about"
+            android:icon="@drawable/ic_action_about"
+            android:title="@string/main_menu_about"
+            app:showAsAction="never|withText" />
+    </group>
+</menu>

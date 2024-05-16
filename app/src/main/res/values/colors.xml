@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#87ab63</color>
+    <color name="colorPrimaryVariant">#3e601d</color>
+    <color name="colorOnPrimary">#ffffff</color>
+    <color name="colorSurface">#183000</color>
+    <color name="readEntry">#666666</color>
+    <color name="unreadEntry">@color/colorPrimary</color>
+    <color name="favoriteEntry">#e0b033</color>
+    <color name="refreshFeed">@color/colorPrimary</color>
+    <color name="notFavoriteEntry">#666666</color>
+    <color name="editFeed">@color/colorPrimary</color>
+</resources>

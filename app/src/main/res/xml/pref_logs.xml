@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="pref_log_uncaught_exceptions"
+        android:title="@string/pref_log_uncaught_exceptions"
+        app:iconSpaceReserved="false"/>
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="pref_log_import_opml"
+        android:title="@string/pref_log_import_opml"
+        app:iconSpaceReserved="false"/>
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="pref_log_export_opml"
+        android:title="@string/pref_log_export_opml"
+        app:iconSpaceReserved="false"/>
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="pref_log_update_feeds"
+        android:title="@string/pref_log_update_feeds"
+        app:iconSpaceReserved="false"/>
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="pref_log_parse_date"
+        android:title="@string/pref_log_parse_date"
+        app:iconSpaceReserved="false"/>
+</PreferenceScreen>

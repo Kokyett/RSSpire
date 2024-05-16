@@ -1,0 +1,145 @@
+<resources>
+    <string name="app_name">RSSpire</string>
+
+    <!-- Database initializations -->
+    <string name="database_initial_category">RSSpire</string>
+    <string name="database_initial_feed_logs">Logs</string>
+
+    <!-- Main menu -->
+    <string name="main_menu_unread">Display all or unread entries</string>
+    <string name="main_menu_mark_all_as_read">Mark all as read</string>
+    <string name="main_menu_add_feed">Add feed</string>
+    <string name="main_menu_feed_list">Feed list</string>
+    <string name="main_menu_import_opml">Import OPML file</string>
+    <string name="main_menu_export_opml">Export OPML file</string>
+    <string name="main_menu_settings">Settings</string>
+    <string name="main_menu_about">About</string>
+
+    <!-- Feeds menu -->
+    <string name="feeds_menu_import_opml">Import OPML file</string>
+    <string name="feeds_menu_export_opml">Export OPML file</string>
+
+    <!-- Edit feed menu -->
+    <string name="edit_feed_menu_save">Save</string>
+    <string name="edit_feed_menu_search_icon">Search icon</string>
+    <string name="edit_feed_menu_reinitialize">Reinitialize</string>
+    <string name="edit_feed_menu_delete">Delete</string>
+
+    <!-- Entry menu -->
+    <string name="entry_menu_open_navigator">Open in navigator</string>
+    <string name="entry_menu_favorite">Set as favorite or not</string>
+
+    <!-- Search feed activity -->
+    <string name="search_feed_activity_title">Search feed</string>
+    <string name="search_feed_text_hint">Enter keywords or URL</string>
+    <string name="search_feed_button">Search</string>
+
+    <!-- Edit feed activity -->
+    <string name="edit_feed_activity_title">Edit feed</string>
+    <string name="edit_feed_url">URL</string>
+    <string name="edit_feed_icon_url">Icon URL</string>
+    <string name="edit_feed_title">Title</string>
+    <string name="edit_feed_description">Description</string>
+    <string name="edit_feed_category">Category</string>
+    <string name="edit_feed_invalid_url">Invalid URL</string>
+    <string name="edit_feed_invalid_icon_url">Invalid icon URL</string>
+    <string name="edit_feed_url_already_exists">URL already exists</string>
+    <string name="edit_feed_not_found_icons">No icon have been found</string>
+    <string name="edit_feed_select_icon">Select icon</string>
+    <string name="edit_feed_select_icon_cancel">Cancel</string>
+    <string name="edit_feed_refresh_interval">Refresh interval</string>
+    <string name="edit_feed_delete_read_entries_interval">Delete read entries interval</string>
+    <string name="edit_feed_download_full_content">Download full content</string>
+    <string name="edit_feed_reinitialized">Feed dates reinitialised and entries deleted</string>
+    <string name="edit_feed_replace_thumbnails">Replace thumbnails by full size images</string>
+
+    <!-- Feeds activity -->
+    <string name="feeds_activity_title">Feed list</string>
+    <string name="feeds_no_category">No category</string>
+    <string name="feeds_entry">%d entry</string>
+    <string name="feeds_unread_entry">, %d unread</string>
+    <string name="feeds_entries">%d entries</string>
+    <string name="feeds_unread_entries">, %d unread</string>
+
+    <!-- Entries activity -->
+    <string name="entries_activity_title">Entry list</string>
+
+    <!-- Entry activity -->
+    <string name="entry_activity_title">Entry</string>
+
+    <!-- Settings activity -->
+    <string name="settings_activity_title">Settings</string>
+    <string name="feeds_tab">Feeds</string>
+    <string name="pref_refresh_intervals_title">Default refresh feed interval</string>
+    <string-array name="pref_refresh_intervals" translatable="false">
+        <item>1H</item>
+        <item>2H</item>
+        <item>3H</item>
+        <item>6H</item>
+        <item>12H</item>
+        <item>1D</item>
+        <item>2D</item>
+        <item>3D</item>
+        <item>1W</item>
+        <item>2W</item>
+        <item>4W</item>
+        <item>8W</item>
+    </string-array>
+    <string-array name="pref_refresh_intervals_labels">
+        <item>1 hour</item>
+        <item>2 hours</item>
+        <item>3 hours</item>
+        <item>6 hours</item>
+        <item>12 hours</item>
+        <item>1 day</item>
+        <item>2 days</item>
+        <item>3 days</item>
+        <item>1 week</item>
+        <item>2 weeks</item>
+        <item>4 weeks</item>
+        <item>8 weeks</item>
+    </string-array>
+    <string name="pref_delete_read_entries_intervals_title">Default delete read entries interval</string>
+    <string-array name="pref_delete_read_entries_intervals" translatable="false">
+        <item>0D</item>
+        <item>1D</item>
+        <item>2D</item>
+        <item>3D</item>
+        <item>1W</item>
+        <item>2W</item>
+        <item>4W</item>
+    </string-array>
+    <string-array name="pref_delete_read_entries_intervals_labels">
+        <item>Never</item>
+        <item>1 day</item>
+        <item>2 days</item>
+        <item>3 days</item>
+        <item>1 week</item>
+        <item>2 weeks</item>
+        <item>4 weeks</item>
+    </string-array>
+    <string name="logs_tab">Logs</string>
+    <string name="pref_log_uncaught_exceptions">Log application crash</string>
+    <string name="pref_log_import_opml">Log import OPML file</string>
+    <string name="pref_log_export_opml">Log export OPML file</string>
+    <string name="pref_log_update_feeds">Log update feeds</string>
+    <string name="pref_log_parse_date">Log failed parse date</string>
+
+    <!-- About activity -->
+    <string name="about_activity_title">About</string>
+    <string name="about_tab">About</string>
+    <string name="source_code"><![CDATA[Source code on <a href="https://github.com/Kokyett/RSSpire">GitHub</a>]]></string>
+    <string name="about_material">Except application icon and License tab icon, all image assets are part of Material Design Icons under the term of Apache License Version 2.0.</string>
+    <string name="about_material_link" translatable="false"><![CDATA[<a href="https://github.com/google/material-design-icons">https://github.com/google/material-design-icons</a>]]></string>
+    <string name="about_license">Copyright \u00A9 2023 Kokyett\n\nThis program is free software. It comes without any warranty, to the extent permitted by applicable law. You can redistribute it and/or modify it under the terms of the Do What The Fuck You Want To, Version 2, as published by Sam Hocevar.</string>
+    <string name="about_license_link" translatable="false"><![CDATA[<a href="http://www.wtfpl.net/">http://www.wtfpl.net/</a>]]></string>
+    <string name="license_tab">Licence</string>
+    <string name="wtfpl_license_1" translatable="false">DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE\nVersion 2, December 2004</string>*
+    <string name="wtfpl_license_2" translatable="false">Copyright (C) 2004 Sam Hocevar &lt;sam@hocevar.net&gt;\n\nEveryone is permitted to copy and distribute verbatim or modified copies of this license document, and changing it is allowed as long as the name is changed.</string>*
+    <string name="wtfpl_license_3" translatable="false">DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE\nTERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION</string>*
+    <string name="wtfpl_license_4" translatable="false">0. You just DO WHAT THE FUCK YOU WANT TO.</string>
+    <string name="changelog_tab">Changelog</string>
+
+    <!-- Error messages -->
+    <string name="error_swipe_not_implemented">Feature not implemented</string>
+</resources>

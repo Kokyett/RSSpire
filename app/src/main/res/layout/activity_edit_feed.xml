@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/imageview"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ic_default_feed"
+            android:layout_margin="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxHeight="150dp"
+            android:importantForAccessibility="no" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:labelFor="@id/url"
+            android:text="@string/edit_feed_url" />
+
+        <EditText
+            android:id="@+id/url"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:inputType="textUri"
+            android:singleLine="true"
+            tools:ignore="SmallSp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:labelFor="@id/icon_url"
+            android:text="@string/edit_feed_icon_url" />
+
+        <EditText
+            android:id="@+id/icon_url"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:inputType="textUri"
+            android:singleLine="true"
+            tools:ignore="SmallSp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:labelFor="@id/category"
+            android:text="@string/edit_feed_category" />
+
+        <fr.kokyett.rsspire.views.InstantAutoComplete
+            android:id="@+id/category"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:inputType="text"
+            android:singleLine="true"
+            tools:ignore="SmallSp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:labelFor="@id/title"
+            android:text="@string/edit_feed_title" />
+
+        <EditText
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:inputType="text"
+            android:singleLine="true"
+            tools:ignore="SmallSp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:labelFor="@id/description"
+            android:text="@string/edit_feed_description" />
+
+        <EditText
+            android:id="@+id/description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:inputType="text"
+            android:singleLine="true"
+            tools:ignore="SmallSp" />
+
+        <TextView
+            android:labelFor="@+id/spinner_refresh_interval"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/edit_feed_refresh_interval"
+            android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+        <Spinner
+            android:id="@+id/spinner_refresh_interval"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/pref_refresh_intervals_labels"/>
+
+        <TextView
+            android:labelFor="@+id/spinner_delete_read_entries_interval"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/edit_feed_delete_read_entries_interval"
+            android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+        <Spinner
+            android:id="@+id/spinner_delete_read_entries_interval"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/pref_delete_read_entries_intervals_labels"/>
+
+        <CheckBox
+            android:id="@+id/check_replace_thumbnails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/edit_feed_replace_thumbnails"/>
+
+        <CheckBox
+            android:id="@+id/check_download_full_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/edit_feed_download_full_content"/>
+    </LinearLayout>
+</ScrollView>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ListPreference
+        android:defaultValue="2D"
+        android:entries="@array/pref_refresh_intervals_labels"
+        android:entryValues="@array/pref_refresh_intervals"
+        android:key="pref_default_refresh_interval"
+        android:summary="%s"
+        android:title="@string/pref_refresh_intervals_title"
+        app:iconSpaceReserved="false"/>
+    <ListPreference
+        android:defaultValue="1W"
+        android:entries="@array/pref_delete_read_entries_intervals_labels"
+        android:entryValues="@array/pref_delete_read_entries_intervals"
+        android:key="pref_default_delete_read_entries_interval"
+        android:summary="%s"
+        android:title="@string/pref_delete_read_entries_intervals_title"
+        app:iconSpaceReserved="false"/>
+</PreferenceScreen>

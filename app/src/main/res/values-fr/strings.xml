@@ -1,0 +1,117 @@
+<resources>
+    <!-- Manifest -->
+    <string name="app_name">RSSpire</string>
+
+    <!-- Database initializations -->
+    <string name="database_initial_category">RSSpire</string>
+    <string name="database_initial_feed_logs">Journaux</string>
+
+    <!-- Main Menu -->
+    <string name="main_menu_unread">Afficher les articlas lus ou non lus</string>
+    <string name="main_menu_mark_all_as_read">Marquer tout comme lu</string>
+    <string name="main_menu_add_feed">Ajouter un flux</string>
+    <string name="main_menu_feed_list">Liste de flux</string>
+    <string name="main_menu_import_opml">Importer un fichier OPML</string>
+    <string name="main_menu_export_opml">Exporter un fichier OPML</string>
+    <string name="main_menu_settings">Settings</string>
+    <string name="main_menu_about">À propos</string>
+
+    <!-- Feeds menu -->
+    <string name="feeds_menu_import_opml">Importer un fichier OPML</string>
+    <string name="feeds_menu_export_opml">Exporter un fichier OPML</string>
+
+    <!-- Edit feed menu -->
+    <string name="edit_feed_menu_save">Enregistrer</string>
+    <string name="edit_feed_menu_search_icon">Rechercher l\'icône</string>
+    <string name="edit_feed_menu_reinitialize">Réinitialiser</string>
+    <string name="edit_feed_menu_delete">Supprimer</string>
+
+    <!-- Entry menu -->
+    <string name="entry_menu_open_navigator">Ouvrir dans un navigateur</string>
+    <string name="entry_menu_favorite">Définir comme favori ou non</string>
+
+    <!-- Search feed activity -->
+    <string name="search_feed_activity_title">Rechercher un flux</string>
+    <string name="search_feed_text_hint">Saisir des mots clé ou une URL</string>
+    <string name="search_feed_button">Rechercher</string>
+
+    <!-- Edit feed activity -->
+    <string name="edit_feed_activity_title">Modification d\'un flux</string>
+    <string name="edit_feed_url">URL</string>
+    <string name="edit_feed_icon_url">URL de l\'icône</string>
+    <string name="edit_feed_title">Titre</string>
+    <string name="edit_feed_description">Description</string>
+    <string name="edit_feed_category">Catégorie</string>
+    <string name="edit_feed_invalid_url">URL invalide</string>
+    <string name="edit_feed_invalid_icon_url">URL de l\'icône invalide</string>
+    <string name="edit_feed_url_already_exists">L\'URL existe déjà</string>
+    <string name="edit_feed_not_found_icons">Aucune icône n\'a été trouvée</string>
+    <string name="edit_feed_select_icon">Selectioner une icône</string>
+    <string name="edit_feed_select_icon_cancel">Annuler</string>
+    <string name="edit_feed_refresh_interval">Interval de rafraichissement</string>
+    <string name="edit_feed_delete_read_entries_interval">Interval de suppression des articles lus</string>
+    <string name="edit_feed_download_full_content">Télécharger le contenu complet</string>
+    <string name="edit_feed_reinitialized">Dates du flux réinitialisées et articles supprimés</string>
+    <string name="edit_feed_replace_thumbnails">Remplacer les miniatures par les images en taille réelle</string>
+
+    <!-- Feeds activity -->
+    <string name="feeds_activity_title">Liste de flux</string>
+    <string name="feeds_no_category">Sans catégorie</string>
+    <string name="feeds_entry">%d article</string>
+    <string name="feeds_entries">%d articles</string>
+    <string name="feeds_unread_entry">, %d non lu</string>
+    <string name="feeds_unread_entries">, %d non lus</string>
+
+    <!-- Entries activity -->
+    <string name="entries_activity_title">Liste des articles</string>
+
+    <!-- Entry activity -->
+    <string name="entry_activity_title">Article</string>
+
+    <!-- Settings activity -->
+    <string name="settings_activity_title">Paramètres</string>
+    <string name="feeds_tab">Flux</string>
+    <string name="pref_refresh_intervals_title">Interval de mise à jour d\'un flux par défaut</string>
+    <string-array name="pref_refresh_intervals_labels">
+        <item>1 heure</item>
+        <item>2 heures</item>
+        <item>3 heures</item>
+        <item>6 heures</item>
+        <item>12 heures</item>
+        <item>1 jour</item>
+        <item>2 jours</item>
+        <item>3 jours</item>
+        <item>1 semaine</item>
+        <item>2 semaines</item>
+        <item>4 semaines</item>
+        <item>8 semaines</item>
+    </string-array>
+    <string name="pref_delete_read_entries_intervals_title">Interval de suppression d\'articles lus par défaut</string>
+    <string-array name="pref_delete_read_entries_intervals_labels">
+        <item>Jamais</item>
+        <item>1 jour</item>
+        <item>2 jours</item>
+        <item>3 jours</item>
+        <item>1 semaine</item>
+        <item>2 semaines</item>
+        <item>4 semaines</item>
+    </string-array>
+    <string name="logs_tab">Journaux</string>
+    <string name="pref_log_uncaught_exceptions">Log des crashs applicatifs</string>
+    <string name="pref_log_import_opml">Log de l\'import d\'un fichier OPML</string>
+    <string name="pref_log_export_opml">Log de l\'export d\'un fichier OPML</string>
+    <string name="pref_log_update_feeds">Log de la mise à jour des flux</string>
+    <string name="pref_log_parse_date">Log des échecs de décodage de dates</string>
+
+    <!-- About activity -->
+    <string name="about_activity_title">À propos</string>
+    <string name="about_tab">À propos</string>
+    <string name="source_code"><![CDATA[Code source sur <a href="https://github.com/Kokyett/RSSpire">GitHub</a>]]></string>
+    <string name="about_material">À l\'exception de l\'icône d\'application et de l\'icône de l\'onglet Licence, toutes les images font partie de Material Design Icons sous le terme de Apache License Version 2.0.</string>
+    <string name="license_tab">Licence</string>
+    <string name="about_license">Copyright \u00A9 2023 Kokyett\n\nCe programme est un logiciel libre. Il est livré sans aucune garantie, dans la mesure permise par les loi. Vous pouvez le redistribuer et/ou le modifier selon les termes du Do What The Fuck You Want To Publc License, version 2, telle que publiée par Sam Hocevar.</string>
+    <string name="changelog_tab">Changelog</string>
+
+    <!-- Error messages -->
+    <string name="error_swipe_not_implemented">Fonctionnalité non implémentée</string>
+</resources>
